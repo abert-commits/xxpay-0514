@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.WxUserMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.WxUser" >
+    <id column="UserId" property="userId" jdbcType="BIGINT" />
+    <result column="WxId" property="wxId" jdbcType="VARCHAR" />
+    <result column="Account" property="account" jdbcType="VARCHAR" />
+    <result column="Password" property="password" jdbcType="VARCHAR" />
+    <result column="NickName" property="nickName" jdbcType="VARCHAR" />
+    <result column="ServerId" property="serverId" jdbcType="VARCHAR" />
+    <result column="RandomId" property="randomId" jdbcType="VARCHAR" />
+    <result column="DayInAmount" property="dayInAmount" jdbcType="BIGINT" />
+    <result column="DayInNumber" property="dayInNumber" jdbcType="BIGINT" />
+    <result column="Weight" property="weight" jdbcType="DECIMAL" />
+    <result column="InStatus" property="inStatus" jdbcType="TINYINT" />
+    <result column="StartPayUser" property="startPayUser" jdbcType="VARCHAR" />
+    <result column="StartPayTime" property="startPayTime" jdbcType="TIMESTAMP" />
+    <result column="LoginStatus" property="loginStatus" jdbcType="INTEGER" />
+    <result column="LoginResult" property="loginResult" jdbcType="VARCHAR" />
+    <result column="LoginSyncTime" property="loginSyncTime" jdbcType="TIMESTAMP" />
+    <result column="DayUpdateTime" property="dayUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="LastInTime" property="lastInTime" jdbcType="TIMESTAMP" />
+    <result column="Status" property="status" jdbcType="TINYINT" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="org.xxpay.core.entity.WxUser" extends="BaseResultMap" >
+    <result column="Settings" property="settings" jdbcType="LONGVARCHAR" />
+    <result column="WxDat" property="wxDat" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    UserId, WxId, Account, Password, NickName, ServerId, RandomId, DayInAmount, DayInNumber, 
+    Weight, InStatus, StartPayUser, StartPayTime, LoginStatus, LoginResult, LoginSyncTime, 
+    DayUpdateTime, LastInTime, Status, Remark, CreateTime, UpdateTime
+  </sql>
+  <sql id="Blob_Column_List" >
+    Settings, WxDat
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="org.xxpay.core.entity.WxUserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_wx_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.WxUserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_wx_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_wx_user
+    where UserId = #{userId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_wx_user
+    where UserId = #{userId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.WxUserExample" >
+    delete from t_wx_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.WxUser" >
+    insert into t_wx_user (UserId, WxId, Account, 
+      Password, NickName, ServerId, 
+      RandomId, DayInAmount, DayInNumber, 
+      Weight, InStatus, StartPayUser, 
+      StartPayTime, LoginStatus, LoginResult, 
+      LoginSyncTime, DayUpdateTime, LastInTime, 
+      Status, Remark, CreateTime, 
+      UpdateTime, Settings, WxDat
+      )
+    values (#{userId,jdbcType=BIGINT}, #{wxId,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{nickName,jdbcType=VARCHAR}, #{serverId,jdbcType=VARCHAR}, 
+      #{randomId,jdbcType=VARCHAR}, #{dayInAmount,jdbcType=BIGINT}, #{dayInNumber,jdbcType=BIGINT}, 
+      #{weight,jdbcType=DECIMAL}, #{inStatus,jdbcType=TINYINT}, #{startPayUser,jdbcType=VARCHAR}, 
+      #{startPayTime,jdbcType=TIMESTAMP}, #{loginStatus,jdbcType=INTEGER}, #{loginResult,jdbcType=VARCHAR}, 
+      #{loginSyncTime,jdbcType=TIMESTAMP}, #{dayUpdateTime,jdbcType=TIMESTAMP}, #{lastInTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{settings,jdbcType=LONGVARCHAR}, #{wxDat,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.WxUser" >
+    insert into t_wx_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        UserId,
+      </if>
+      <if test="wxId != null" >
+        WxId,
+      </if>
+      <if test="account != null" >
+        Account,
+      </if>
+      <if test="password != null" >
+        Password,
+      </if>
+      <if test="nickName != null" >
+        NickName,
+      </if>
+      <if test="serverId != null" >
+        ServerId,
+      </if>
+      <if test="randomId != null" >
+        RandomId,
+      </if>
+      <if test="dayInAmount != null" >
+        DayInAmount,
+      </if>
+      <if test="dayInNumber != null" >
+        DayInNumber,
+      </if>
+      <if test="weight != null" >
+        Weight,
+      </if>
+      <if test="inStatus != null" >
+        InStatus,
+      </if>
+      <if test="startPayUser != null" >
+        StartPayUser,
+      </if>
+      <if test="startPayTime != null" >
+        StartPayTime,
+      </if>
+      <if test="loginStatus != null" >
+        LoginStatus,
+      </if>
+      <if test="loginResult != null" >
+        LoginResult,
+      </if>
+      <if test="loginSyncTime != null" >
+        LoginSyncTime,
+      </if>
+      <if test="dayUpdateTime != null" >
+        DayUpdateTime,
+      </if>
+      <if test="lastInTime != null" >
+        LastInTime,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime,
+      </if>
+      <if test="settings != null" >
+        Settings,
+      </if>
+      <if test="wxDat != null" >
+        WxDat,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="wxId != null" >
+        #{wxId,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="serverId != null" >
+        #{serverId,jdbcType=VARCHAR},
+      </if>
+      <if test="randomId != null" >
+        #{randomId,jdbcType=VARCHAR},
+      </if>
+      <if test="dayInAmount != null" >
+        #{dayInAmount,jdbcType=BIGINT},
+      </if>
+      <if test="dayInNumber != null" >
+        #{dayInNumber,jdbcType=BIGINT},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="inStatus != null" >
+        #{inStatus,jdbcType=TINYINT},
+      </if>
+      <if test="startPayUser != null" >
+        #{startPayUser,jdbcType=VARCHAR},
+      </if>
+      <if test="startPayTime != null" >
+        #{startPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginStatus != null" >
+        #{loginStatus,jdbcType=INTEGER},
+      </if>
+      <if test="loginResult != null" >
+        #{loginResult,jdbcType=VARCHAR},
+      </if>
+      <if test="loginSyncTime != null" >
+        #{loginSyncTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dayUpdateTime != null" >
+        #{dayUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastInTime != null" >
+        #{lastInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="settings != null" >
+        #{settings,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="wxDat != null" >
+        #{wxDat,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.WxUserExample" resultType="java.lang.Integer" >
+    select count(*) from t_wx_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_wx_user
+    <set >
+      <if test="record.userId != null" >
+        UserId = #{record.userId,jdbcType=BIGINT},
+      </if>
+      <if test="record.wxId != null" >
+        WxId = #{record.wxId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.account != null" >
+        Account = #{record.account,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null" >
+        Password = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nickName != null" >
+        NickName = #{record.nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serverId != null" >
+        ServerId = #{record.serverId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.randomId != null" >
+        RandomId = #{record.randomId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dayInAmount != null" >
+        DayInAmount = #{record.dayInAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.dayInNumber != null" >
+        DayInNumber = #{record.dayInNumber,jdbcType=BIGINT},
+      </if>
+      <if test="record.weight != null" >
+        Weight = #{record.weight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.inStatus != null" >
+        InStatus = #{record.inStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.startPayUser != null" >
+        StartPayUser = #{record.startPayUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startPayTime != null" >
+        StartPayTime = #{record.startPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.loginStatus != null" >
+        LoginStatus = #{record.loginStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.loginResult != null" >
+        LoginResult = #{record.loginResult,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginSyncTime != null" >
+        LoginSyncTime = #{record.loginSyncTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.dayUpdateTime != null" >
+        DayUpdateTime = #{record.dayUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastInTime != null" >
+        LastInTime = #{record.lastInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.remark != null" >
+        Remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.settings != null" >
+        Settings = #{record.settings,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="record.wxDat != null" >
+        WxDat = #{record.wxDat,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update t_wx_user
+    set UserId = #{record.userId,jdbcType=BIGINT},
+      WxId = #{record.wxId,jdbcType=VARCHAR},
+      Account = #{record.account,jdbcType=VARCHAR},
+      Password = #{record.password,jdbcType=VARCHAR},
+      NickName = #{record.nickName,jdbcType=VARCHAR},
+      ServerId = #{record.serverId,jdbcType=VARCHAR},
+      RandomId = #{record.randomId,jdbcType=VARCHAR},
+      DayInAmount = #{record.dayInAmount,jdbcType=BIGINT},
+      DayInNumber = #{record.dayInNumber,jdbcType=BIGINT},
+      Weight = #{record.weight,jdbcType=DECIMAL},
+      InStatus = #{record.inStatus,jdbcType=TINYINT},
+      StartPayUser = #{record.startPayUser,jdbcType=VARCHAR},
+      StartPayTime = #{record.startPayTime,jdbcType=TIMESTAMP},
+      LoginStatus = #{record.loginStatus,jdbcType=INTEGER},
+      LoginResult = #{record.loginResult,jdbcType=VARCHAR},
+      LoginSyncTime = #{record.loginSyncTime,jdbcType=TIMESTAMP},
+      DayUpdateTime = #{record.dayUpdateTime,jdbcType=TIMESTAMP},
+      LastInTime = #{record.lastInTime,jdbcType=TIMESTAMP},
+      Status = #{record.status,jdbcType=TINYINT},
+      Remark = #{record.remark,jdbcType=VARCHAR},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      Settings = #{record.settings,jdbcType=LONGVARCHAR},
+      WxDat = #{record.wxDat,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_wx_user
+    set UserId = #{record.userId,jdbcType=BIGINT},
+      WxId = #{record.wxId,jdbcType=VARCHAR},
+      Account = #{record.account,jdbcType=VARCHAR},
+      Password = #{record.password,jdbcType=VARCHAR},
+      NickName = #{record.nickName,jdbcType=VARCHAR},
+      ServerId = #{record.serverId,jdbcType=VARCHAR},
+      RandomId = #{record.randomId,jdbcType=VARCHAR},
+      DayInAmount = #{record.dayInAmount,jdbcType=BIGINT},
+      DayInNumber = #{record.dayInNumber,jdbcType=BIGINT},
+      Weight = #{record.weight,jdbcType=DECIMAL},
+      InStatus = #{record.inStatus,jdbcType=TINYINT},
+      StartPayUser = #{record.startPayUser,jdbcType=VARCHAR},
+      StartPayTime = #{record.startPayTime,jdbcType=TIMESTAMP},
+      LoginStatus = #{record.loginStatus,jdbcType=INTEGER},
+      LoginResult = #{record.loginResult,jdbcType=VARCHAR},
+      LoginSyncTime = #{record.loginSyncTime,jdbcType=TIMESTAMP},
+      DayUpdateTime = #{record.dayUpdateTime,jdbcType=TIMESTAMP},
+      LastInTime = #{record.lastInTime,jdbcType=TIMESTAMP},
+      Status = #{record.status,jdbcType=TINYINT},
+      Remark = #{record.remark,jdbcType=VARCHAR},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.WxUser" >
+    update t_wx_user
+    <set >
+      <if test="wxId != null" >
+        WxId = #{wxId,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        Account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        Password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        NickName = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="serverId != null" >
+        ServerId = #{serverId,jdbcType=VARCHAR},
+      </if>
+      <if test="randomId != null" >
+        RandomId = #{randomId,jdbcType=VARCHAR},
+      </if>
+      <if test="dayInAmount != null" >
+        DayInAmount = #{dayInAmount,jdbcType=BIGINT},
+      </if>
+      <if test="dayInNumber != null" >
+        DayInNumber = #{dayInNumber,jdbcType=BIGINT},
+      </if>
+      <if test="weight != null" >
+        Weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="inStatus != null" >
+        InStatus = #{inStatus,jdbcType=TINYINT},
+      </if>
+      <if test="startPayUser != null" >
+        StartPayUser = #{startPayUser,jdbcType=VARCHAR},
+      </if>
+      <if test="startPayTime != null" >
+        StartPayTime = #{startPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginStatus != null" >
+        LoginStatus = #{loginStatus,jdbcType=INTEGER},
+      </if>
+      <if test="loginResult != null" >
+        LoginResult = #{loginResult,jdbcType=VARCHAR},
+      </if>
+      <if test="loginSyncTime != null" >
+        LoginSyncTime = #{loginSyncTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="dayUpdateTime != null" >
+        DayUpdateTime = #{dayUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastInTime != null" >
+        LastInTime = #{lastInTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="settings != null" >
+        Settings = #{settings,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="wxDat != null" >
+        WxDat = #{wxDat,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where UserId = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="org.xxpay.core.entity.WxUser" >
+    update t_wx_user
+    set WxId = #{wxId,jdbcType=VARCHAR},
+      Account = #{account,jdbcType=VARCHAR},
+      Password = #{password,jdbcType=VARCHAR},
+      NickName = #{nickName,jdbcType=VARCHAR},
+      ServerId = #{serverId,jdbcType=VARCHAR},
+      RandomId = #{randomId,jdbcType=VARCHAR},
+      DayInAmount = #{dayInAmount,jdbcType=BIGINT},
+      DayInNumber = #{dayInNumber,jdbcType=BIGINT},
+      Weight = #{weight,jdbcType=DECIMAL},
+      InStatus = #{inStatus,jdbcType=TINYINT},
+      StartPayUser = #{startPayUser,jdbcType=VARCHAR},
+      StartPayTime = #{startPayTime,jdbcType=TIMESTAMP},
+      LoginStatus = #{loginStatus,jdbcType=INTEGER},
+      LoginResult = #{loginResult,jdbcType=VARCHAR},
+      LoginSyncTime = #{loginSyncTime,jdbcType=TIMESTAMP},
+      DayUpdateTime = #{dayUpdateTime,jdbcType=TIMESTAMP},
+      LastInTime = #{lastInTime,jdbcType=TIMESTAMP},
+      Status = #{status,jdbcType=TINYINT},
+      Remark = #{remark,jdbcType=VARCHAR},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      Settings = #{settings,jdbcType=LONGVARCHAR},
+      WxDat = #{wxDat,jdbcType=LONGVARCHAR}
+    where UserId = #{userId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.WxUser" >
+    update t_wx_user
+    set WxId = #{wxId,jdbcType=VARCHAR},
+      Account = #{account,jdbcType=VARCHAR},
+      Password = #{password,jdbcType=VARCHAR},
+      NickName = #{nickName,jdbcType=VARCHAR},
+      ServerId = #{serverId,jdbcType=VARCHAR},
+      RandomId = #{randomId,jdbcType=VARCHAR},
+      DayInAmount = #{dayInAmount,jdbcType=BIGINT},
+      DayInNumber = #{dayInNumber,jdbcType=BIGINT},
+      Weight = #{weight,jdbcType=DECIMAL},
+      InStatus = #{inStatus,jdbcType=TINYINT},
+      StartPayUser = #{startPayUser,jdbcType=VARCHAR},
+      StartPayTime = #{startPayTime,jdbcType=TIMESTAMP},
+      LoginStatus = #{loginStatus,jdbcType=INTEGER},
+      LoginResult = #{loginResult,jdbcType=VARCHAR},
+      LoginSyncTime = #{loginSyncTime,jdbcType=TIMESTAMP},
+      DayUpdateTime = #{dayUpdateTime,jdbcType=TIMESTAMP},
+      LastInTime = #{lastInTime,jdbcType=TIMESTAMP},
+      Status = #{status,jdbcType=TINYINT},
+      Remark = #{remark,jdbcType=VARCHAR},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where UserId = #{userId,jdbcType=BIGINT}
+  </update>
+
+  <!-- 查询一个可用的微信收款用户 -->
+  <select id="selectByAvailable" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_wx_user
+    where ServerId = #{serverId}
+    and LoginStatus = 3
+    and Status = 1
+    and InStatus = 1
+    and DayInAmount &lt;= #{dayMaxAmount}
+    and DayInNumber &lt;= #{dayMaxNumber}
+    order by LastInTime asc, DayInNumber asc, DayInAmount asc, Weight desc limit 1;
+  </select>
+
+  <!-- 更新今日数据根据随机ID -->
+  <update id="updateDayByRandomId" parameterType="java.util.Map" >
+        update t_wx_user
+        set DayUpdateTime = now(),
+            LastInTime = now(),
+            DayInAmount = case when date_format(DayUpdateTime, '%Y%m%d') = date_format(now(), '%Y%m%d') then DayInAmount + #{amount} else #{amount} end,
+            DayInNumber = case when date_format(DayUpdateTime, '%Y%m%d') = date_format(now(), '%Y%m%d') then DayInNumber + 1 else 1 end
+        where RandomId = #{randomId};
+   </update>
+
+  <!-- 初始化今日数据 -->
+  <update id="updateDayByInit" parameterType="java.util.Map" >
+      update t_wx_user set DayUpdateTime = now(), DayInAmount = 0, DayInNumber = 0 where date_format(DayUpdateTime, '%Y%m%d') != date_format(now(), '%Y%m%d');
+  </update>
+</mapper>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.MchBalanceMapper" >
+   <resultMap id="BaseResultMap" type="org.xxpay.core.entity.MchBalance" >
+    <result column="MchId" property="mchId" jdbcType="BIGINT" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="Amount" property="amount" jdbcType="BIGINT" />
+    <result column="LastOrder" property="lastOrder" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="MerchantRecharge" property="merchantRecharge" jdbcType="BIGINT" />
+    <result column="TransferAmount" property="transferAmount" jdbcType="BIGINT" />
+    <result column="WithdrawalAmount" property="withdrawalAmount" jdbcType="BIGINT" />
+    <result column="WithdrawalOrder" property="withdrawalOrder" jdbcType="BIGINT" />
+    <result column="WithdrawalFee" property="withdrawalFee" jdbcType="BIGINT" />
+    <result column="YesterdayBalance" property="yesterdayBalance" jdbcType="BIGINT" />
+   </resultMap>
+
+
+
+  <select id="selectSynthesis" resultMap="BaseResultMap" parameterType="java.util.Map" >
+
+      SELECT MchId,sum(fff.Amount) as Amount,max(LastOrder) as LastOrder,sum(MerchantRecharge) as MerchantRecharge,sum(TransferAmount) as TransferAmount,sum(WithdrawalAmount) as WithdrawalAmount ,sum(WithdrawalOrder) as WithdrawalOrder,sum(WithdrawalFee) as WithdrawalFee,sum(YesterdayBalance) as YesterdayBalance FROM (
+      (select MchId,t_mch_account_history.AfterBalance as Amount,"" as LastOrder,0 as MerchantRecharge,0 as TransferAmount,0 as WithdrawalAmount,0 as WithdrawalOrder,0 as WithdrawalFee,0 as YesterdayBalance
+      from t_mch_account_history where MchId=#{MchId,jdbcType=BIGINT} and CreateTime  <![CDATA[<]]> #{tomorrow,jdbcType=VARCHAR}
+      order by CreateTime desc  LIMIT 1)
+      UNION ALL
+
+      select MchId,0,MAX(PayOrderId) as LastOrder,0,0,0,0,0,0 from t_pay_order where MchId=#{MchId,jdbcType=BIGINT} and `Status` in (2,3)
+      and PaySuccTime <![CDATA[>]]>  #{startDay,jdbcType=BIGINT}  and  PaySuccTime <![CDATA[<]]>  #{lastDay,jdbcType=BIGINT}
+      UNION ALL
+
+      select MchId,0,"",sum(MchIncome) as  MerchantRecharge,0,0,0,0,0 from t_pay_order where MchId=#{MchId,jdbcType=BIGINT} and `Status` in (2,3)
+      and PaySuccTime <![CDATA[>]]>  #{startDay,jdbcType=BIGINT}  and  PaySuccTime <![CDATA[<]]>  #{lastDay,jdbcType=BIGINT}
+      UNION ALL
+      select MchId,0,"",0,SUM(Amount) as TransferAmount,0,0,0,0 from t_mch_account_history  WHERE  MchId=#{MchId,jdbcType=BIGINT} and BizType='3'
+       and  CreateTime <![CDATA[>]]> #{startDay,jdbcType=BIGINT}  and  CreateTime <![CDATA[<]]>  #{lastDay,jdbcType=BIGINT}
+      UNION ALL
+
+      select  MchId,0,"",0,0,sum(Amount) as WithdrawalAmount,count(0) as WithdrawalOrder ,sum(Fee) as WithdrawalFee,0  from t_mch_account_history  WHERE  MchId=#{MchId,jdbcType=BIGINT}
+      and BizType='2' and CreateTime<![CDATA[>]]>  #{startDay,jdbcType=BIGINT}  and  CreateTime <![CDATA[<]]> #{lastDay,jdbcType=BIGINT}
+      UNION ALL
+
+      (select tt.MchId,0,"",0,0,0,0,0, tt.AfterBalance as YesterdayBalance from t_mch_account_history tt where MchId=#{MchId,jdbcType=BIGINT}
+      and CreateTime <![CDATA[<]]>   #{startDay,jdbcType=VARCHAR}
+      order by CreateTime desc  LIMIT 1)
+      )fff  where MchId  is not null  GROUP BY MchId
+  </select>
+
+
+    <insert id="insertSelective" parameterType="org.xxpay.core.entity.MchBalance" >
+        insert into t_mch_balance
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="mchId != null" >
+                mchId,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+            <if test="amount != null" >
+                amount,
+            </if>
+            <if test="lastOrder != null" >
+                lastOrder,
+            </if>
+            <if test="createTime != null" >
+                createTime,
+            </if>
+            <if test="merchantRecharge != null" >
+                merchantRecharge,
+            </if>
+            <if test="transferAmount != null" >
+                transferAmount,
+            </if>
+            <if test="withdrawalAmount != null" >
+                withdrawalAmount,
+            </if>
+            <if test="withdrawalOrder != null" >
+                withdrawalOrder,
+            </if>
+            <if test="withdrawalFee != null" >
+                withdrawalFee,
+            </if>
+            <if test="yesterdayBalance != null" >
+                yesterdayBalance,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="mchId != null" >
+                #{mchId,jdbcType=BIGINT},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null" >
+                #{amount,jdbcType=BIGINT},
+            </if>
+            <if test="lastOrder != null" >
+                #{lastOrder,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null" >
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="merchantRecharge != null" >
+                #{merchantRecharge,jdbcType=BIGINT},
+            </if>
+            <if test="transferAmount != null" >
+                #{transferAmount,jdbcType=BIGINT},
+            </if>
+            <if test="withdrawalAmount != null" >
+                #{withdrawalAmount,jdbcType=BIGINT},
+            </if>
+            <if test="withdrawalOrder != null" >
+                #{withdrawalOrder,jdbcType=BIGINT},
+            </if>
+            <if test="withdrawalFee != null" >
+                #{withdrawalFee,jdbcType=BIGINT},
+            </if>
+            <if test="yesterdayBalance != null" >
+                #{yesterdayBalance,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="count" parameterType="org.xxpay.core.entity.MchBalance" resultType="java.lang.Integer" >
+        select count(0) from t_mch_balance where 1=1
+        <if test="mchId != null" >
+            and MchId= #{mchId,jdbcType=BIGINT}
+        </if>
+        <if test="createTime != null" >
+            and  CreateTime <![CDATA[>]]> #{createTime,jdbcType=TIMESTAMP}  and  CreateTime <![CDATA[<]]>  #{createTimeTow,jdbcType=TIMESTAMP}
+        </if>
+    </select>
+    <select id="select" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.MchBalance" >
+        select
+        MchId,
+        Name,
+        Amount,
+        LastOrder,
+        CreateTime,
+        MerchantRecharge,
+        TransferAmount,
+        WithdrawalAmount,
+        WithdrawalOrder,
+        WithdrawalFee,
+        YesterdayBalance
+        from t_mch_balance
+        where 1=1
+        <if test="mchBalance.mchId != null" >
+            and MchId= #{mchBalance.mchId,jdbcType=BIGINT}
+        </if>
+        <if test="mchBalance.createTime != null" >
+            and  CreateTime <![CDATA[>]]> #{mchBalance.createTime,jdbcType=TIMESTAMP}  and  CreateTime <![CDATA[<]]> #{mchBalance.createTimeTow,jdbcType=TIMESTAMP}
+        </if>
+        order by CreateTime desc
+        <if test="limit != null" >
+            <if test="offset != null" >
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null" >
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+</mapper>

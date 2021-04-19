@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.PinduoduoOrdersMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.PinduoduoOrders" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="admin_uid" property="adminUid" jdbcType="INTEGER" />
+    <result column="staff_id" property="staffId" jdbcType="INTEGER" />
+    <result column="order_sn" property="orderSn" jdbcType="CHAR" />
+    <result column="api_order_sn" property="apiOrderSn" jdbcType="CHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="fp_id" property="fpId" jdbcType="CHAR" />
+    <result column="total" property="total" jdbcType="INTEGER" />
+    <result column="is_pay" property="isPay" jdbcType="BIT" />
+    <result column="notify_url" property="notifyUrl" jdbcType="VARCHAR" />
+    <result column="is_notify" property="isNotify" jdbcType="BIT" />
+    <result column="pay_type" property="payType" jdbcType="TINYINT" />
+    <result column="from_platform" property="fromPlatform" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="mtime" property="mtime" jdbcType="TIMESTAMP" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="g_id" property="gId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="c_id" property="cId" jdbcType="INTEGER" />
+    <result column="p_id" property="pId" jdbcType="INTEGER" />
+    <result column="d_id" property="dId" jdbcType="INTEGER" />
+    <result column="notify_status" property="notifyStatus" jdbcType="INTEGER" />
+    <result column="notify_number" property="notifyNumber" jdbcType="INTEGER" />
+    <result column="notify_time" property="notifyTime" jdbcType="INTEGER" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="stores_name" property="storesName" jdbcType="VARCHAR" />
+    <result column="stores_id" property="storesId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, admin_uid, staff_id, order_sn, api_order_sn, ip, fp_id, total, is_pay, notify_url, 
+    is_notify, pay_type, from_platform, status, mtime, ctime, g_id, user_id, c_id, p_id, 
+    d_id, notify_status, notify_number, notify_time, phone, stores_name, stores_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.PinduoduoOrdersExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pinduoduo_orders
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pinduoduo_orders
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pinduoduo_orders
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.PinduoduoOrdersExample" >
+    delete from pinduoduo_orders
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.PinduoduoOrders" >
+    insert into pinduoduo_orders (id, admin_uid, staff_id, 
+      order_sn, api_order_sn, ip, 
+      fp_id, total, is_pay, notify_url, 
+      is_notify, pay_type, from_platform, 
+      status, mtime, ctime, 
+      g_id, user_id, c_id, p_id, 
+      d_id, notify_status, notify_number, 
+      notify_time, phone, stores_name, 
+      stores_id)
+    values (#{id,jdbcType=INTEGER}, #{adminUid,jdbcType=INTEGER}, #{staffId,jdbcType=INTEGER}, 
+      #{orderSn,jdbcType=CHAR}, #{apiOrderSn,jdbcType=CHAR}, #{ip,jdbcType=VARCHAR}, 
+      #{fpId,jdbcType=CHAR}, #{total,jdbcType=INTEGER}, #{isPay,jdbcType=BIT}, #{notifyUrl,jdbcType=VARCHAR}, 
+      #{isNotify,jdbcType=BIT}, #{payType,jdbcType=TINYINT}, #{fromPlatform,jdbcType=TINYINT}, 
+      #{status,jdbcType=INTEGER}, #{mtime,jdbcType=TIMESTAMP}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{gId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{cId,jdbcType=INTEGER}, #{pId,jdbcType=INTEGER}, 
+      #{dId,jdbcType=INTEGER}, #{notifyStatus,jdbcType=INTEGER}, #{notifyNumber,jdbcType=INTEGER}, 
+      #{notifyTime,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{storesName,jdbcType=VARCHAR}, 
+      #{storesId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.PinduoduoOrders" >
+    insert into pinduoduo_orders
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="adminUid != null" >
+        admin_uid,
+      </if>
+      <if test="staffId != null" >
+        staff_id,
+      </if>
+      <if test="orderSn != null" >
+        order_sn,
+      </if>
+      <if test="apiOrderSn != null" >
+        api_order_sn,
+      </if>
+      <if test="ip != null" >
+        ip,
+      </if>
+      <if test="fpId != null" >
+        fp_id,
+      </if>
+      <if test="total != null" >
+        total,
+      </if>
+      <if test="isPay != null" >
+        is_pay,
+      </if>
+      <if test="notifyUrl != null" >
+        notify_url,
+      </if>
+      <if test="isNotify != null" >
+        is_notify,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="fromPlatform != null" >
+        from_platform,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="mtime != null" >
+        mtime,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="gId != null" >
+        g_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="cId != null" >
+        c_id,
+      </if>
+      <if test="pId != null" >
+        p_id,
+      </if>
+      <if test="dId != null" >
+        d_id,
+      </if>
+      <if test="notifyStatus != null" >
+        notify_status,
+      </if>
+      <if test="notifyNumber != null" >
+        notify_number,
+      </if>
+      <if test="notifyTime != null" >
+        notify_time,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="storesName != null" >
+        stores_name,
+      </if>
+      <if test="storesId != null" >
+        stores_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="adminUid != null" >
+        #{adminUid,jdbcType=INTEGER},
+      </if>
+      <if test="staffId != null" >
+        #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="orderSn != null" >
+        #{orderSn,jdbcType=CHAR},
+      </if>
+      <if test="apiOrderSn != null" >
+        #{apiOrderSn,jdbcType=CHAR},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="fpId != null" >
+        #{fpId,jdbcType=CHAR},
+      </if>
+      <if test="total != null" >
+        #{total,jdbcType=INTEGER},
+      </if>
+      <if test="isPay != null" >
+        #{isPay,jdbcType=BIT},
+      </if>
+      <if test="notifyUrl != null" >
+        #{notifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isNotify != null" >
+        #{isNotify,jdbcType=BIT},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=TINYINT},
+      </if>
+      <if test="fromPlatform != null" >
+        #{fromPlatform,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="mtime != null" >
+        #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gId != null" >
+        #{gId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="cId != null" >
+        #{cId,jdbcType=INTEGER},
+      </if>
+      <if test="pId != null" >
+        #{pId,jdbcType=INTEGER},
+      </if>
+      <if test="dId != null" >
+        #{dId,jdbcType=INTEGER},
+      </if>
+      <if test="notifyStatus != null" >
+        #{notifyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="notifyNumber != null" >
+        #{notifyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="notifyTime != null" >
+        #{notifyTime,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="storesName != null" >
+        #{storesName,jdbcType=VARCHAR},
+      </if>
+      <if test="storesId != null" >
+        #{storesId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.PinduoduoOrdersExample" resultType="java.lang.Integer" >
+    select count(*) from pinduoduo_orders
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pinduoduo_orders
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.adminUid != null" >
+        admin_uid = #{record.adminUid,jdbcType=INTEGER},
+      </if>
+      <if test="record.staffId != null" >
+        staff_id = #{record.staffId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderSn != null" >
+        order_sn = #{record.orderSn,jdbcType=CHAR},
+      </if>
+      <if test="record.apiOrderSn != null" >
+        api_order_sn = #{record.apiOrderSn,jdbcType=CHAR},
+      </if>
+      <if test="record.ip != null" >
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fpId != null" >
+        fp_id = #{record.fpId,jdbcType=CHAR},
+      </if>
+      <if test="record.total != null" >
+        total = #{record.total,jdbcType=INTEGER},
+      </if>
+      <if test="record.isPay != null" >
+        is_pay = #{record.isPay,jdbcType=BIT},
+      </if>
+      <if test="record.notifyUrl != null" >
+        notify_url = #{record.notifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isNotify != null" >
+        is_notify = #{record.isNotify,jdbcType=BIT},
+      </if>
+      <if test="record.payType != null" >
+        pay_type = #{record.payType,jdbcType=TINYINT},
+      </if>
+      <if test="record.fromPlatform != null" >
+        from_platform = #{record.fromPlatform,jdbcType=TINYINT},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.mtime != null" >
+        mtime = #{record.mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ctime != null" >
+        ctime = #{record.ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gId != null" >
+        g_id = #{record.gId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.cId != null" >
+        c_id = #{record.cId,jdbcType=INTEGER},
+      </if>
+      <if test="record.pId != null" >
+        p_id = #{record.pId,jdbcType=INTEGER},
+      </if>
+      <if test="record.dId != null" >
+        d_id = #{record.dId,jdbcType=INTEGER},
+      </if>
+      <if test="record.notifyStatus != null" >
+        notify_status = #{record.notifyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.notifyNumber != null" >
+        notify_number = #{record.notifyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.notifyTime != null" >
+        notify_time = #{record.notifyTime,jdbcType=INTEGER},
+      </if>
+      <if test="record.phone != null" >
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storesName != null" >
+        stores_name = #{record.storesName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storesId != null" >
+        stores_id = #{record.storesId,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pinduoduo_orders
+    set id = #{record.id,jdbcType=INTEGER},
+      admin_uid = #{record.adminUid,jdbcType=INTEGER},
+      staff_id = #{record.staffId,jdbcType=INTEGER},
+      order_sn = #{record.orderSn,jdbcType=CHAR},
+      api_order_sn = #{record.apiOrderSn,jdbcType=CHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      fp_id = #{record.fpId,jdbcType=CHAR},
+      total = #{record.total,jdbcType=INTEGER},
+      is_pay = #{record.isPay,jdbcType=BIT},
+      notify_url = #{record.notifyUrl,jdbcType=VARCHAR},
+      is_notify = #{record.isNotify,jdbcType=BIT},
+      pay_type = #{record.payType,jdbcType=TINYINT},
+      from_platform = #{record.fromPlatform,jdbcType=TINYINT},
+      status = #{record.status,jdbcType=INTEGER},
+      mtime = #{record.mtime,jdbcType=TIMESTAMP},
+      ctime = #{record.ctime,jdbcType=TIMESTAMP},
+      g_id = #{record.gId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      c_id = #{record.cId,jdbcType=INTEGER},
+      p_id = #{record.pId,jdbcType=INTEGER},
+      d_id = #{record.dId,jdbcType=INTEGER},
+      notify_status = #{record.notifyStatus,jdbcType=INTEGER},
+      notify_number = #{record.notifyNumber,jdbcType=INTEGER},
+      notify_time = #{record.notifyTime,jdbcType=INTEGER},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      stores_name = #{record.storesName,jdbcType=VARCHAR},
+      stores_id = #{record.storesId,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.PinduoduoOrders" >
+    update pinduoduo_orders
+    <set >
+      <if test="adminUid != null" >
+        admin_uid = #{adminUid,jdbcType=INTEGER},
+      </if>
+      <if test="staffId != null" >
+        staff_id = #{staffId,jdbcType=INTEGER},
+      </if>
+      <if test="orderSn != null" >
+        order_sn = #{orderSn,jdbcType=CHAR},
+      </if>
+      <if test="apiOrderSn != null" >
+        api_order_sn = #{apiOrderSn,jdbcType=CHAR},
+      </if>
+      <if test="ip != null" >
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="fpId != null" >
+        fp_id = #{fpId,jdbcType=CHAR},
+      </if>
+      <if test="total != null" >
+        total = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="isPay != null" >
+        is_pay = #{isPay,jdbcType=BIT},
+      </if>
+      <if test="notifyUrl != null" >
+        notify_url = #{notifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="isNotify != null" >
+        is_notify = #{isNotify,jdbcType=BIT},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=TINYINT},
+      </if>
+      <if test="fromPlatform != null" >
+        from_platform = #{fromPlatform,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="mtime != null" >
+        mtime = #{mtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gId != null" >
+        g_id = #{gId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="cId != null" >
+        c_id = #{cId,jdbcType=INTEGER},
+      </if>
+      <if test="pId != null" >
+        p_id = #{pId,jdbcType=INTEGER},
+      </if>
+      <if test="dId != null" >
+        d_id = #{dId,jdbcType=INTEGER},
+      </if>
+      <if test="notifyStatus != null" >
+        notify_status = #{notifyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="notifyNumber != null" >
+        notify_number = #{notifyNumber,jdbcType=INTEGER},
+      </if>
+      <if test="notifyTime != null" >
+        notify_time = #{notifyTime,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="storesName != null" >
+        stores_name = #{storesName,jdbcType=VARCHAR},
+      </if>
+      <if test="storesId != null" >
+        stores_id = #{storesId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.PinduoduoOrders" >
+    update pinduoduo_orders
+    set admin_uid = #{adminUid,jdbcType=INTEGER},
+      staff_id = #{staffId,jdbcType=INTEGER},
+      order_sn = #{orderSn,jdbcType=CHAR},
+      api_order_sn = #{apiOrderSn,jdbcType=CHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      fp_id = #{fpId,jdbcType=CHAR},
+      total = #{total,jdbcType=INTEGER},
+      is_pay = #{isPay,jdbcType=BIT},
+      notify_url = #{notifyUrl,jdbcType=VARCHAR},
+      is_notify = #{isNotify,jdbcType=BIT},
+      pay_type = #{payType,jdbcType=TINYINT},
+      from_platform = #{fromPlatform,jdbcType=TINYINT},
+      status = #{status,jdbcType=INTEGER},
+      mtime = #{mtime,jdbcType=TIMESTAMP},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      g_id = #{gId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      c_id = #{cId,jdbcType=INTEGER},
+      p_id = #{pId,jdbcType=INTEGER},
+      d_id = #{dId,jdbcType=INTEGER},
+      notify_status = #{notifyStatus,jdbcType=INTEGER},
+      notify_number = #{notifyNumber,jdbcType=INTEGER},
+      notify_time = #{notifyTime,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      stores_name = #{storesName,jdbcType=VARCHAR},
+      stores_id = #{storesId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

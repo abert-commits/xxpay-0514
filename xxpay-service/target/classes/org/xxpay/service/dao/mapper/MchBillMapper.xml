@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.MchBillMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.MchBill" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="mchId" property="mchId" jdbcType="BIGINT" />
+    <result column="mchName" property="mchName" jdbcType="VARCHAR" />
+    <result column="mchType" property="mchType" jdbcType="TINYINT" />
+    <result column="billDate" property="billDate" jdbcType="DATE" />
+    <result column="Status" property="status" jdbcType="TINYINT" />
+    <result column="billPath" property="billPath" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, mchId, mchName, mchType, billDate, Status, billPath, createTime, updateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.MchBillExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mch_bill
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mch_bill
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_mch_bill
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.MchBillExample" >
+    delete from t_mch_bill
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.MchBill" >
+    insert into t_mch_bill (id, mchId, mchName, 
+      mchType, billDate, Status, 
+      billPath, createTime, updateTime
+      )
+    values (#{id,jdbcType=BIGINT}, #{mchId,jdbcType=BIGINT}, #{mchName,jdbcType=VARCHAR}, 
+      #{mchType,jdbcType=TINYINT}, #{billDate,jdbcType=DATE}, #{status,jdbcType=TINYINT}, 
+      #{billPath,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.MchBill" >
+    insert into t_mch_bill
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="mchId != null" >
+        mchId,
+      </if>
+      <if test="mchName != null" >
+        mchName,
+      </if>
+      <if test="mchType != null" >
+        mchType,
+      </if>
+      <if test="billDate != null" >
+        billDate,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="billPath != null" >
+        billPath,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="mchId != null" >
+        #{mchId,jdbcType=BIGINT},
+      </if>
+      <if test="mchName != null" >
+        #{mchName,jdbcType=VARCHAR},
+      </if>
+      <if test="mchType != null" >
+        #{mchType,jdbcType=TINYINT},
+      </if>
+      <if test="billDate != null" >
+        #{billDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="billPath != null" >
+        #{billPath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.MchBillExample" resultType="java.lang.Integer" >
+    select count(*) from t_mch_bill
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_mch_bill
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.mchId != null" >
+        mchId = #{record.mchId,jdbcType=BIGINT},
+      </if>
+      <if test="record.mchName != null" >
+        mchName = #{record.mchName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mchType != null" >
+        mchType = #{record.mchType,jdbcType=TINYINT},
+      </if>
+      <if test="record.billDate != null" >
+        billDate = #{record.billDate,jdbcType=DATE},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.billPath != null" >
+        billPath = #{record.billPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_mch_bill
+    set id = #{record.id,jdbcType=BIGINT},
+      mchId = #{record.mchId,jdbcType=BIGINT},
+      mchName = #{record.mchName,jdbcType=VARCHAR},
+      mchType = #{record.mchType,jdbcType=TINYINT},
+      billDate = #{record.billDate,jdbcType=DATE},
+      Status = #{record.status,jdbcType=TINYINT},
+      billPath = #{record.billPath,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.MchBill" >
+    update t_mch_bill
+    <set >
+      <if test="mchId != null" >
+        mchId = #{mchId,jdbcType=BIGINT},
+      </if>
+      <if test="mchName != null" >
+        mchName = #{mchName,jdbcType=VARCHAR},
+      </if>
+      <if test="mchType != null" >
+        mchType = #{mchType,jdbcType=TINYINT},
+      </if>
+      <if test="billDate != null" >
+        billDate = #{billDate,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="billPath != null" >
+        billPath = #{billPath,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.MchBill" >
+    update t_mch_bill
+    set mchId = #{mchId,jdbcType=BIGINT},
+      mchName = #{mchName,jdbcType=VARCHAR},
+      mchType = #{mchType,jdbcType=TINYINT},
+      billDate = #{billDate,jdbcType=DATE},
+      Status = #{status,jdbcType=TINYINT},
+      billPath = #{billPath,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

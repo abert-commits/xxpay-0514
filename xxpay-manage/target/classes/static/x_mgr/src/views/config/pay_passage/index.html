@@ -1,0 +1,141 @@
+<div class="layui-card-header layui-card">
+    <span class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">首页</a>
+        <a><cite>支付配置</cite></a>
+    </span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">支付通道</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-row">
+                    <div class="layui-form" style="float:left; margin-bottom: 10px;">
+                    <div class="layuiAdmin-btns" style="margin-bottom: 10px;">
+                        <a lay-href="config/pay_passage/create" class="layui-btn" data-type="all" data-events="create">新增支付通道</a>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="passageId" id="passageId" lay-search="">
+                            <option value="-99">支付通道</option>
+                        </select>
+                    </div>
+                    <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                </div>
+                </div>
+                <table id="cList" lay-filter="cList"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['table','util', 'form','admin'], function(){
+        var table = layui.table
+        ,$ = layui.$
+         , admin = layui.admin
+        ,form = layui.form
+        ,element = layui.element;
+
+        element.render('breadcrumb', 'breadcrumb');//渲染导航信息
+
+        var tplEdit = function(d){
+            return "<a class='layui-btn layui-btn-primary layui-btn-xs' lay-event='account'>子账户</a>" +
+                    "<a class='layui-btn layui-btn-primary layui-btn-xs' lay-event='rate'>费率</a>" +
+                    "<a class='layui-btn layui-btn-primary layui-btn-xs' lay-event='risk'>风控</a>" +
+                    "<a class='layui-btn layui-btn-xs' lay-event='edit'>编辑</a>";
+        };
+
+        var tplStatus = function(d){
+            if(d.status == 0) {
+                return "关闭";
+            }else if(d.status == 1) {
+                return "<span style='color: green'>开启</span>";
+            }
+        };
+
+        var tplRate = function(d){
+            return "<span style='color: blue'>"+ d.passageRate+"%</span>";
+        };
+
+        table.render({
+            elem: '#cList'
+            ,url: layui.setter.baseUrl + '/config/pay_passage/list'
+            ,where: { access_token: layui.data(layui.setter.tableName).access_token}
+            ,id: 'tableReload'
+            ,cols: [[
+                {field:'id', title: '通道ID'}
+                ,{field:'passageName', title: '通道名称'}
+                ,{field:'ifCode', title: '接口代码'}
+                ,{field:'ifName', title: '接口名称'}
+                ,{field:'payTypeName', title: '支付类型'}
+                ,{field:'passageRate', title: '通道费率', templet: tplRate}
+                ,{field:'status', title: '通道状态',templet: tplStatus }
+                ,{field:'edite', width: 260, title: '操作', templet: tplEdit }
+            ]]
+            ,page: true
+            ,skin: 'line'
+        });
+
+        // 加载支付通道
+        admin.req({
+            type: 'post',
+            url: layui.setter.baseUrl + '/config/common/pay_passage_all',
+            error: function (err) {
+                layer.alert(err);
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    var payPassageList = res.data;
+                    //遍历赋值
+                    for (var i in payPassageList) {
+                        $("#passageId").append('<option value= ' + payPassageList[i].id + '>' + payPassageList[i].passageName + '</option>');
+                    }
+                    form.render('select');
+                }
+            }
+        });
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function () {
+                var passageId = $('#passageId').val();
+
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        id: passageId
+                    }
+                });
+            }
+        };
+
+        $('#search').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //监听工具条
+        table.on('tool(cList)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'account'){
+                location.href = layui.setter.baseLocal + "config/pay_passage_account//payPassageId=" + data.id;
+            } else if(obj.event === 'rate'){
+                location.href = layui.setter.baseLocal + "config/pay_passage/rate_set/id=" + data.id;
+            } else if(obj.event === 'risk'){
+                location.href = layui.setter.baseLocal + "config/pay_passage/risk_set/id=" + data.id;
+            }  else if(obj.event === 'edit'){
+                location.href = layui.setter.baseLocal + "config/pay_passage/update/id=" + data.id;
+            }
+        });
+
+        // 渲染表单
+        form.render();
+
+    });
+    
+</script>

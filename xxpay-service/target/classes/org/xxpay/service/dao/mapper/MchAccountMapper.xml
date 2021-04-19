@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.MchAccountMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.MchAccount" >
+    <id column="MchId" property="mchId" jdbcType="BIGINT" />
+    <result column="Name" property="name" jdbcType="VARCHAR" />
+    <result column="Type" property="type" jdbcType="TINYINT" />
+    <result column="Balance" property="balance" jdbcType="BIGINT" />
+    <result column="UnBalance" property="unBalance" jdbcType="BIGINT" />
+    <result column="SecurityMoney" property="securityMoney" jdbcType="BIGINT" />
+    <result column="TotalIncome" property="totalIncome" jdbcType="BIGINT" />
+    <result column="TotalExpend" property="totalExpend" jdbcType="BIGINT" />
+    <result column="TodayIncome" property="todayIncome" jdbcType="BIGINT" />
+    <result column="TodayExpend" property="todayExpend" jdbcType="BIGINT" />
+    <result column="SettAmount" property="settAmount" jdbcType="BIGINT" />
+    <result column="Status" property="status" jdbcType="TINYINT" />
+    <result column="AccountUpdateTime" property="accountUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="FrozenMoney" property="frozenMoney" jdbcType="BIGINT" />
+    <result column="AgentpayBalance" property="agentpayBalance" jdbcType="BIGINT" />
+    <result column="UnAgentpayBalance" property="unAgentpayBalance" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    MchId, Name, Type, Balance, UnBalance, SecurityMoney, TotalIncome, TotalExpend, TodayIncome, 
+    TodayExpend, SettAmount, Status, AccountUpdateTime, CreateTime, UpdateTime, FrozenMoney,
+    AgentpayBalance, UnAgentpayBalance
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.MchAccountExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mch_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mch_account
+    where MchId = #{mchId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_mch_account
+    where MchId = #{mchId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.MchAccountExample" >
+    delete from t_mch_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.MchAccount" >
+    insert into t_mch_account (MchId, Name, Type, 
+      Balance, UnBalance, SecurityMoney, 
+      TotalIncome, TotalExpend, TodayIncome, 
+      TodayExpend, SettAmount, Status, 
+      AccountUpdateTime, CreateTime, UpdateTime,
+      FrozenMoney, AgentpayBalance, UnAgentpayBalance
+      )
+    values (#{mchId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{balance,jdbcType=BIGINT}, #{unBalance,jdbcType=BIGINT}, #{securityMoney,jdbcType=BIGINT}, 
+      #{totalIncome,jdbcType=BIGINT}, #{totalExpend,jdbcType=BIGINT}, #{todayIncome,jdbcType=BIGINT}, 
+      #{todayExpend,jdbcType=BIGINT}, #{settAmount,jdbcType=BIGINT}, #{status,jdbcType=TINYINT}, 
+      #{accountUpdateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{frozenMoney,jdbcType=BIGINT}, #{agentpayBalance,jdbcType=BIGINT}, #{unAgentpayBalance,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.MchAccount" >
+    insert into t_mch_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mchId != null" >
+        MchId,
+      </if>
+      <if test="name != null" >
+        Name,
+      </if>
+      <if test="type != null" >
+        Type,
+      </if>
+      <if test="balance != null" >
+        Balance,
+      </if>
+      <if test="unBalance != null" >
+        UnBalance,
+      </if>
+      <if test="securityMoney != null" >
+        SecurityMoney,
+      </if>
+      <if test="totalIncome != null" >
+        TotalIncome,
+      </if>
+      <if test="totalExpend != null" >
+        TotalExpend,
+      </if>
+      <if test="todayIncome != null" >
+        TodayIncome,
+      </if>
+      <if test="todayExpend != null" >
+        TodayExpend,
+      </if>
+      <if test="settAmount != null" >
+        SettAmount,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="accountUpdateTime != null" >
+        AccountUpdateTime,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime,
+      </if>
+      <if test="frozenMoney != null" >
+        FrozenMoney,
+      </if>
+      <if test="agentpayBalance != null" >
+        AgentpayBalance,
+      </if>
+      <if test="unAgentpayBalance != null" >
+        UnAgentpayBalance,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mchId != null" >
+        #{mchId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=BIGINT},
+      </if>
+      <if test="unBalance != null" >
+        #{unBalance,jdbcType=BIGINT},
+      </if>
+      <if test="securityMoney != null" >
+        #{securityMoney,jdbcType=BIGINT},
+      </if>
+      <if test="totalIncome != null" >
+        #{totalIncome,jdbcType=BIGINT},
+      </if>
+      <if test="totalExpend != null" >
+        #{totalExpend,jdbcType=BIGINT},
+      </if>
+      <if test="todayIncome != null" >
+        #{todayIncome,jdbcType=BIGINT},
+      </if>
+      <if test="todayExpend != null" >
+        #{todayExpend,jdbcType=BIGINT},
+      </if>
+      <if test="settAmount != null" >
+        #{settAmount,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="accountUpdateTime != null" >
+        #{accountUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frozenMoney != null" >
+        #{frozenMoney,jdbcType=BIGINT},
+      </if>
+      <if test="agentpayBalance != null" >
+        #{agentpayBalance,jdbcType=BIGINT},
+      </if>
+      <if test="unAgentpayBalance != null" >
+        #{unAgentpayBalance,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.MchAccountExample" resultType="java.lang.Integer" >
+    select count(*) from t_mch_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_mch_account
+    <set >
+      <if test="record.mchId != null" >
+        MchId = #{record.mchId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        Name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null" >
+        Type = #{record.type,jdbcType=TINYINT},
+      </if>
+      <if test="record.balance != null" >
+        Balance = #{record.balance,jdbcType=BIGINT},
+      </if>
+      <if test="record.unBalance != null" >
+        UnBalance = #{record.unBalance,jdbcType=BIGINT},
+      </if>
+      <if test="record.securityMoney != null" >
+        SecurityMoney = #{record.securityMoney,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalIncome != null" >
+        TotalIncome = #{record.totalIncome,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalExpend != null" >
+        TotalExpend = #{record.totalExpend,jdbcType=BIGINT},
+      </if>
+      <if test="record.todayIncome != null" >
+        TodayIncome = #{record.todayIncome,jdbcType=BIGINT},
+      </if>
+      <if test="record.todayExpend != null" >
+        TodayExpend = #{record.todayExpend,jdbcType=BIGINT},
+      </if>
+      <if test="record.settAmount != null" >
+        SettAmount = #{record.settAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.accountUpdateTime != null" >
+        AccountUpdateTime = #{record.accountUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.frozenMoney != null" >
+        FrozenMoney = #{record.frozenMoney,jdbcType=BIGINT},
+      </if>
+      <if test="record.agentpayBalance != null" >
+        AgentpayBalance = #{record.agentpayBalance,jdbcType=BIGINT},
+      </if>
+      <if test="record.unAgentpayBalance != null" >
+        UnAgentpayBalance = #{record.unAgentpayBalance,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_mch_account
+    set MchId = #{record.mchId,jdbcType=BIGINT},
+      Name = #{record.name,jdbcType=VARCHAR},
+      Type = #{record.type,jdbcType=TINYINT},
+      Balance = #{record.balance,jdbcType=BIGINT},
+      UnBalance = #{record.unBalance,jdbcType=BIGINT},
+      SecurityMoney = #{record.securityMoney,jdbcType=BIGINT},
+      TotalIncome = #{record.totalIncome,jdbcType=BIGINT},
+      TotalExpend = #{record.totalExpend,jdbcType=BIGINT},
+      TodayIncome = #{record.todayIncome,jdbcType=BIGINT},
+      TodayExpend = #{record.todayExpend,jdbcType=BIGINT},
+      SettAmount = #{record.settAmount,jdbcType=BIGINT},
+      Status = #{record.status,jdbcType=TINYINT},
+      AccountUpdateTime = #{record.accountUpdateTime,jdbcType=TIMESTAMP},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      FrozenMoney = #{record.frozenMoney,jdbcType=BIGINT},
+      AgentpayBalance = #{record.agentpayBalance,jdbcType=BIGINT},
+      UnAgentpayBalance = #{record.unAgentpayBalance,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.MchAccount" >
+    update t_mch_account
+    <set >
+      <if test="name != null" >
+        Name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        Type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="balance != null" >
+        Balance = #{balance,jdbcType=BIGINT},
+      </if>
+      <if test="unBalance != null" >
+        UnBalance = #{unBalance,jdbcType=BIGINT},
+      </if>
+      <if test="securityMoney != null" >
+        SecurityMoney = #{securityMoney,jdbcType=BIGINT},
+      </if>
+      <if test="totalIncome != null" >
+        TotalIncome = #{totalIncome,jdbcType=BIGINT},
+      </if>
+      <if test="totalExpend != null" >
+        TotalExpend = #{totalExpend,jdbcType=BIGINT},
+      </if>
+      <if test="todayIncome != null" >
+        TodayIncome = #{todayIncome,jdbcType=BIGINT},
+      </if>
+      <if test="todayExpend != null" >
+        TodayExpend = #{todayExpend,jdbcType=BIGINT},
+      </if>
+      <if test="settAmount != null" >
+        SettAmount = #{settAmount,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="accountUpdateTime != null" >
+        AccountUpdateTime = #{accountUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frozenMoney != null" >
+        FrozenMoney = #{frozenMoney,jdbcType=BIGINT},
+      </if>
+      <if test="agentpayBalance != null" >
+        AgentpayBalance = #{agentpayBalance,jdbcType=BIGINT},
+      </if>
+      <if test="unAgentpayBalance != null" >
+        UnAgentpayBalance = #{unAgentpayBalance,jdbcType=BIGINT},
+      </if>
+    </set>
+    where MchId = #{mchId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.MchAccount" >
+    update t_mch_account
+    set Name = #{name,jdbcType=VARCHAR},
+      Type = #{type,jdbcType=TINYINT},
+      Balance = #{balance,jdbcType=BIGINT},
+      UnBalance = #{unBalance,jdbcType=BIGINT},
+      SecurityMoney = #{securityMoney,jdbcType=BIGINT},
+      TotalIncome = #{totalIncome,jdbcType=BIGINT},
+      TotalExpend = #{totalExpend,jdbcType=BIGINT},
+      TodayIncome = #{todayIncome,jdbcType=BIGINT},
+      TodayExpend = #{todayExpend,jdbcType=BIGINT},
+      SettAmount = #{settAmount,jdbcType=BIGINT},
+      Status = #{status,jdbcType=TINYINT},
+      AccountUpdateTime = #{accountUpdateTime,jdbcType=TIMESTAMP},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      FrozenMoney = #{frozenMoney,jdbcType=BIGINT},
+      AgentpayBalance = #{agentpayBalance,jdbcType=BIGINT},
+      UnAgentpayBalance = #{unAgentpayBalance,jdbcType=BIGINT}
+    where MchId = #{mchId,jdbcType=BIGINT}
+  </update>
+
+  <!-- 更新用户可结算金额 -->
+  <update id="updateSettAmount" parameterType="java.util.Map" >
+    update t_mch_account
+    set SettAmount = SettAmount + #{totalAmount}
+    where MchId = #{mchId,jdbcType=BIGINT}
+  </update>
+</mapper>

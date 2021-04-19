@@ -1,0 +1,171 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>商户充值</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">商户充值</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row" style="margin-bottom: 10px;">
+                        <div class="layui-form" style="float:right;">
+                            <div class="layui-form-item" style="margin:0;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="createTimeStart" id="createTimeStart" autocomplete="off"
+                                           placeholder="起始时间" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="createTimeEnd" id="createTimeEnd" autocomplete="off"
+                                           placeholder="结束时间" class="layui-input">
+                                </div>
+                               <!-- <div class="layui-input-inline">
+                                    <select name="mchId" id="mchId" lay-search="">
+                                        <option value="-99">商户名称</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="passageId" id="passageId" lay-search="">
+                                        <option value="-99">支付通道</option>
+                                    </select>
+                                </div>-->
+                                <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                                <!--<button id="exportDataStatics" class="layui-btn">导出EXCEL</button>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="XxPay_Bcd_User_dataAll" lay-filter="XxPay_Bcd_User_dataAll"></table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    layui.use(['admin', 'table', 'util', 'laydate',  'util'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            // , util = layui.util
+            , element = layui.element
+            , laydate = layui.laydate
+            //, excel = layui.excel
+            , form = layui.form;
+
+        element.render('breadcrumb', 'breadcrumb');
+
+        var tplStatus = function (d) {
+            var d = d.successRate;
+            if (parseFloat(d * 100) >= 50.00) {
+                return "<span  style='color: green'>" + d == null ? 0 : (d * 100).toFixed(2) + "%</span>";
+            } else if (parseFloat(d * 100) < 50.00) {
+                return "<span style='color: red'>" + d == null ? 0 : (d * 100).toFixed(2) + "%</span>";
+            }
+        };
+
+        var tplOutAmount2 = function (d) {
+            return d.outAmount - d.feeAmount;
+        };
+
+        //商户充值计列表
+        table.render({
+            elem: '#XxPay_Bcd_User_dataAll'
+            , cellMinWidth: 90
+            , url: layui.setter.baseUrl + '/bill/data/merchanttopup'  //商户充值接口
+            , where: {
+                access_token: layui.data(layui.setter.tableName).access_token
+            }
+            ,initSort: {
+                field: 'totalAmount' //排序字段，对应 cols 设定的各字段名
+                , type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            }
+            , id: 'tableReload'
+            , page: true
+            , cols: [
+                [
+                    {field: 'mchId', title: '商户ID'}
+                    , {field: 'mchName', title: '商户名称'}
+                    , {
+                    field: 'productId',
+                    title: '产品编号',
+                    sort: true,
+                    templet: '<div>{{ d.productId==null?0:d.productId }}</div>'
+                }
+                    , {
+                    field: 'productName',
+                    title: '支付产品',
+                    sort: true,
+                    templet: '<div>{{ d.productName==null?0:d.productName }}</div>'
+                }
+                    , {
+                    field: 'totalAmount',
+                    title: '充值金额',
+                    sort: true,
+                    templet: '<div>{{ d.totalAmount==null?0:(d.totalAmount)/100}}</div>'
+                }
+                    , {
+                    field: 'handlingfee',
+                    title: '手续费',
+                    templet: '<div>{{ d.handlingfee == null?0:d.handlingfee/100 }}</div>'
+                }
+                    , {field: 'Amount', title: '结算金额', templet: '<div>{{ d.Amount == null?0:d.Amount/100 }}</div>'}
+                    , {
+                    field: 'successRate',
+                    title: '订单成功率',
+                    templet: '<div>{{ d.successRate==null?0:d.successRate }}% </div>',
+                    templet: tplStatus
+                }]
+            ],
+            skin: 'line'
+        });
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function () {
+                var createTimeStart = $('#createTimeStart').val();
+                var createTimeEnd = $('#createTimeEnd').val();
+                var passageId = $('#passageId').val();
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , page: true
+                    , where: {
+                        createTimeStart: createTimeStart,
+                        createTimeEnd: createTimeEnd,
+                        passageId:passageId
+                    }
+                });
+            }
+        };
+
+        $('#search').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        laydate.render({
+            elem: '#createTimeStart'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        laydate.render({
+            elem: '#createTimeEnd'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        // 渲染表单
+        form.render();
+    });
+</script>

@@ -1,0 +1,210 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>账号管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-form" style="padding-top: 15px;">
+    <div class="layui-form-item" style="margin-bottom: 0">
+        <label class="layui-form-label">手机号：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="phone" class="layui-input"  placeholder="请填写手机号码">
+        </div>
+        <div class="layui-input-inline">
+            <select name="is_expired" id="is_expired">
+                <option  value="">是否过期</option>
+                <option value="true">过期</option>
+                <option value="false">未过期</option>
+            </select>
+        </div>
+
+        <div class="layui-input-inline">
+        <select name="is_limit" id="is_limit" >
+            <option value="">是否受限</option>
+            <option value="true">受限</option>
+            <option value="false">未受限</option>
+        </select>
+        </div>
+
+        <div class="layui-form-mid layui-word-aux" style="padding: 5px 0!important;">
+            <button type="button" id="search" data-type="search" class="layui-btn layui-btn-normal" >搜索</button>
+            <a class="layui-btn" lay-href="pinduoduo/user/users_add">新增</a>
+            <a class="layui-btn"  lay-href="pinduoduo/user/onekey">导入</a>
+
+            <button type="button" id="verification" class="layui-btn tab-btn-active">排查过期下单号</button>
+
+        </div>
+    </div>
+</div>
+<table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
+<script type="text/html" id="toolbar">
+   <!-- <div class="layui-btn-group fl">
+        <a data-href="api/pdd/user/setUserStatus?val=1" class="layui-btn layui-btn-primary layui-btn-sm hisi-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
+        <a data-href="api/pdd/user/setUserStatus?val=1" class="layui-btn layui-btn-primary layui-btn-sm hisi-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
+    </div>-->
+</script>
+<script type="text/html" id="buttonTpl">
+    <form>
+        <!---->
+        <input type="checkbox" class="layui-btn layui-btn-sm" data-id="{{d.id }}" {{d.status==1?'checked':''}}  lay-skin="switch" lay-filter="StatusSwitch" lay-text="启用|禁用">
+    </form>
+</script>
+<script>
+    layui.use(['form','jquery','table'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var $ = layui.$;
+        var element = layui.element;
+        element.render('breadcrumb', 'breadcrumb');
+        form.render("select");
+        table.render({
+            elem: '#dataTable'
+            ,url: layui.setter.baseUrl + '/pdd/user/list'
+            ,page: true
+            ,cellMinWidth: 80
+            ,toolbar: '#toolbar'
+            , id: 'users'
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'id', title: 'ID',width: 80, sort: true}
+                ,{field:'phone', title: '手机号码'}
+                ,{field:'is_expired', title: '是否过期',templet: '<div>{{d.is_expired==true?"过期":"未过期"  }}</div>'}
+                ,{field:'is_limit', title: '是否受限',templet: '<div>{{d.is_limit==true?"受限":"未受限"  }}</div>'}
+                ,{field:'address_id', title: '地址id'}
+                ,{field:'ctime', title: '添加时间', sort: true,templet:'<div>{{ dateFormat(d.ctime) }}</div> '}
+                ,{title: '操作',width: 220, templet: '#buttonTpl'}
+            ]]
+        });
+        //搜索加载--数据表格重载
+        var active = {
+            search: function () {
+                table.reload('users', {
+                    method:'GET',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        phone: $("input[name=phone]").val(),
+                        agent: $("select[name=agent]").val(),
+                        is_limit: $("#is_limit").val(),
+                        is_expired: $("#is_expired").val()
+
+                    }
+                });
+            }
+        };
+        $('#search').on('click', function () {
+            ids=new Array();
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        //监听工具条
+        table.on('tool(users)', function(obj){
+        });
+        form.on('switch(StatusSwitch)', function(data){
+            let id=data.elem.dataset.id;
+            let status=this.checked?1:0;
+            $.post( layui.setter.baseUrl + '/pdd/user/setUserStatus',{
+                id:id,
+                val:status
+            },function (res) {
+                console.log(res);
+                layer.msg(res.msg, {
+                    time: 2000,
+                    closeBtn: 0
+                });
+                if(res.code!=0){
+                    $(data.elem).prop("checked", data.elem.defaultChecked);
+                    form.render();
+                }
+            })
+        });
+
+
+
+
+
+        $("#verification").on('click',function () {
+            var msg =layer.msg('正在排查请稍后...', {
+                time: 100000,
+                closeBtn: 0
+            });
+            $.post(layui.setter.baseUrl + '/pdd/user/verification',{
+            },function (res) {
+                layer.close(msg);
+                if (res.code==0){
+                    var ms="检查出: "+res.data.count+"个过期 已更改状态"
+                    var msg1=layer.msg( ms, {
+                        time: 200000,
+                        btn: ['知道了'],
+                        yes:function(){
+                            layer.close(msg1);
+                            active["search"].call(this)
+                        },
+                        btnAlign: 'c',
+                        anim: 6
+                    });
+                }else{
+                    layer.msg("排查出错 请呼叫管理员", {
+                        time: 200000,
+                        btn: ['知道了'],
+                        btnAlign: 'c',
+                        anim: 6
+                    });
+                }
+            })
+        });
+
+
+    });
+    function users_del(id) {
+        if (confirm('确认是否删除？')==true){
+            //self.location='{:url('pinduoduo/users_del')}?id='+id;
+        }
+    }
+
+
+    Date.prototype.format = function (fmt) { //author: meizz  
+        var o = {
+            "M+": this.getMonth() + 1, //月份  
+            "d+": this.getDate(), //日  
+            "h+": this.getHours(), //小时  
+            "m+": this.getMinutes(), //分  
+            "s+": this.getSeconds(), //秒   
+            "q+": Math.floor((this.getMonth() + 3) / 3),    //q是季度
+            "S": this.getMilliseconds() //毫秒  
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    String.prototype.format = function (args) {
+        var result = this;
+        if (arguments.length > 0) {
+            if (arguments.length == 1 && typeof (args) == "loginTime") {
+                for (var key in args) {
+                    if (args[key] != undefined) {
+                        var reg = new RegExp("({" + key + "})", "g");
+                        result = result.replace(reg, args[key]);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < arguments.length; i++) {
+                    if (arguments[i] != undefined) {
+                        //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题  
+                        var reg = new RegExp("({)" + i + "(})", "g");
+                        result = result.replace(reg, arguments[i]);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    function dateFormat(value) {
+        return value ? new Date(value).format("yyyy-MM-dd hh:mm:ss") : "";
+    } 
+</script>

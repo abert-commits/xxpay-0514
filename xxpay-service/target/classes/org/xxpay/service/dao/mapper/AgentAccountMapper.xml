@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.AgentAccountMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.AgentAccount" >
+    <id column="AgentId" property="agentId" jdbcType="BIGINT" />
+    <result column="Balance" property="balance" jdbcType="BIGINT" />
+    <result column="UnBalance" property="unBalance" jdbcType="BIGINT" />
+    <result column="SecurityMoney" property="securityMoney" jdbcType="BIGINT" />
+    <result column="TotalIncome" property="totalIncome" jdbcType="BIGINT" />
+    <result column="TotalExpend" property="totalExpend" jdbcType="BIGINT" />
+    <result column="TodayIncome" property="todayIncome" jdbcType="BIGINT" />
+    <result column="TodayExpend" property="todayExpend" jdbcType="BIGINT" />
+    <result column="SettAmount" property="settAmount" jdbcType="BIGINT" />
+    <result column="Status" property="status" jdbcType="TINYINT" />
+    <result column="AccountUpdateTime" property="accountUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    AgentId, Balance, UnBalance, SecurityMoney, TotalIncome, TotalExpend, TodayIncome, 
+    TodayExpend, SettAmount, Status, AccountUpdateTime, CreateTime, UpdateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.AgentAccountExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_agent_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_agent_account
+    where AgentId = #{agentId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_agent_account
+    where AgentId = #{agentId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.AgentAccountExample" >
+    delete from t_agent_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.AgentAccount" >
+    insert into t_agent_account (AgentId, Balance, UnBalance, 
+      SecurityMoney, TotalIncome, TotalExpend, 
+      TodayIncome, TodayExpend, SettAmount, 
+      Status, AccountUpdateTime, CreateTime,
+      UpdateTime)
+    values (#{agentId,jdbcType=BIGINT}, #{balance,jdbcType=BIGINT}, #{unBalance,jdbcType=BIGINT}, 
+      #{securityMoney,jdbcType=BIGINT}, #{totalIncome,jdbcType=BIGINT}, #{totalExpend,jdbcType=BIGINT}, 
+      #{todayIncome,jdbcType=BIGINT}, #{todayExpend,jdbcType=BIGINT}, #{settAmount,jdbcType=BIGINT}, 
+      #{status,jdbcType=TINYINT}, #{accountUpdateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.AgentAccount" >
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="agentId">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_agent_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="agentId != null" >
+        AgentId,
+      </if>
+      <if test="balance != null" >
+        Balance,
+      </if>
+      <if test="unBalance != null" >
+        UnBalance,
+      </if>
+      <if test="securityMoney != null" >
+        SecurityMoney,
+      </if>
+      <if test="totalIncome != null" >
+        TotalIncome,
+      </if>
+      <if test="totalExpend != null" >
+        TotalExpend,
+      </if>
+      <if test="todayIncome != null" >
+        TodayIncome,
+      </if>
+      <if test="todayExpend != null" >
+        TodayExpend,
+      </if>
+      <if test="settAmount != null" >
+        SettAmount,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="accountUpdateTime != null" >
+        AccountUpdateTime,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="agentId != null" >
+        #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=BIGINT},
+      </if>
+      <if test="unBalance != null" >
+        #{unBalance,jdbcType=BIGINT},
+      </if>
+      <if test="securityMoney != null" >
+        #{securityMoney,jdbcType=BIGINT},
+      </if>
+      <if test="totalIncome != null" >
+        #{totalIncome,jdbcType=BIGINT},
+      </if>
+      <if test="totalExpend != null" >
+        #{totalExpend,jdbcType=BIGINT},
+      </if>
+      <if test="todayIncome != null" >
+        #{todayIncome,jdbcType=BIGINT},
+      </if>
+      <if test="todayExpend != null" >
+        #{todayExpend,jdbcType=BIGINT},
+      </if>
+      <if test="settAmount != null" >
+        #{settAmount,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="accountUpdateTime != null" >
+        #{accountUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.AgentAccountExample" resultType="java.lang.Integer" >
+    select count(*) from t_agent_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_agent_account
+    <set >
+      <if test="record.agentId != null" >
+        AgentId = #{record.agentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.balance != null" >
+        Balance = #{record.balance,jdbcType=BIGINT},
+      </if>
+      <if test="record.unBalance != null" >
+        UnBalance = #{record.unBalance,jdbcType=BIGINT},
+      </if>
+      <if test="record.securityMoney != null" >
+        SecurityMoney = #{record.securityMoney,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalIncome != null" >
+        TotalIncome = #{record.totalIncome,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalExpend != null" >
+        TotalExpend = #{record.totalExpend,jdbcType=BIGINT},
+      </if>
+      <if test="record.todayIncome != null" >
+        TodayIncome = #{record.todayIncome,jdbcType=BIGINT},
+      </if>
+      <if test="record.todayExpend != null" >
+        TodayExpend = #{record.todayExpend,jdbcType=BIGINT},
+      </if>
+      <if test="record.settAmount != null" >
+        SettAmount = #{record.settAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.accountUpdateTime != null" >
+        AccountUpdateTime = #{record.accountUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_agent_account
+    set AgentId = #{record.agentId,jdbcType=BIGINT},
+      Balance = #{record.balance,jdbcType=BIGINT},
+      UnBalance = #{record.unBalance,jdbcType=BIGINT},
+      SecurityMoney = #{record.securityMoney,jdbcType=BIGINT},
+      TotalIncome = #{record.totalIncome,jdbcType=BIGINT},
+      TotalExpend = #{record.totalExpend,jdbcType=BIGINT},
+      TodayIncome = #{record.todayIncome,jdbcType=BIGINT},
+      TodayExpend = #{record.todayExpend,jdbcType=BIGINT},
+      SettAmount = #{record.settAmount,jdbcType=BIGINT},
+      Status = #{record.status,jdbcType=TINYINT},
+      AccountUpdateTime = #{record.accountUpdateTime,jdbcType=TIMESTAMP},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.AgentAccount" >
+    update t_agent_account
+    <set >
+      <if test="balance != null" >
+        Balance = #{balance,jdbcType=BIGINT},
+      </if>
+      <if test="unBalance != null" >
+        UnBalance = #{unBalance,jdbcType=BIGINT},
+      </if>
+      <if test="securityMoney != null" >
+        SecurityMoney = #{securityMoney,jdbcType=BIGINT},
+      </if>
+      <if test="totalIncome != null" >
+        TotalIncome = #{totalIncome,jdbcType=BIGINT},
+      </if>
+      <if test="totalExpend != null" >
+        TotalExpend = #{totalExpend,jdbcType=BIGINT},
+      </if>
+      <if test="todayIncome != null" >
+        TodayIncome = #{todayIncome,jdbcType=BIGINT},
+      </if>
+      <if test="todayExpend != null" >
+        TodayExpend = #{todayExpend,jdbcType=BIGINT},
+      </if>
+      <if test="settAmount != null" >
+        SettAmount = #{settAmount,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="accountUpdateTime != null" >
+        AccountUpdateTime = #{accountUpdateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where AgentId = #{agentId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.AgentAccount" >
+    update t_agent_account
+    set Balance = #{balance,jdbcType=BIGINT},
+      UnBalance = #{unBalance,jdbcType=BIGINT},
+      SecurityMoney = #{securityMoney,jdbcType=BIGINT},
+      TotalIncome = #{totalIncome,jdbcType=BIGINT},
+      TotalExpend = #{totalExpend,jdbcType=BIGINT},
+      TodayIncome = #{todayIncome,jdbcType=BIGINT},
+      TodayExpend = #{todayExpend,jdbcType=BIGINT},
+      SettAmount = #{settAmount,jdbcType=BIGINT},
+      Status = #{status,jdbcType=TINYINT},
+      AccountUpdateTime = #{accountUpdateTime,jdbcType=TIMESTAMP},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where AgentId = #{agentId,jdbcType=BIGINT}
+  </update>
+
+  <!-- 更新用户可结算金额 -->
+  <update id="updateSettAmount" parameterType="java.util.Map" >
+    update t_agent_account
+    set SettAmount = SettAmount + #{totalAmount}
+    where AgentId = #{agentId,jdbcType=BIGINT}
+  </update>
+
+  <select id="sumAgentBalance" parameterType="org.xxpay.core.entity.AgentAccountExample" resultType="java.math.BigDecimal" >
+    select ifnull(sum(Balance), 0) from t_agent_account
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <select id="sumBalanceByParentAgentId" parameterType="org.xxpay.core.entity.AgentInfo" resultType="java.math.BigDecimal" >
+    select ifnull(sum(balance), 0) from t_agent_account where 1=1
+    <if test="parentAgentId != null" >
+      and agentId in (select agentId from t_agent_info WHERE parentAgentId = #{parentAgentId})
+    </if>
+  </select>
+  <select id="findAllList" resultType="org.xxpay.core.entity.AgentAccount">
+    select <include refid="Base_Column_List"/>
+    from t_agent_account
+  </select>
+
+</mapper>

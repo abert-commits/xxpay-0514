@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.PayOrderCashCollRecordMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.core.entity.PayOrderCashCollRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="PayOrderId" property="payOrderId" jdbcType="VARCHAR"/>
+        <result column="ChannelOrderNo" property="channelOrderNo" jdbcType="VARCHAR"/>
+        <result column="RequestNo" property="requestNo" jdbcType="VARCHAR"/>
+        <result column="TransInUserName" property="transInUserName" jdbcType="VARCHAR"/>
+        <result column="TransInUserAccount" property="transInUserAccount" jdbcType="VARCHAR"/>
+        <result column="TransInUserId" property="transInUserId" jdbcType="VARCHAR"/>
+        <result column="TransInPercentage" property="transInPercentage" jdbcType="DECIMAL"/>
+        <result column="TransInAmount" property="transInAmount" jdbcType="BIGINT"/>
+        <result column="Status" property="status" jdbcType="TINYINT"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="Type" property="type" jdbcType="INTEGER"/>
+        <result column="passageAccountId" property="passageAccountId" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, PayOrderId, ChannelOrderNo, RequestNo, TransInUserName, TransInUserAccount, TransInUserId,
+    TransInPercentage, TransInAmount, Status, Remark, CreateTime, UpdateTime,Type,PassageAccountId
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="org.xxpay.core.entity.PayOrderCashCollRecordExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_pay_order_cash_coll_record
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="transSuccess" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        SUM(TransInAmount) AS transSuccessAmount
+        FROM
+        t_pay_order_cash_coll_record tt
+        WHERE
+        1 = 1
+        <if test="payOrderId != null">
+            AND tt.PayOrderId = #{payOrderId}
+        </if>
+        <if test="channelOrderNo != null">
+            AND tt.ChannelOrderNo = #{channelOrderNo}
+        </if>
+        <if test="transInUserId != null">
+            AND tt.TransInUserId = #{transInUserId}
+        </if>
+        <if test="createTimeStart != null">
+            AND tt.CreateTime &gt;= #{createTimeStart}
+        </if>
+        <if test="createTimeEnd != null">
+            AND tt.CreateTime &lt;= #{createTimeEnd}
+        </if>
+        <if test="status != null">
+            AND tt.`Status` = #{status}
+        </if>
+
+        <if test="passageAccountId != null">
+            AND tt.`PassageAccountId` = #{passageAccountId}
+        </if>
+
+        <if test="type != null">
+            AND tt.`Type` = #{type}
+        </if>
+
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from t_pay_order_cash_coll_record
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_pay_order_cash_coll_record
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.core.entity.PayOrderCashCollRecordExample">
+        delete from t_pay_order_cash_coll_record
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.core.entity.PayOrderCashCollRecord">
+    insert into t_pay_order_cash_coll_record (id, PayOrderId, ChannelOrderNo,
+      RequestNo, TransInUserName, TransInUserAccount,
+      TransInUserId, TransInPercentage, TransInAmount,
+      Status, Remark, CreateTime,
+      UpdateTime,Type,PassageAccountId)
+    values (#{id,jdbcType=INTEGER}, #{payOrderId,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR},
+      #{requestNo,jdbcType=VARCHAR}, #{transInUserName,jdbcType=VARCHAR}, #{transInUserAccount,jdbcType=VARCHAR},
+      #{transInUserId,jdbcType=VARCHAR}, #{transInPercentage,jdbcType=DECIMAL}, #{transInAmount,jdbcType=BIGINT},
+      #{status,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP},#{type,jdbcType=INTEGER},#{passageAccountId,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="org.xxpay.core.entity.PayOrderCashCollRecord">
+        insert into t_pay_order_cash_coll_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="payOrderId != null">
+                PayOrderId,
+            </if>
+            <if test="channelOrderNo != null">
+                ChannelOrderNo,
+            </if>
+            <if test="requestNo != null">
+                RequestNo,
+            </if>
+            <if test="transInUserName != null">
+                TransInUserName,
+            </if>
+            <if test="transInUserAccount != null">
+                TransInUserAccount,
+            </if>
+            <if test="transInUserId != null">
+                TransInUserId,
+            </if>
+            <if test="transInPercentage != null">
+                TransInPercentage,
+            </if>
+            <if test="transInAmount != null">
+                TransInAmount,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="updateTime != null">
+                UpdateTime,
+            </if>
+            <if test="type != null">
+                Type,
+            </if>
+            <if test="passageAccountId != null">
+                PassageAccountId,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="payOrderId != null">
+                #{payOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelOrderNo != null">
+                #{channelOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="requestNo != null">
+                #{requestNo,jdbcType=VARCHAR},
+            </if>
+            <if test="transInUserName != null">
+                #{transInUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="transInUserAccount != null">
+                #{transInUserAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="transInUserId != null">
+                #{transInUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="transInPercentage != null">
+                #{transInPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="transInAmount != null">
+                #{transInAmount,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+
+            <if test="passageAccountId != null">
+                #{passageAccountId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.core.entity.PayOrderCashCollRecordExample"
+            resultType="java.lang.Integer">
+        select count(*) from t_pay_order_cash_coll_record
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_pay_order_cash_coll_record
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.payOrderId != null">
+                PayOrderId = #{record.payOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.channelOrderNo != null">
+                ChannelOrderNo = #{record.channelOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="record.requestNo != null">
+                RequestNo = #{record.requestNo,jdbcType=VARCHAR},
+            </if>
+            <if test="record.transInUserName != null">
+                TransInUserName = #{record.transInUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.transInUserAccount != null">
+                TransInUserAccount = #{record.transInUserAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="record.transInUserId != null">
+                TransInUserId = #{record.transInUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.transInPercentage != null">
+                TransInPercentage = #{record.transInPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="record.transInAmount != null">
+                TransInAmount = #{record.transInAmount,jdbcType=BIGINT},
+            </if>
+            <if test="record.status != null">
+                Status = #{record.status,jdbcType=TINYINT},
+            </if>
+            <if test="record.remark != null">
+                Remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_pay_order_cash_coll_record
+        set id = #{record.id,jdbcType=INTEGER},
+        PayOrderId = #{record.payOrderId,jdbcType=VARCHAR},
+        ChannelOrderNo = #{record.channelOrderNo,jdbcType=VARCHAR},
+        RequestNo = #{record.requestNo,jdbcType=VARCHAR},
+        TransInUserName = #{record.transInUserName,jdbcType=VARCHAR},
+        TransInUserAccount = #{record.transInUserAccount,jdbcType=VARCHAR},
+        TransInUserId = #{record.transInUserId,jdbcType=VARCHAR},
+        TransInPercentage = #{record.transInPercentage,jdbcType=DECIMAL},
+        TransInAmount = #{record.transInAmount,jdbcType=BIGINT},
+        Status = #{record.status,jdbcType=TINYINT},
+        Remark = #{record.remark,jdbcType=VARCHAR},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.PayOrderCashCollRecord">
+        update t_pay_order_cash_coll_record
+        <set>
+            <if test="payOrderId != null">
+                PayOrderId = #{payOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="channelOrderNo != null">
+                ChannelOrderNo = #{channelOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="requestNo != null">
+                RequestNo = #{requestNo,jdbcType=VARCHAR},
+            </if>
+            <if test="transInUserName != null">
+                TransInUserName = #{transInUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="transInUserAccount != null">
+                TransInUserAccount = #{transInUserAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="transInUserId != null">
+                TransInUserId = #{transInUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="transInPercentage != null">
+                TransInPercentage = #{transInPercentage,jdbcType=DECIMAL},
+            </if>
+            <if test="transInAmount != null">
+                TransInAmount = #{transInAmount,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="type != null">
+                Type = #{type,jdbcType=INTEGER},
+            </if>
+
+        </set>
+        where id = #{id,jdbcType=INTEGER} AND Status != 1
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.PayOrderCashCollRecord">
+    update t_pay_order_cash_coll_record
+    set PayOrderId = #{payOrderId,jdbcType=VARCHAR},
+      ChannelOrderNo = #{channelOrderNo,jdbcType=VARCHAR},
+      RequestNo = #{requestNo,jdbcType=VARCHAR},
+      TransInUserName = #{transInUserName,jdbcType=VARCHAR},
+      TransInUserAccount = #{transInUserAccount,jdbcType=VARCHAR},
+      TransInUserId = #{transInUserId,jdbcType=VARCHAR},
+      TransInPercentage = #{transInPercentage,jdbcType=DECIMAL},
+      TransInAmount = #{transInAmount,jdbcType=BIGINT},
+      Status = #{status,jdbcType=TINYINT},
+      Remark = #{remark,jdbcType=VARCHAR},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      Type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

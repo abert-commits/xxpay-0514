@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.AgentSettDailyCollectMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.AgentSettDailyCollect" >
+    <id column="Id" property="id" jdbcType="BIGINT" />
+    <result column="AgentId" property="agentId" jdbcType="BIGINT" />
+    <result column="CollectDate" property="collectDate" jdbcType="DATE" />
+    <result column="CollectType" property="collectType" jdbcType="TINYINT" />
+    <result column="TotalAmount" property="totalAmount" jdbcType="BIGINT" />
+    <result column="TotalCount" property="totalCount" jdbcType="INTEGER" />
+    <result column="TotalAgentProfit" property="totalAgentProfit" jdbcType="BIGINT" />
+    <result column="SettStatus" property="settStatus" jdbcType="TINYINT" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="RiskDay" property="riskDay" jdbcType="INTEGER" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="CollectItem" property="collectItem" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, AgentId, CollectDate, CollectType, TotalAmount, TotalCount, TotalAgentProfit, 
+    SettStatus, Remark, RiskDay, CreateTime, UpdateTime, CollectItem
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.AgentSettDailyCollectExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_agent_sett_daily_collect
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_agent_sett_daily_collect
+    where Id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_agent_sett_daily_collect
+    where Id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.AgentSettDailyCollectExample" >
+    delete from t_agent_sett_daily_collect
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.AgentSettDailyCollect" >
+    insert into t_agent_sett_daily_collect (Id, AgentId, CollectDate, 
+      CollectType, TotalAmount, TotalCount, 
+      TotalAgentProfit, SettStatus, Remark, 
+      RiskDay, CreateTime, UpdateTime,
+      CollectItem)
+    values (#{id,jdbcType=BIGINT}, #{agentId,jdbcType=BIGINT}, #{collectDate,jdbcType=DATE}, 
+      #{collectType,jdbcType=TINYINT}, #{totalAmount,jdbcType=BIGINT}, #{totalCount,jdbcType=INTEGER}, 
+      #{totalAgentProfit,jdbcType=BIGINT}, #{settStatus,jdbcType=TINYINT}, #{remark,jdbcType=VARCHAR}, 
+      #{riskDay,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{collectItem,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.AgentSettDailyCollect" >
+    insert into t_agent_sett_daily_collect
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="agentId != null" >
+        AgentId,
+      </if>
+      <if test="collectDate != null" >
+        CollectDate,
+      </if>
+      <if test="collectType != null" >
+        CollectType,
+      </if>
+      <if test="totalAmount != null" >
+        TotalAmount,
+      </if>
+      <if test="totalCount != null" >
+        TotalCount,
+      </if>
+      <if test="totalAgentProfit != null" >
+        TotalAgentProfit,
+      </if>
+      <if test="settStatus != null" >
+        SettStatus,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="riskDay != null" >
+        RiskDay,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime,
+      </if>
+      <if test="collectItem != null" >
+        CollectItem,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="collectDate != null" >
+        #{collectDate,jdbcType=DATE},
+      </if>
+      <if test="collectType != null" >
+        #{collectType,jdbcType=TINYINT},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=BIGINT},
+      </if>
+      <if test="totalCount != null" >
+        #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="totalAgentProfit != null" >
+        #{totalAgentProfit,jdbcType=BIGINT},
+      </if>
+      <if test="settStatus != null" >
+        #{settStatus,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="riskDay != null" >
+        #{riskDay,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="collectItem != null" >
+        #{collectItem,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.AgentSettDailyCollectExample" resultType="java.lang.Integer" >
+    select count(*) from t_agent_sett_daily_collect
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_agent_sett_daily_collect
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.agentId != null" >
+        AgentId = #{record.agentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.collectDate != null" >
+        CollectDate = #{record.collectDate,jdbcType=DATE},
+      </if>
+      <if test="record.collectType != null" >
+        CollectType = #{record.collectType,jdbcType=TINYINT},
+      </if>
+      <if test="record.totalAmount != null" >
+        TotalAmount = #{record.totalAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalCount != null" >
+        TotalCount = #{record.totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalAgentProfit != null" >
+        TotalAgentProfit = #{record.totalAgentProfit,jdbcType=BIGINT},
+      </if>
+      <if test="record.settStatus != null" >
+        SettStatus = #{record.settStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.remark != null" >
+        Remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.riskDay != null" >
+        RiskDay = #{record.riskDay,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.collectItem != null" >
+        CollectItem = #{record.collectItem,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_agent_sett_daily_collect
+    set Id = #{record.id,jdbcType=BIGINT},
+      AgentId = #{record.agentId,jdbcType=BIGINT},
+      CollectDate = #{record.collectDate,jdbcType=DATE},
+      CollectType = #{record.collectType,jdbcType=TINYINT},
+      TotalAmount = #{record.totalAmount,jdbcType=BIGINT},
+      TotalCount = #{record.totalCount,jdbcType=INTEGER},
+      TotalAgentProfit = #{record.totalAgentProfit,jdbcType=BIGINT},
+      SettStatus = #{record.settStatus,jdbcType=TINYINT},
+      Remark = #{record.remark,jdbcType=VARCHAR},
+      RiskDay = #{record.riskDay,jdbcType=INTEGER},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      CollectItem = #{record.collectItem,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.AgentSettDailyCollect" >
+    update t_agent_sett_daily_collect
+    <set >
+      <if test="agentId != null" >
+        AgentId = #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="collectDate != null" >
+        CollectDate = #{collectDate,jdbcType=DATE},
+      </if>
+      <if test="collectType != null" >
+        CollectType = #{collectType,jdbcType=TINYINT},
+      </if>
+      <if test="totalAmount != null" >
+        TotalAmount = #{totalAmount,jdbcType=BIGINT},
+      </if>
+      <if test="totalCount != null" >
+        TotalCount = #{totalCount,jdbcType=INTEGER},
+      </if>
+      <if test="totalAgentProfit != null" >
+        TotalAgentProfit = #{totalAgentProfit,jdbcType=BIGINT},
+      </if>
+      <if test="settStatus != null" >
+        SettStatus = #{settStatus,jdbcType=TINYINT},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="riskDay != null" >
+        RiskDay = #{riskDay,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="collectItem != null" >
+        CollectItem = #{collectItem,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.AgentSettDailyCollect" >
+    update t_agent_sett_daily_collect
+    set AgentId = #{agentId,jdbcType=BIGINT},
+      CollectDate = #{collectDate,jdbcType=DATE},
+      CollectType = #{collectType,jdbcType=TINYINT},
+      TotalAmount = #{totalAmount,jdbcType=BIGINT},
+      TotalCount = #{totalCount,jdbcType=INTEGER},
+      TotalAgentProfit = #{totalAgentProfit,jdbcType=BIGINT},
+      SettStatus = #{settStatus,jdbcType=TINYINT},
+      Remark = #{remark,jdbcType=VARCHAR},
+      RiskDay = #{riskDay,jdbcType=INTEGER},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      CollectItem = #{collectItem,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

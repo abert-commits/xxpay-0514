@@ -1,0 +1,216 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>订单管理</cite></a>
+    </div>
+</div>
+<div class="layui-form" style="padding-top: 15px;">
+    <div class="layui-form-item" style="margin-bottom: 0">
+        <label class="layui-form-label">订单号：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="order_sn" class="layui-input"  placeholder="请填写订单号">
+        </div>
+        <label class="layui-form-label">商户订单号：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="api_order_sn" class="layui-input"  placeholder="请填写商户订单号">
+        </div>
+        <label class="layui-form-label">下单时间：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="createTimeStart" id="createTimeStart" autocomplete="off"
+                   placeholder="开始时间" class="layui-input">
+        </div>
+        <div class="layui-input-inline">
+            <input type="text" name="createTimeEnd" id="createTimeEnd" autocomplete="off"
+                   placeholder="结束时间" class="layui-input">
+        </div>
+        <label class="layui-form-label">来源：</label>
+        <div class="layui-input-inline">
+            <select name="from_platform">
+                <option value="">全部</option>
+                <option value="1">自行出码</option>
+                <option value="0">支付平台</option>
+            </select>
+        </div>
+        <label class="layui-form-label">支付：</label>
+        <div class="layui-input-inline">
+            <select name="is_pay">
+                <option value="">全部</option>
+                <option value="1">是</option>
+                <option value="0">否</option>
+            </select>
+        </div>
+        <label class="layui-form-label">支付方式：</label>
+        <div class="layui-input-inline">
+            <select name="pay_type">
+                <option value="">全部</option>
+                <option value="38">微信</option>
+                <option value="9">支付宝</option>
+            </select>
+        </div>
+        <label class="layui-form-label">状态：</label>
+        <div class="layui-input-inline">
+            <select name="status">
+                <option value="">全部</option>
+                <option value="0">待付款</option>
+                <option value="1">待发货</option>
+                <option value="2">待收货</option>
+                <option value="3">待评价</option>
+                <option value="4">交易已取消</option>
+            </select>
+        </div>
+        <div class="layui-form-mid layui-word-aux" style="padding: 5px 0!important;">
+            <button type="button" id="search" data-type="search" class="layui-btn layui-btn-normal layui-btn-sm" >搜索</button>
+        </div>
+    </div>
+</div>
+
+<table class="layui-hide" id="orders"></table>
+<div class="statistical" style="padding: 20px 10px;">
+    总金额：<span class="total" style="color: red;"></span>元
+</div>
+<script>
+    layui.use(['form','jquery','table','laydate'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var $ = layui.$;
+        var laydate = layui.laydate;
+        table.render({
+            elem: '#orders'
+            ,url:layui.setter.baseUrl + '/pdd/order/list'
+            ,page: true
+            ,cellMinWidth: 80
+            ,cols: [[
+                {field:'id', title: 'ID',hide:false,width:60}
+                ,{field:'storesName', title: '店铺名'}
+                ,{field:'orderSn', title: '订单号'}
+                ,{field:'apiOrderSn', title: '商户订单号'}
+                ,{field:'total', title: '金额',width:100}
+                ,{field:'isPay', title: '支付',templet:'<div>{{ d.isPay==true?"支付":"未支付" }}</div> ',width:80}
+                ,{field:'fromPlatform', title: '订单来源',templet:'<div>{{ d.from_platform==true?"自行出码":"支付平台" }}</div> ',width:100}
+                ,{field:'phone', title: '下单手机'}
+                ,{field:'gId', title: '商品ID'}
+                ,{field:'status', title: '状态',templet:'<div>{{#  if(d.status==0){ return "待付款" }else if(d.status==1){return "待发货"}else if(d.status==2){return "待收货"}else if(d.status==3){return "待评价"}else if(d.status==4){return "交易已取消"} }} </div> ',width:100}
+
+                ,{field:'payType', title: '方式',templet:'<div>{{ d.payType==9?"支付宝":"微信" }}</div> ',width:80}
+                ,{field:'ctime', title: '下单时间', sort: true,templet:'<div>{{ dateFormat(d.ctime) }}</div>'}
+            ]]
+            ,done: function(res, curr, count){
+                console.log(res)
+                $(".statistical .total").text(res.total);
+            }
+        });
+        layui.form.render('select');
+
+        //日期范围
+        laydate.render({
+            elem: '#date'
+            ,range: "~"
+            ,max: getNowFormatDate()
+        });
+        //搜索加载--数据表格重载
+        var active = {
+            search: function () {
+                table.reload('orders', {
+                    method:'GET',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        order_sn: $("input[name=order_sn]").val(),
+                        api_order_sn: $("input[name=api_order_sn]").val(),
+                        createTimeStart: $("input[name=createTimeStart]").val(),
+                        createTimeEnd: $("input[name=createTimeEnd]").val(),
+                        from_platform: $("select[name=from_platform]").val(),
+                        is_pay: $("select[name=is_pay]").val(),
+                        pay_type: $("select[name=pay_type]").val(),
+                        status: $("select[name=status]").val()
+                    }
+                });
+            }
+        };
+        $('#search').on('click', function () {
+            ids=new Array();
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        //获取当前时间，格式YYYY-MM-DD
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        }
+        laydate.render({
+            elem: '#createTimeStart'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        laydate.render({
+            elem: '#createTimeEnd'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+    });
+
+
+    Date.prototype.format = function (fmt) { //author: meizz  
+        var o = {
+            "M+": this.getMonth() + 1, //月份  
+            "d+": this.getDate(), //日  
+            "h+": this.getHours(), //小时  
+            "m+": this.getMinutes(), //分  
+            "s+": this.getSeconds(), //秒   
+            "q+": Math.floor((this.getMonth() + 3) / 3),    //q是季度
+            "S": this.getMilliseconds() //毫秒  
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    String.prototype.format = function (args) {
+        var result = this;
+        if (arguments.length > 0) {
+            if (arguments.length == 1 && typeof (args) == "loginTime") {
+                for (var key in args) {
+                    if (args[key] != undefined) {
+                        var reg = new RegExp("({" + key + "})", "g");
+                        result = result.replace(reg, args[key]);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < arguments.length; i++) {
+                    if (arguments[i] != undefined) {
+                        //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题  
+                        var reg = new RegExp("({)" + i + "(})", "g");
+                        result = result.replace(reg, arguments[i]);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    function dateFormat(value) {
+        return value ? new Date(value).format("yyyy-MM-dd hh:mm:ss") : "";
+    }
+
+</script>
+<style>
+    .layui-form-label{
+        min-width: initial !important;
+        width: initial !important;
+    }
+</style>

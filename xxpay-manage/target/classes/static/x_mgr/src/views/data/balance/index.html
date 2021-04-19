@@ -1,0 +1,276 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>数据分析</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">结余数据统计</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row" style="margin-bottom: 10px;">
+                        <div class="layui-form" style="float:right;">
+                            <div class="layui-form-item" style="margin:0;">
+
+                                <div class="layui-input-inline">
+                                    <input type="text" name="balanceTimeStart" id="balanceTimeStart" autocomplete="off"
+                                           placeholder="起始时间" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="balanceTimeEnd" id="balanceTimeEnd" autocomplete="off"
+                                           placeholder="结束时间" class="layui-input">
+                                </div>
+
+
+                                <div class="layui-input-inline">
+                                    <input type="text" name="mchId" id="mchId" placeholder="商户ID" autocomplete="off"
+                                           class="layui-input">
+                                </div>
+                                <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                                <button id="exportDataBalance" class="layui-btn">导出EXCEL</button>
+                                <!--<div>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="time" id="time" autocomplete="off"
+                                               placeholder="手动时间" class="layui-input">
+                                    </div>
+                                    <button id="add" class="layui-btn" data-type="reload">生成</button>
+                                </div>-->
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <table id="XxPay_Bcd_User_dataAll" lay-filter="XxPay_Bcd_User_dataAll"></table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: 'layui/layui_exts/',
+    }).extend({
+        excel: 'excel'
+    });
+
+    layui.use(['admin', 'table', 'util', 'laydate', 'excel'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            , element = layui.element
+            , laydate = layui.laydate
+            , excel = layui.excel
+            , form = layui.form;
+        element.render('breadcrumb', 'breadcrumb');
+
+        //通道统计列表
+        table.render({
+            elem: '#XxPay_Bcd_User_dataAll'
+            , cellMinWidth: 90
+            , url: layui.setter.baseUrl + '/data/balance/list'
+            , where: {
+                access_token: layui.data(layui.setter.tableName).access_token
+            }
+            , initSort: {
+                field: 'amount' //排序字段，对应 cols 设定的各字段名
+                , type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            }
+            , id: 'tableReload'
+            , page: true
+            , cols: [[
+                {field: 'mchId', title: '商户ID'}
+                , {field: 'name', title: '名称'}
+                , {
+                    field: 'amount',
+                    title: '今日金额',
+                    sort: true,
+                    templet: '<div>{{ d.amount==null?0:d.amount/100 }}</div>'
+                }
+                , {field: 'lastOrder', title: '最后一次订单'}
+                , {
+                    field: 'createTime',
+                    title: '创建时间',
+                    templet: '<div>{{ layui.util.toDateString(d.createTime, "yyyy-MM-dd") }}</div>'
+                }
+                , {
+                    field: 'merchantRecharge',
+                    title: '商户充值',
+                    sort: true,
+                    templet: '<div>{{ d.merchantRecharge==null?0:d.merchantRecharge/100 }}</div>'
+                }
+                , {
+                    field: 'transferAmount',
+                    title: '调账金额',
+                    sort: true,
+                    templet: '<div>{{ d.transferAmount==null?0:d.transferAmount/100 }}</div>'
+                }
+                , {
+                    field: 'withdrawalAmount',
+                    title: '提现金额',
+                    sort: true,
+                    templet: '<div>{{ d.withdrawalAmount==null?0:d.withdrawalAmount/100 }}</div>'
+                }
+                , {field: 'withdrawalOrder', title: '提现单数'}
+                , {
+                    field: 'withdrawalFee',
+                    title: '提现手续费',
+                    sort: true,
+                    templet: '<div>{{ d.withdrawalFee==null?0:d.withdrawalFee/100 }}</div>'
+                }
+                , {
+                    field: 'yesterdayBalance',
+                    title: '昨天余额',
+                    sort: true,
+                    templet: '<div>{{ d.yesterdayBalance==null?0:d.yesterdayBalance/100 }}</div>'
+                }
+
+            ]]
+            , skin: 'line'
+        });
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function () {
+                var balanceTimeStart = $('#balanceTimeStart').val();
+                var balanceTimeEnd = $('#balanceTimeEnd').val();
+                var mchId = $('#mchId').val();
+
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , page: true
+                    , where: {
+                        balanceTimeEnd: balanceTimeEnd,
+                        balanceTimeStart: balanceTimeStart,
+                        mchId: mchId
+                    }
+                });
+            }
+        };
+        $('#search').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        laydate.render({
+            elem: '#balanceTimeStart'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+        laydate.render({
+            elem: '#balanceTimeEnd'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+        laydate.render({
+            elem: '#time'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd'
+        });
+       /* //新增
+        $('#add').on('click', function () {
+            var time = $('#time').val();
+            if (time == null || time == '') {
+                layer.alert("生成时间没填写")
+                return null;
+            }
+            $.ajax({
+                url: layui.setter.baseUrl + '/data/balance/add',
+                dataType: 'json',
+                data: {"time": time},
+                success: function (res) {
+                    if (res.code==0){
+                        layer.alert('生成数据成功');
+                    }else{
+                        layer.alert(res.msg);
+                    }
+                },
+                error: function () {
+                    layer.alert('生成数据失败');
+                }
+            });
+        });*/
+        // 导出
+        $('#exportDataBalance').on('click', function () {
+            var balanceTimeStart = $('#balanceTimeStart').val();
+            var balanceTimeEnd = $('#balanceTimeEnd').val();
+            var mchId = $('#mchId').val();
+            var accessToken = layui.data(layui.setter.tableName).access_token;
+            var reqUrl = layui.setter.baseUrl + '/data/exportDataBalance' + '?' +
+                'access_token=' + accessToken +
+                '&balanceTimeStart=' + balanceTimeStart +
+                '&balanceTimeEnd=' + balanceTimeEnd +
+                '&mchId=' + mchId;
+            // layer.alert("开始导出订单");
+            var index = layer.load(1, exportFile(reqUrl));
+            //关闭
+            layer.close(index);
+        })
+
+        //表格导出
+        function exportFile(reqUrl) {
+            var headerArr = ['mchId', 'name', 'amount', 'lastOrder', 'createTime', 'merchantRecharge', 'transferAmount', 'withdrawalAmount', 'withdrawalOrder', 'withdrawalFee', 'yesterdayBalance', 'error'];
+            var titles = {
+                mchId: "商户ID ",
+                name: "商户名称",
+                amount: "结余金额",
+                lastOrder: "最后一次订单",
+                createTime: "创建时间",
+                merchantRecharge: "商户充值",
+                transferAmount: "调账金额",
+                withdrawalAmount: "提现金额",
+                withdrawalOrder: "提现单数",
+                withdrawalFee: "提现手续费",
+                yesterdayBalance: "昨天余额",
+                error: "误差",
+            };
+            $.ajax({
+                url: reqUrl,
+                dataType: 'json',
+                success: function (res) {
+                    var data = res.data;
+                    for (index in data) {
+                        var date = data[index].createTime;
+                        var time = new Date(date);
+                        data[index].amount = data[index].amount == null ? 0 : data[index].amount / 100;
+                        data[index].merchantRecharge = data[index].merchantRecharge == null ? 0 : data[index].merchantRecharge / 100;
+                        data[index].transferAmount = data[index].transferAmount == null ? 0 : data[index].transferAmount / 100;
+                        data[index].withdrawalAmount = data[index].withdrawalAmount == null ? 0 : data[index].withdrawalAmount / 100;
+                        data[index].withdrawalFee = data[index].withdrawalFee == null ? 0 : data[index].withdrawalFee / 100;
+                        data[index].yesterdayBalance = data[index].yesterdayBalance == null ? 0 : data[index].yesterdayBalance / 100;
+                        data[index].createTime = layui.util.toDateString(time, "yyyy-MM-dd");
+                        data[index].error = (data[index].yesterdayBalance + data[index].merchantRecharge + data[index].transferAmount - data[index].withdrawalAmount - data[index].amount).toFixed(2)
+                    }
+                    data = excel.filterExportData(data, headerArr)
+                    //将标题行置顶添加到数组
+                    data.unshift(titles);
+                    //导出excel
+                    var year = new Date().getFullYear();
+                    var month = new Date().getMonth() + 1;
+                    var date = new Date().getDate();
+
+
+                    excel.exportExcel({
+                        结余报表: data
+                    }, 'BalanceList_' + year + '-' + month + '-' + date + '.xlsx', 'xlsx');
+                },
+                error: function () {
+                    layer.alert('获取数据失败');
+                }
+
+            });
+        }
+
+        // 渲染表单
+        form.render();
+    });
+</script>

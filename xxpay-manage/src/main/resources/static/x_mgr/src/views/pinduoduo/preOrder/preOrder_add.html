@@ -1,0 +1,238 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>新增预订单</cite></a>
+    </div>
+</div>
+
+<div class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题：</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="name" id="name" placeholder="请填写标题"/>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择商品：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="goods_id" id="goods_id"readonly="readonly" class="layui-input" placeholder="请选择商品">
+        </div>
+        <button type="button" id="selectGoods_id" class="layui-btn layui-btn-normal" >选择商品</button>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">支付方式：</label>
+        <div class="layui-input-inline">
+            <select name="payCode" id="payCode">
+                <option value="9">支付宝</option>
+                <option value="38">微信</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">订单总数：</label>
+        <div class="layui-input-inline">
+            <input type="number" name="totalOrders" id="totalOrders" class="layui-input" placeholder="请输入订单总数">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">开始时间：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="startingTime" id="startingTime" class="layui-input" placeholder="请输入开始时间">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">结束时间：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="endTime" id="endTime" class="layui-input" placeholder="请输入结束时间">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">频率(秒)：</label>
+        <div class="layui-input-inline">
+            <input type="number" name="frequency" id="frequency" class="layui-input" placeholder="请输入每几秒生成一个单">
+        </div>
+        <button type="button" id="selectfrequency" class="layui-btn layui-btn-normal" >生成频率</button>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"> </label>
+        <div class="layui-input-block">
+            <button type="button" id="submitForm" class="layui-btn tab-btn-active">添加预订单</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form','jquery', 'layer','laydate'], function () {
+        var $ = layui.$
+        ,laydate = layui.laydate;
+        var form = layui.form;
+
+        $('#selectGoods_id').on('click', function () {
+            layer.open({
+                type: 2,
+                title: '请选择商品',
+                maxmin: false,
+                area: ['60%', '80%'],
+                offset: '0px',
+                content:layui.setter.views+'pinduoduo/preOrder/goods_list.html?layui='+layui,
+                btn: ['确定', '关闭'],
+                yes: function (index) {
+                    //当点击‘确定'按钮的时候，获取弹出层返回的值
+                    var res = window["layui-layer-iframe" + index].callbackdata();
+                    //打印返回的值，看是否有我们想返回的值。
+                    console.log(res);
+                    //最后关闭弹出层
+                    layer.close(index);
+                }
+            });
+        });
+
+        form.render("select");
+
+        $("#selectfrequency").on('click', function () {
+            var totalOrders = $("#totalOrders").val();
+            var startingTime = $("#startingTime").val();
+            var endTime = $("#endTime").val();
+            if (startingTime == null) {
+                layer.msg("请填写开始时间")
+                return
+            }
+            if (endTime == null) {
+                layer.msg("请填写结束时间")
+                return
+            }
+            if (totalOrders == null) {
+                layer.msg("请填写订单总数")
+                return
+            }
+            var date1 = new Date(startingTime);    //结束时间
+            var date2 = new Date(endTime);    //结束时间
+            var ss = Math.round((date2.getTime() - new Date(date1).getTime())/1000);   //时间差的秒数
+            $("#frequency").val(Math.ceil(ss/totalOrders))
+
+        });
+        $("#submitForm").on('click', function () {
+            var totalOrders = $("#totalOrders").val();
+            var startingTime = $("#startingTime").val();
+            var endTime = $("#endTime").val();
+            var frequency = $("#frequency").val();
+            var goods_id = $("#goods_id").val();
+            var name = $("#name").val();
+            var payCode = $("#payCode").val();
+
+
+            if (!totalOrders) {
+                layer.msg('请填写订单总数！', {
+                    time: 3000, //20s后自动关闭
+                    btn: ['知道了'],
+                    btnAlign: 'c',
+                    anim: 6
+                });
+                return;
+            }
+            if (!startingTime) {
+                layer.msg('请填写开始时间！', {
+                    time: 3000, //20s后自动关闭
+                    btn: ['知道了'],
+                    btnAlign: 'c',
+                    anim: 6
+                });
+                return;
+            }
+            if (!endTime) {
+                layer.msg('请填写结束时间！', {
+                    time: 3000, //20s后自动关闭
+                    btn: ['知道了'],
+                    btnAlign: 'c',
+                    anim: 6
+                });
+                return;
+            }
+            if (!frequency) {
+                layer.msg('请填写频率！', {
+                    time: 3000, //20s后自动关闭
+                    btn: ['知道了'],
+                    btnAlign: 'c',
+                    anim: 6
+                });
+                return;
+            }
+            if (!goods_id) {
+                layer.msg('请选择商品ID！', {
+                    time: 3000, //20s后自动关闭
+                    btn: ['知道了'],
+                    btnAlign: 'c',
+                    anim: 6
+                });
+                return;
+            }
+            if (!name) {
+                layer.msg('请填写标题！', {
+                    time: 3000, //20s后自动关闭
+                    btn: ['知道了'],
+                    btnAlign: 'c',
+                    anim: 6
+                });
+                return;
+            }
+            var msg = layer.msg('添加预订单信息...', {
+                time: 10000,
+                closeBtn: 0
+            });
+            $.post(layui.setter.baseUrl + '/pdd/preOrders/add', {
+                totalOrders: totalOrders,
+                frequency: frequency,
+                goodsId: goods_id,
+                name: name,
+                startingTime: startingTime,
+                endTime: endTime,
+                payCode: payCode
+            }, function (res) {
+                layer.close(msg);
+                console.log(res);
+                if (res.code == 0) {
+                    layer.msg('添加成功', {
+                        time: 2000,
+                        closeBtn: 0
+                    });
+                    location.hash = '/pinduoduo/preOrder/';
+                } else {
+                    layer.msg(res.msg, {
+                        time: 2000,
+                        btn: ['知道了'],
+                        btnAlign: 'c',
+                        anim: 6
+                    });
+                }
+            })
+        });
+
+        laydate.render({
+            elem: '#startingTime'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        laydate.render({
+            elem: '#endTime'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+    });
+
+
+    function  openGoods(object){
+        document.getElementById("goods_id").value=object.data.id//刷新父页面，注意一定要在关闭当前iframe层之前执行刷新
+    }
+</script>
+<style>
+    .layui-form {
+        padding-top: 15px;
+    }
+
+    .layui-form-item .layui-input-inline {
+        width: 300px;
+    }
+</style>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.MchQrCodeMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.MchQrCode" >
+    <id column="Id" property="id" jdbcType="BIGINT" />
+    <result column="MchId" property="mchId" jdbcType="BIGINT" />
+    <result column="AppId" property="appId" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="TINYINT" />
+    <result column="Channels" property="channels" jdbcType="VARCHAR" />
+    <result column="CodeName" property="codeName" jdbcType="VARCHAR" />
+    <result column="MinAmount" property="minAmount" jdbcType="BIGINT" />
+    <result column="MaxAmount" property="maxAmount" jdbcType="BIGINT" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, MchId, AppId, Status, Channels, CodeName, MinAmount, MaxAmount, CreateTime, UpdateTime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.MchQrCodeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mch_qr_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mch_qr_code
+    where Id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_mch_qr_code
+    where Id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.MchQrCodeExample" >
+    delete from t_mch_qr_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.MchQrCode" >
+    insert into t_mch_qr_code (Id, MchId, AppId, 
+      Status, Channels, CodeName, 
+      MinAmount, MaxAmount, CreateTime, 
+      UpdateTime)
+    values (#{id,jdbcType=BIGINT}, #{mchId,jdbcType=BIGINT}, #{appId,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{channels,jdbcType=VARCHAR}, #{codeName,jdbcType=VARCHAR}, 
+      #{minAmount,jdbcType=BIGINT}, #{maxAmount,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.MchQrCode" >
+    insert into t_mch_qr_code
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="mchId != null" >
+        MchId,
+      </if>
+      <if test="appId != null" >
+        AppId,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="channels != null" >
+        Channels,
+      </if>
+      <if test="codeName != null" >
+        CodeName,
+      </if>
+      <if test="minAmount != null" >
+        MinAmount,
+      </if>
+      <if test="maxAmount != null" >
+        MaxAmount,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="mchId != null" >
+        #{mchId,jdbcType=BIGINT},
+      </if>
+      <if test="appId != null" >
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="channels != null" >
+        #{channels,jdbcType=VARCHAR},
+      </if>
+      <if test="codeName != null" >
+        #{codeName,jdbcType=VARCHAR},
+      </if>
+      <if test="minAmount != null" >
+        #{minAmount,jdbcType=BIGINT},
+      </if>
+      <if test="maxAmount != null" >
+        #{maxAmount,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.MchQrCodeExample" resultType="java.lang.Integer" >
+    select count(*) from t_mch_qr_code
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_mch_qr_code
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.mchId != null" >
+        MchId = #{record.mchId,jdbcType=BIGINT},
+      </if>
+      <if test="record.appId != null" >
+        AppId = #{record.appId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.channels != null" >
+        Channels = #{record.channels,jdbcType=VARCHAR},
+      </if>
+      <if test="record.codeName != null" >
+        CodeName = #{record.codeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.minAmount != null" >
+        MinAmount = #{record.minAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.maxAmount != null" >
+        MaxAmount = #{record.maxAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_mch_qr_code
+    set Id = #{record.id,jdbcType=BIGINT},
+      MchId = #{record.mchId,jdbcType=BIGINT},
+      AppId = #{record.appId,jdbcType=VARCHAR},
+      Status = #{record.status,jdbcType=TINYINT},
+      Channels = #{record.channels,jdbcType=VARCHAR},
+      CodeName = #{record.codeName,jdbcType=VARCHAR},
+      MinAmount = #{record.minAmount,jdbcType=BIGINT},
+      MaxAmount = #{record.maxAmount,jdbcType=BIGINT},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.MchQrCode" >
+    update t_mch_qr_code
+    <set >
+      <if test="mchId != null" >
+        MchId = #{mchId,jdbcType=BIGINT},
+      </if>
+      <if test="appId != null" >
+        AppId = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="channels != null" >
+        Channels = #{channels,jdbcType=VARCHAR},
+      </if>
+      <if test="codeName != null" >
+        CodeName = #{codeName,jdbcType=VARCHAR},
+      </if>
+      <if test="minAmount != null" >
+        MinAmount = #{minAmount,jdbcType=BIGINT},
+      </if>
+      <if test="maxAmount != null" >
+        MaxAmount = #{maxAmount,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.MchQrCode" >
+    update t_mch_qr_code
+    set MchId = #{mchId,jdbcType=BIGINT},
+      AppId = #{appId,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=TINYINT},
+      Channels = #{channels,jdbcType=VARCHAR},
+      CodeName = #{codeName,jdbcType=VARCHAR},
+      MinAmount = #{minAmount,jdbcType=BIGINT},
+      MaxAmount = #{maxAmount,jdbcType=BIGINT},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP}
+    where Id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

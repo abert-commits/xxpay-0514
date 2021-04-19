@@ -1,0 +1,272 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>商户管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-form" style="padding-top: 15px;">
+    <div class="layui-form-item" style="margin-bottom: 0">
+        <label class="layui-form-label">店铺：</label>
+        <div class="layui-input-inline" >
+            <div class="layui-input-inline" >
+<!--
+                <input type="text" name="stores_name" id="stores_name" class="layui-input"  placeholder="请填写店铺名称">
+-->
+                <select name="stores" id="stores"  placeholder="请填写店铺名称"  lay-verify="" lay-search>
+
+                </select>
+            </div>
+        </div>
+        <label class="layui-form-label">商品ID：</label>
+        <div class="layui-input-inline">
+            <input type="number" name="id" class="layui-input"  placeholder="请填写商品ID">
+        </div>
+        <div class="layui-form-mid layui-word-aux" style="padding: 5px 0!important;">
+            <button type="button" id="search" data-type="search" class="layui-btn layui-btn-normal" >搜索</button>
+            <a class="layui-btn" lay-href="pinduoduo/goods/goods_add">新增</a>
+
+        </div>
+    </div>
+</div>
+
+<table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
+<script type="text/html" id="toolbar">
+  <!--  <div class="layui-btn-group fl">
+        <a data-href="{:url('goods_status?val=1')}" class="layui-btn layui-btn-primary layui-btn-sm hisi-page-btns layui-icon layui-icon-play" data-table="dataTable">&nbsp;启用</a>
+        <a data-href="{:url('goods_status?val=0')}" class="layui-btn layui-btn-primary layui-btn-sm hisi-page-btns layui-icon layui-icon-pause" data-table="dataTable">&nbsp;禁用</a>
+    </div>-->
+</script>
+<script type="text/html" id="is_upperTpl">
+    <div class="layui-btn-group">
+        <input type="checkbox" class="layui-btn layui-btn-sm" data-id="{{d.id }}" {{d.is_upper==1?'checked':''}}  lay-skin="switch" lay-filter="IsUpperSwitch" lay-text="上架|下架">
+    </div>
+</script>
+<script type="text/html" id="buttonTpl">
+    <div class="layui-btn-group">
+        <input type="checkbox" class="layui-btn layui-btn-sm" data-id="{{d.id }}" {{d.status==1?'checked':''}}  lay-skin="switch" lay-filter="StatusSwitch" lay-text="启用|禁用">
+        <a data-id="{{d.id }}" lay-event="goods_move" href="javascript:yidonSwitch({{d.id}},'goods_move');"  style="margin-left: 10px !important;" class="goods-move-btn layui-btn layui-btn-danger layui-btn-xs">移动</a>
+
+<!--
+        <a href="javascript:goods_del({{d.id }});" style="margin-left: 10px !important;" class="layui-btn layui-btn-warm layui-btn-xs">删除</a>
+-->
+    </div>
+</script>
+<script>
+    layui.use(['form','jquery','table'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var $ = layui.$;
+        form.render("select");
+        table.render({
+            elem: '#dataTable'
+            ,url:layui.setter.baseUrl + '/pdd/goods/list'
+            ,page: true
+            ,cellMinWidth: 80
+            ,toolbar: '#toolbar'
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'id', title: 'ID', sort: true}
+                ,{field:'stores_name', title: '店铺'}
+                ,{field:'goods_name', title: '商品名称'}
+                ,{field:'goods_url', title: '商品链接'}
+
+                ,{field:'normal_price', title: '价格',templet:'<div>{{ d.normal_price/100 }}</div> '}
+
+                ,{field:'is_upper', title: '上下架', templet: '#is_upperTpl'}
+                ,{field:'last_use_time', title: '最后使用时间', sort: true,templet:'<div>{{ dateFormat(d.last_use_time) }}</div> '}
+                ,{title: '操作', templet: '#buttonTpl'}
+            ]]
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: layui.setter.baseUrl + '/pdd/stores/list',
+            data:{page:1,limit:8000},
+            success: function (res) {
+                $("#stores").html('<option value="">全部商户</option>');
+                $.each(res.data, function (key, val) {
+                    var option1 = $("<option>").val(val.id).text(val.name);
+                    //通过LayUI.jQuery添加列表项
+                    $("#stores").append(option1);
+                });
+                layui.form.render('select');
+            }
+        });
+
+
+
+        //搜索加载--数据表格重载
+        var active = {
+            search: function () {
+                table.reload('dataTable', {
+                    method:'GET',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        stores_id: $("select[name=stores]").val(),
+                        id: $("input[name=id]").val(),
+                    }
+                });
+            }
+        };
+        $('#search').on('click', function () {
+            ids=new Array();
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        form.on('switch(StatusSwitch)', function(data){
+            let id=data.elem.dataset.id;
+            let status=this.checked?1:0;
+            $.post(layui.setter.baseUrl + '/pdd/goods/update',{
+                id:id,
+                status:status
+            },function (res) {
+                console.log(res);
+                layer.msg(res.msg, {
+                    time: 2000,
+                    closeBtn: 0
+                });
+                if(res.status==0){
+                    $(data.elem).prop("checked", data.elem.defaultChecked);
+                    form.render();
+                }
+            })
+        });
+        form.on('switch(IsUpperSwitch)', function(data){
+            let id=data.elem.dataset.id;
+            let is_upper=this.checked?1:0;
+            $.post(layui.setter.baseUrl + '/pdd/goods/update',{
+                id:id,
+                is_upper:is_upper
+            },function (res) {
+                console.log(res);
+                layer.msg(res.msg, {
+                    time: 2000,
+                    closeBtn: 0
+                });
+                if(res.status==0){
+                    $(data.elem).prop("checked", data.elem.defaultChecked);
+                    form.render();
+                }
+            })
+        });
+
+
+
+        window.yidonSwitch=function(id,event){
+            if (event=='goods_move'){
+                var html='<div style="padding: 30px 58px 10px; background-color: #393D49;color: #FFFFFF; line-height: 22px; font-weight: 300;">';
+                html+='<div class="layui-form" >';
+                html+='<div class="layui-form-item">';
+                html+='<div class="layui-input-inline" style="text-align: center" >';
+                html+='<select class="layui-input" id="goods_move_select" style="display: block">';
+                html+='<option value="">选择店铺</option>';
+                $.ajax({
+                    type: 'GET',
+                    async:false,
+                    url: layui.setter.baseUrl + '/pdd/stores/list',
+                    data:{page:1,limit:8000},
+                    success: function (res) {
+                        $.each(res.data, function (key, val) {
+                            html+='<option value="'+val.id+'">'+val.name+'</option>';
+                        });
+                    }
+                });
+                html+='</select></div></div></div></div>';
+                layer.open({
+                    type: 1
+                    ,title: '移动商品:'
+                    ,closeBtn: false
+                    ,area: '300px;'
+                    ,shade: 0.8
+                    ,id: 'LAY_goods_move' //设定一个id，防止重复弹出
+                    ,btn: ['移动','放弃']
+                    ,btnAlign: 'c'
+                    ,moveType: 1 //拖拽模式，0或者1
+                    ,content: html
+                    ,success: function(res){
+                    }
+                    ,yes: function(){
+                        var flag=true;
+                        var stores_id=$('#goods_move_select').val();
+                        if (!stores_id) {
+                            layer.msg("请选择店铺！");
+                            flag=false;
+                            return;
+                        }
+                        if (flag){
+                            $.ajax({
+                                type:"POST",
+                                url: layui.setter.baseUrl + '/pdd/goods/update',
+                                data:{
+                                    id:id
+                                    ,stores_id:stores_id
+                                },
+                                success: function(res){
+                                    layer.msg(res.msg);
+                                    if (res.code==0){
+                                        self.location.reload();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        };
+    });
+
+
+   /* function goods_del(id) {
+        if (confirm('确认是否删除？')==true){
+            location.hash = layui.setter.baseUrl + "/pdd/goods/delete?id="+id;
+        }
+    }*/
+
+
+
+    Date.prototype.format = function (fmt) { //author: meizz  
+        var o = {
+            "M+": this.getMonth() + 1, //月份  
+            "d+": this.getDate(), //日  
+            "h+": this.getHours(), //小时  
+            "m+": this.getMinutes(), //分  
+            "s+": this.getSeconds(), //秒   
+            "q+": Math.floor((this.getMonth() + 3) / 3),    //q是季度
+            "S": this.getMilliseconds() //毫秒  
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    String.prototype.format = function (args) {
+        var result = this;
+        if (arguments.length > 0) {
+            if (arguments.length == 1 && typeof (args) == "loginTime") {
+                for (var key in args) {
+                    if (args[key] != undefined) {
+                        var reg = new RegExp("({" + key + "})", "g");
+                        result = result.replace(reg, args[key]);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < arguments.length; i++) {
+                    if (arguments[i] != undefined) {
+                        //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题  
+                        var reg = new RegExp("({)" + i + "(})", "g");
+                        result = result.replace(reg, arguments[i]);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    function dateFormat(value) {
+        return value ? new Date(value*1000).format("yyyy-MM-dd hh:mm:ss") : "";
+    }
+</script>

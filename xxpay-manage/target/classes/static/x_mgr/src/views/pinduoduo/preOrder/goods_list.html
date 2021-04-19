@@ -1,0 +1,156 @@
+
+<link rel="stylesheet" href="../../../../start/layui/css/layui.css" media="all">
+<div class="layui-form" style="padding-top: 15px;">
+    <div class="layui-form-item" style="margin-bottom: 0">
+        <label class="layui-form-label">店铺：</label>
+        <div class="layui-input-inline" >
+            <div class="layui-input-inline" >
+
+                <select name="stores" id="stores"  placeholder="请填写店铺名称"  lay-verify="" lay-search>
+
+                </select>
+            </div>
+        </div>
+        <label class="layui-form-label">商品ID：</label>
+        <div class="layui-input-inline">
+            <input type="number" name="goods_id" class="layui-input"  placeholder="请填写商品ID">
+        </div>
+        <div class="layui-form-mid layui-word-aux" style="padding: 5px 0!important;">
+            <button type="button" id="search" data-type="search" class="layui-btn layui-btn-normal" >搜索</button>
+        </div>
+    </div>
+</div>
+
+<table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
+<script type="text/html" id="toolbar">
+</script>
+<script src="../../../../start/layui/layui.js"></script>
+<script src="../../../../start/layui/lay/modules/jquery.js"></script>
+
+<script>
+    layui.config({
+        base: '../../../../src/' //指定 layuiAdmin 项目路径，本地开发用 src，线上用 dist
+        ,version: '1.0.0'
+    }).use('index');
+    layui.use(['form','jquery','table'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var $ = layui.$;
+        form.render("select");
+        table.render({
+            elem: '#dataTable'
+            ,url:layui.setter.baseUrl + '/pdd/goods/list'
+            ,page: true
+            ,cellMinWidth: 80
+            ,toolbar: '#toolbar'
+            , where: {
+                status:true,
+                is_upper:true,
+            }
+            ,cols: [[
+                 {checkbox: true}
+                ,{field:'id', title: 'ID', sort: true}
+                ,{field:'stores_name', title: '店铺'}
+                ,{field:'goods_name', title: '商品名称'}
+                ,{field:'goods_url', title: '商品链接'}
+                ,{field:'normal_price', title: '价格',templet:'<div>{{ d.normal_price/100 }}</div> '}
+                ,{field:'last_use_time', title: '最后使用时间', sort: true,templet:'<div>{{ dateFormat(d.last_use_time) }}</div> '}
+            ]]
+        });
+
+        $.ajax({
+            type: 'GET',
+            url: layui.setter.baseUrl + '/pdd/stores/list',
+            data:{page:1,limit:8000},
+            success: function (res) {
+                $("#stores").html('<option value="">全部商户</option>');
+                $.each(res.data, function (key, val) {
+                    var option1 = $("<option>").val(val.id).text(val.name);
+                    //通过LayUI.jQuery添加列表项
+                    $("#stores").append(option1);
+                });
+                layui.form.render('select');
+            }
+        });
+
+
+
+        //搜索加载--数据表格重载
+        var active = {
+            search: function () {
+                table.reload('dataTable', {
+                    method:'GET',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        stores_id: $("select[name=stores]").val(),
+                        goods_id: $("input[name=goods_id]").val(),
+                        status:true,
+                        is_upper:true,
+                    }
+                });
+            }
+        };
+        $('#search').on('click', function () {
+            ids=new Array();
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        //以复选框事件为例
+        table.on('checkbox(dataTable)', function(obj){
+            var index=parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.openGoods(obj);//刷新父页面，注意一定要在关闭当前iframe层之前执行刷新
+            parent.layer.close(index); //再执行关闭
+        });
+
+
+    });
+
+
+
+
+
+    Date.prototype.format = function (fmt) { //author: meizz  
+        var o = {
+            "M+": this.getMonth() + 1, //月份  
+            "d+": this.getDate(), //日  
+            "h+": this.getHours(), //小时  
+            "m+": this.getMinutes(), //分  
+            "s+": this.getSeconds(), //秒   
+            "q+": Math.floor((this.getMonth() + 3) / 3),    //q是季度
+            "S": this.getMilliseconds() //毫秒  
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    String.prototype.format = function (args) {
+        var result = this;
+        if (arguments.length > 0) {
+            if (arguments.length == 1 && typeof (args) == "loginTime") {
+                for (var key in args) {
+                    if (args[key] != undefined) {
+                        var reg = new RegExp("({" + key + "})", "g");
+                        result = result.replace(reg, args[key]);
+                    }
+                }
+            }
+            else {
+                for (var i = 0; i < arguments.length; i++) {
+                    if (arguments[i] != undefined) {
+                        //var reg = new RegExp("({[" + i + "]})", "g");//这个在索引大于9时会有问题  
+                        var reg = new RegExp("({)" + i + "(})", "g");
+                        result = result.replace(reg, arguments[i]);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    function dateFormat(value) {
+        return value ? new Date(value*1000).format("yyyy-MM-dd hh:mm:ss") : "";
+    }
+</script>

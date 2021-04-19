@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.PinduoduoPreOrdersMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.PinduoduoPreOrders" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="startingTime" property="startingTime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="frequency" property="frequency" jdbcType="BIGINT" />
+    <result column="totalOrders" property="totalOrders" jdbcType="BIGINT" />
+    <result column="ctime" property="ctime" jdbcType="TIMESTAMP" />
+    <result column="lastTime" property="lastTime" jdbcType="TIMESTAMP" />
+    <result column="goodsId" property="goodsId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="completionsNumber" property="completionsNumber" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="payCode" property="payCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, startingTime, endTime, frequency, totalOrders, ctime, lastTime, goodsId, name, 
+    completionsNumber, status, payCode
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.PinduoduoPreOrdersExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pinduoduo_pre_orders
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pinduoduo_pre_orders
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pinduoduo_pre_orders
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.PinduoduoPreOrdersExample" >
+    delete from pinduoduo_pre_orders
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.PinduoduoPreOrders" >
+    insert into pinduoduo_pre_orders (id, startingTime, endTime, 
+      frequency, totalOrders, ctime, 
+      lastTime, goodsId, name, 
+      completionsNumber, status, payCode
+      )
+    values (#{id,jdbcType=INTEGER}, #{startingTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{frequency,jdbcType=BIGINT}, #{totalOrders,jdbcType=BIGINT}, #{ctime,jdbcType=TIMESTAMP}, 
+      #{lastTime,jdbcType=TIMESTAMP}, #{goodsId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{completionsNumber,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{payCode,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.PinduoduoPreOrders" >
+    insert into pinduoduo_pre_orders
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="startingTime != null" >
+        startingTime,
+      </if>
+      <if test="endTime != null" >
+        endTime,
+      </if>
+      <if test="frequency != null" >
+        frequency,
+      </if>
+      <if test="totalOrders != null" >
+        totalOrders,
+      </if>
+      <if test="ctime != null" >
+        ctime,
+      </if>
+      <if test="lastTime != null" >
+        lastTime,
+      </if>
+      <if test="goodsId != null" >
+        goodsId,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="completionsNumber != null" >
+        completionsNumber,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="payCode != null" >
+        payCode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="startingTime != null" >
+        #{startingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frequency != null" >
+        #{frequency,jdbcType=BIGINT},
+      </if>
+      <if test="totalOrders != null" >
+        #{totalOrders,jdbcType=BIGINT},
+      </if>
+      <if test="ctime != null" >
+        #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastTime != null" >
+        #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="completionsNumber != null" >
+        #{completionsNumber,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="payCode != null" >
+        #{payCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.PinduoduoPreOrdersExample" resultType="java.lang.Integer" >
+    select count(*) from pinduoduo_pre_orders
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pinduoduo_pre_orders
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.startingTime != null" >
+        startingTime = #{record.startingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null" >
+        endTime = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.frequency != null" >
+        frequency = #{record.frequency,jdbcType=BIGINT},
+      </if>
+      <if test="record.totalOrders != null" >
+        totalOrders = #{record.totalOrders,jdbcType=BIGINT},
+      </if>
+      <if test="record.ctime != null" >
+        ctime = #{record.ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastTime != null" >
+        lastTime = #{record.lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.goodsId != null" >
+        goodsId = #{record.goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.completionsNumber != null" >
+        completionsNumber = #{record.completionsNumber,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.payCode != null" >
+        payCode = #{record.payCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pinduoduo_pre_orders
+    set id = #{record.id,jdbcType=INTEGER},
+      startingTime = #{record.startingTime,jdbcType=TIMESTAMP},
+      endTime = #{record.endTime,jdbcType=TIMESTAMP},
+      frequency = #{record.frequency,jdbcType=BIGINT},
+      totalOrders = #{record.totalOrders,jdbcType=BIGINT},
+      ctime = #{record.ctime,jdbcType=TIMESTAMP},
+      lastTime = #{record.lastTime,jdbcType=TIMESTAMP},
+      goodsId = #{record.goodsId,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      completionsNumber = #{record.completionsNumber,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=INTEGER},
+      payCode = #{record.payCode,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.PinduoduoPreOrders" >
+    update pinduoduo_pre_orders
+    <set >
+      <if test="startingTime != null" >
+        startingTime = #{startingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        endTime = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frequency != null" >
+        frequency = #{frequency,jdbcType=BIGINT},
+      </if>
+      <if test="totalOrders != null" >
+        totalOrders = #{totalOrders,jdbcType=BIGINT},
+      </if>
+      <if test="ctime != null" >
+        ctime = #{ctime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastTime != null" >
+        lastTime = #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsId != null" >
+        goodsId = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="completionsNumber != null" >
+        completionsNumber = #{completionsNumber,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="payCode != null" >
+        payCode = #{payCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.PinduoduoPreOrders" >
+    update pinduoduo_pre_orders
+    set startingTime = #{startingTime,jdbcType=TIMESTAMP},
+      endTime = #{endTime,jdbcType=TIMESTAMP},
+      frequency = #{frequency,jdbcType=BIGINT},
+      totalOrders = #{totalOrders,jdbcType=BIGINT},
+      ctime = #{ctime,jdbcType=TIMESTAMP},
+      lastTime = #{lastTime,jdbcType=TIMESTAMP},
+      goodsId = #{goodsId,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      completionsNumber = #{completionsNumber,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      payCode = #{payCode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

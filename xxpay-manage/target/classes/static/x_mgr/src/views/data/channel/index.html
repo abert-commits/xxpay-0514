@@ -1,0 +1,240 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>数据分析</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">通道数据统计</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row" style="margin-bottom: 10px;">
+                        <blockquote class="layui-elem-quote" id="amountTip" style="float:left">
+                            今日充值总金额:<span id="currentDaysRecharge" style="color: green; margin-left: 10px;"></span>
+                            昨日充值总金额:<span id="oneDaysRecharge" style="color: green; margin-left: 10px;"></span>
+                            前天充值总金额:<span id="twoDaysRecharge" style="color: green; margin-left: 10px;"></span>
+                        </blockquote>
+                        <div class="layui-form" style="float:right;">
+                            <div class="layui-form-item" style="margin:0;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="createTimeStart" id="createTimeStart" autocomplete="off"
+                                           placeholder="起始时间" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="createTimeEnd" id="createTimeEnd" autocomplete="off"
+                                           placeholder="结束时间" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="passageId" id="passageId" lay-search="">
+                                        <option value="-99">支付通道</option>
+                                    </select>
+                                </div>
+                                <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                                <button id="exportChannelStatics" class="layui-btn">导出EXCEL</button>
+                            </div>
+                        </div>
+                    </div>
+                    <span style="color: red;font-size: 18px">充值金额=处理完成</span>
+                    <table id="XxPay_Bcd_User_dataAll" lay-filter="XxPay_Bcd_User_dataAll"></table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    layui.config({
+        base: 'layui/layui_exts/',
+    }).extend({
+        excel: 'excel'
+    });
+
+    layui.use(['admin', 'table', 'util', 'laydate','excel'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            , excel = layui.excel
+            , element = layui.element
+            , laydate = layui.laydate
+            , form = layui.form;
+        element.render('breadcrumb', 'breadcrumb');
+
+        //通道统计列表
+        table.render({
+            elem: '#XxPay_Bcd_User_dataAll'
+            , cellMinWidth: 90
+            , url: layui.setter.baseUrl + '/data/channelTime/list'
+            , where: {
+                access_token: layui.data(layui.setter.tableName).access_token
+            }
+            , initSort: {
+                field: 'currentDaysRecharge' //排序字段，对应 cols 设定的各字段名
+                , type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            }
+            , id: 'tableReload'
+            , page: true
+            , cols: [[
+                   {field: 'id', title: '通道ID'}
+                , {field: 'passageName', title: '通道名称'}
+                , {field: 'passageRate', title: '通道费率百分比'}
+                , {field: 'twoDaysRecharge', title: '前天充值', sort: true, templet: '<div>{{ d.twoDaysRecharge==null?0:d.twoDaysRecharge/100 }}</div>'}
+                , {field: 'oneDaysRecharge', title: '昨天充值', sort: true, templet: '<div>{{ d.oneDaysRecharge==null?0:d.oneDaysRecharge/100 }}</div>'}
+                , {field: 'currentDaysRecharge', title: '今日充值', sort: true, templet: '<div>{{ d.currentDaysRecharge==null?0:d.currentDaysRecharge/100 }}</div>'}
+                , {field: 'mchIncome', title: '商户入账', sort: true, templet: '<div>{{ d.mchIncome==null?0:d.mchIncome/100 }}</div>'}
+
+
+
+                , {field: 'ordersNumber', title: '提交订单数', sort: true}
+                , {field: 'successOrdersNumber', title: '成功订单', sort: true}
+                , {field: 'successRate', title: '成功率', sort: true, templet: '<div>{{ d.successRate==null?0:d.successRate }}%</div>'}
+                // , {field: 'statisticsDate', title: '统计时间'}
+            ]]
+            , skin: 'line'
+            , done: function(res, curr, count){
+                if (res.code == 0) {
+                    var twoDaysRecharge = document.getElementById("twoDaysRecharge");
+                    var currentDaysRecharge = document.getElementById("currentDaysRecharge");
+                    var oneDaysRecharge = document.getElementById("oneDaysRecharge");
+                    twoDaysRecharge.innerText = res.ps.twoDaysRecharge/100;
+                    currentDaysRecharge.innerText = res.ps.currentDaysRecharge/100;
+                    oneDaysRecharge.innerText = res.ps.oneDaysRecharge/100;
+                }
+            }
+        });
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function () {
+                var channelTime = $('#channelTime').val();
+                var passageId = $('#passageId').val();
+                var createTimeStart = $('#createTimeStart').val();
+                var createTimeEnd = $('#createTimeEnd').val();
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , page: true
+                    , where: {
+                        channelTime: channelTime,
+                        passageId: passageId,
+                        createTimeStart:createTimeStart,
+                        createTimeEnd:createTimeEnd
+                    }
+                });
+            }
+        };
+
+        // 导出
+        $('#exportChannelStatics').on('click', function () {
+            var passageId = $('#passageId').val();
+            var createTimeStart = $('#createTimeStart').val();
+            var createTimeEnd = $('#createTimeEnd').val();
+            function daysBetween(sDate1, sDate2) {
+                //Date.parse() 解析一个日期时间字符串，并返回1970/1/1 午夜距离该日期时间的毫秒数
+                var time1 = Date.parse(sDate1);
+                var time2 = Date.parse(new Date(sDate2));
+                var nDays = parseFloat((time2 - time1) / 1000 / 3600 / 24);
+                return nDays;
+            };
+
+            var accessToken = layui.data(layui.setter.tableName).access_token;
+            var reqUrl = layui.setter.baseUrl + '/data/exportChannle/list' + '?' +
+                'access_token=' + accessToken +
+                '&createTimeStart=' + createTimeStart +
+                '&createTimeEnd=' + createTimeEnd +
+                '&passageId=' + passageId;
+            // layer.alert("开始导出订单");
+
+            var index = layer.load(1, exportFile(reqUrl));
+
+
+            //关闭
+            layer.close(index);
+
+        })
+
+        //表格导出
+        function exportFile(reqUrl) {
+            var headerArr = ['id', 'passageName','passageRate','twoDaysRecharge','oneDaysRecharge','currentDaysRecharge','ordersNumber','successOrdersNumber',
+                'successRate'];
+            var titles = {id:"通道ID ",
+                passageName:"通道名称",
+                passageRate:"通道费率百分比",
+                twoDaysRecharge:"前天充值",
+                oneDaysRecharge:"昨天充值",
+                currentDaysRecharge:'今日充值',
+                ordersNumber:'提交订单数',
+                successOrdersNumber:'成功订单数',
+                successRate:'成功率'
+            };
+            $.ajax({
+                url: reqUrl,
+                dataType: 'json',
+                success:function(res) {
+                    var data = res.data;
+                    var successRate = res.data.successRate;
+                    data = excel.filterExportData(data,headerArr)
+                    //将标题行置顶添加到数组
+                    data.unshift(titles);
+                    //导出excel
+                    var year = new Date().getFullYear();
+                    var month = new Date().getMonth()+1;
+                    var date = new Date().getDate();
+                    excel.exportExcel({
+                        支付订单: data
+                    }, 'HistoryList_' +year+'-'+ month+'-'+date+ '.xlsx', 'xlsx');
+                },
+                error:function(){
+                    layer.alert('获取数据失败');
+                }
+
+            });
+        }
+
+        $('#search').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        // 加载支付通道
+        admin.req({
+            type: 'post',
+            url: layui.setter.baseUrl + '/config/common/pay_passage_all',
+            error: function (err) {
+                layer.alert(err);
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    var payPassageList = res.data;
+                    //遍历赋值
+                    for (var i in payPassageList) {
+                        $("#passageId").append('<option value= ' + payPassageList[i].id + '>' + payPassageList[i].passageName + '</option>');
+                    }
+                    form.render('select');
+                }
+            }
+        });
+        laydate.render({
+            elem: '#createTimeStart'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+            , value: layui.util.toDateString(new Date(), "yyyy-MM-dd 00:00:00")
+        });
+
+        laydate.render({
+            elem: '#createTimeEnd'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        // 渲染表单
+        form.render();
+    });
+</script>

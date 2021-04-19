@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.xxpay</groupId>
+  <artifactId>xxpay</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <name>xxpay</name>
+  <description>xxpay</description>
+
+  <modules>
+    <module>xxpay-core</module>
+    <module>xxpay-generator</module>
+    <module>xxpay-manage</module>
+    <module>xxpay-merchant</module>
+    <module>xxpay-agent</module>
+    <module>xxpay-pay</module>
+    <module>xxpay-service</module>
+    <module>xxpay-task</module>
+    <module>xxpay-transit</module>
+  </modules>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.5.6.RELEASE</version>
+  </parent>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <springboot.version>1.5.6.RELEASE</springboot.version>
+    <springboot.dubbo.version>1.0.0</springboot.dubbo.version>
+    <fastjson.version>1.2.67</fastjson.version>
+    <mysql.connector.java.version>8.0.16</mysql.connector.java.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.xxpay</groupId>
+      <artifactId>xxpay-core</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.dubbo.springboot</groupId>
+      <artifactId>spring-boot-starter-dubbo</artifactId>
+      <version>${springboot.dubbo.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.alibaba</groupId>
+          <artifactId>dubbo</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>dubbo</artifactId>
+      <version>2.6.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.curator</groupId>
+      <artifactId>curator-framework</artifactId>
+      <version>2.5.0</version>
+    </dependency>
+  </dependencies>
+
+</project>

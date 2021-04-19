@@ -1,0 +1,106 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>预订单管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-form" style="padding-top: 15px;">
+    <div class="layui-form-item" style="margin-bottom: 0">
+        <label class="layui-form-label">标题：</label>
+        <div class="layui-input-inline" >
+            <input type="text" name="name" id="name" class="layui-input"  placeholder="">
+        </div>
+        <label class="layui-form-label">状态：</label>
+        <div class="layui-input-inline">
+            <select name="status" id="status">
+                <option value="">全部</option>
+                <option value="0">执行中</option>
+                <option value="1">执行完成</option>
+                <option value="2">停止</option>
+            </select>
+        </div>
+        <div class="layui-form-mid layui-word-aux" style="padding: 5px 0!important;">
+            <button type="button" id="search" data-type="search" class="layui-btn layui-btn-normal" >搜索</button>
+            <a class="layui-btn" lay-href="pinduoduo/preOrder/preOrder_add">新增</a>
+        </div>
+    </div>
+</div>
+<table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
+<script type="text/html" id="toolbar">
+
+</script>
+<script type="text/html" id="buttonTpl">
+    <form>
+        <input type="{{d.status==1?'hidden':'checkbox'}}" class="layui-btn-sm" data-id="{{d.id }}" {{d.status==0?'checked':''}}  lay-skin="switch" lay-filter="StatusSwitch" lay-text="启用|禁用">
+    </form>
+</script>
+<script>
+    layui.use(['form','jquery','table'], function(){
+        var form = layui.form;
+        var table = layui.table;
+        var $ = layui.$;
+        table.render({
+            elem: '#dataTable'
+            ,url: layui.setter.baseUrl + '/pdd/preOrders/list'
+            ,page: true
+            ,cellMinWidth: 80
+            ,toolbar: '#toolbar'
+            ,cols: [[
+                {type:'checkbox'}
+                ,{field:'id', title: 'ID', sort: true}
+                ,{field:'name', title: '标题',edit: 'text'}
+                ,{field:'startingTime', title: '开始时间'}
+                ,{field:'endTime', title: '结束时间'}
+                ,{field:'frequency', title: '频率', sort: true}
+                ,{field:'payCode', title: '支付方式', sort: true,templet:'<div>{{ d.payCode==9?"支付宝":"微信" }}</div> ',}
+
+                ,{field:'goodsId', title: '商品id', sort: true}
+                ,{field:'totalOrders', title: '总单数', sort: true}
+                ,{field:'completionsNumber', title: '成功单数', sort: true}
+                ,{field:'status', title: '状态', sort: true,templet:'<div>{{# if(d.status==0){return "执行中"}else if(d.status==1){return "执行完成"}else{ return "停止"} }}</div> '}
+                ,{title: '操作', templet: '#buttonTpl'}
+            ]]
+        });
+        //搜索加载--数据表格重载
+        var active = {
+            search: function () {
+                table.reload('dataTable', {
+                    method:'GET',
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        name: $("#name").val(),
+                        status: $("#status").val(),
+                    }
+                });
+            }
+        };
+        form.render("select");
+
+        $('#search').on('click', function () {
+            ids=new Array();
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        form.on('switch(StatusSwitch)', function(data){
+            let id=data.elem.dataset.id;
+            let status=this.checked?0:2;
+            $.post(layui.setter.baseUrl + '/pdd/preOrders/update',{
+                id:id,
+                status:status
+            },function (res) {
+                console.log(res);
+                layer.msg(res.msg, {
+                    time: 2000,
+                    closeBtn: 0
+                });
+                if(res.code!=0){
+                    $(data.elem).prop("checked", data.elem.defaultChecked);
+                    form.render();
+                }
+            })
+        });
+    });
+</script>

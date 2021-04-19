@@ -1,0 +1,87 @@
+server:
+  port: 3020
+
+# 服务节点,要求分布式下每个节点不同
+##node: 01
+
+spring:
+  dubbo:
+    application:
+      name: xxpay-pay
+    consumer:
+      timeout: 5200000
+    registry:
+      address: zookeeper://127.0.0.1:2181
+    protocol:
+      name: dubbo
+      port: 20881
+    scan: org.xxpay.pay
+  redis:
+    host: 127.0.0.1
+    password: root
+    port: 6379
+    database: 0
+    timeout: 1000
+    pool:
+      max-idle: 100
+      min-idle: 1
+      max-active: 1000
+      max-wait: -1
+  activemq:
+    broker-url: failover:(tcp://127.0.0.1:61616?wireFormat.maxInactivityDuration=0)
+    in-memory: false
+    pool:
+     enabled: true
+     max-connections: 10
+     idle-timeout: 30000  # 空闲的连接过期时间，默认为30秒
+     expiry-timeout: 0 # 强制的连接过期时间，与idleTimeout的区别在于：idleTimeout是在连接空闲一段时间失效，而expiryTimeout不管当前连接的情况，只要达到指定时间就失效。默认为0，never
+#    user: admin
+#    password: hanxing_mq123
+  freemarker:
+
+    cache: false
+    charset: UTF-8
+    check-template-location: true
+    content-type: text/html
+    expose-request-attributes: true
+    expose-session-attributes: true
+    request-context-attribute: request
+    suffix: .ftl
+    templateEncoding: UTF-8
+    templateLoaderPath: classpath:/templates/
+    settings:
+      number_format: 0.##
+
+logging:
+  file: /home/xxpay_0514/log/xxpay-pay.log
+  level:
+    root: info
+
+config:
+  notifyUrl: http://pay.hanxincorp.com/notify/%s/notify_res.htm
+  returnUrl: http://pay.hanxincorp.com/notify/%s/return_res.htm
+  notifyTransUrl: http://pay.hanxincorp.com/notify/%s/trans_notify.htm
+  notifyDivisionUrl: http://pay.hanxincorp.com/notify/%s/division_notify.htm
+  payUrl: http://pay.hanxincorp.com/api
+  certRootPath: /Users/dingzhiwei/java/tmp/cert1
+  agentpayNotifyUrl: http://pay.hanxincorp.com/api/agentpay/notify
+
+task:
+  reissue.pay.switch: true
+  reissue.pay.ip: 172.31.71.84
+  reissue.trans.switch: true
+  reissue.trans.ip: 172.31.71.84
+  reissue.agentpay.switch: true
+  reissue.agentpay.ip: 172.31.71.84
+
+
+rocketmq:
+  accessKey: LTAI4G2R1oxaVzAQ9JTT9Zf3
+  secretKey: gCHa7PDibyybb3rZRlU1yzTDtF7CO7
+  nameSrvAddr: http://MQ_INST_1447489268418198_BcmjWkY0.cn-hongkong.mq-internal.aliyuncs.com:8080
+  topic: XXX
+  groupId: GID_XXX
+  tag: TAG_A
+  orderTopic: XXX
+  orderGroupId: XXX
+  orderTag: TAG_order

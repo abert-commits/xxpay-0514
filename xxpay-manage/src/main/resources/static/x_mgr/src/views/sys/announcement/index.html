@@ -1,0 +1,122 @@
+<div class="layui-card-header layui-card">
+    <span class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">首页</a>
+        <a>公告消息</a>
+        <a><cite>新增支付接口</cite></a>
+    </span>
+</div>
+
+<style>
+    .layui-form-label {
+        width: 120px !important;
+        margin-left: 1%;
+    }
+
+    .layui-input-inline {
+        width: 80% !important;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">消息发送</li>
+            </ul>
+            <div class="layui-tab-content">
+                <form class="layui-form center">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">消息类型</label>
+                        <div class="layui-input-inline">
+                            <select name="type" id="type">
+                                <option value="">---请选择---</option>
+                                <option value="1">内部盘口</option>
+                                <option value="2">外包盘口</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">消息内容:</label>
+                        <div class="layui-input-inline">
+                            <textarea name="msg" id="msg" placeholder="消息内容,发送前请认真检查内容信息。" class="layui-textarea"
+                                      style="height:418px"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn" lay-submit="" lay-filter="sendMsg">发送</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'table', 'util', 'admin',], function () {
+        var form = layui.form
+            , $ = layui.$
+            , admin = layui.admin
+            , layer = layui.layer
+            , element = layui.element
+            , table = layui.table;
+
+
+
+        element.render('breadcrumb', 'breadcrumb');//渲染导航信息
+        form.render();
+        // 当点击微信渠道配置按钮保存的时候
+        form.on('submit(sendMsg)', function (data) {
+            var load = layer.msg('发送中...', {
+                icon: 16
+                ,shade: 0.01
+                ,time: 9999999999
+            });
+
+            var type = $("#type").val();
+            var sendMsg = $("#msg").val();
+            if (sendMsg=='')
+            {
+                layer.alert("<span style=\"font-size: 18px\">叼毛:请填写需要发送的内容,你不填写,我发空气吗?塞尼木诶~</span>");
+                return;
+            }
+
+            if (type == '') {
+                // layer.alert("叼毛:请选择消息发送的类型,你不选择劳资怎么知道给谁发？塞尼木诶~");
+                layer.alert("<span style=\"font-size: 18px\">叼毛:请选择消息发送的类型,你不选择我怎么知道给谁发？塞尼木诶~</span>");
+                return;
+            }
+
+            var msg = "确认给【内部盘口】发送消息?"
+            if (msg == '2') {
+                msg = "确认给【外包盘口】发送消息?"
+            }
+
+            layer.confirm("" + msg + "", function (index) {
+                admin.req({
+                    type: 'post',
+                    url: layui.setter.baseUrl + '/sys/announcement/pushMsg',
+                    timeout: 1000 * 60,
+                    data: {
+                        type: type,
+                        msg: sendMsg
+                    },
+                    error: function (err) {
+                        layer.close(load);
+                        layer.alert(err);
+                    },
+                    success: function (res) {
+                        layer.close(load);
+                        if (res.code == 0) {
+                            layer.alert(res.msg);
+                        } else {
+                            layer.alert("发送失败");
+                        }
+                    }
+                });
+            });
+        })
+    })
+</script>

@@ -1,0 +1,1002 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.AgentInfoMapper">
+    <resultMap id="BaseResultMap" type="org.xxpay.core.entity.AgentInfo">
+        <id column="AgentId" property="agentId" jdbcType="BIGINT"/>
+        <result column="parentAgentId" property="parentAgentId" jdbcType="BIGINT"/>
+        <result column="AgentName" property="agentName" jdbcType="VARCHAR"/>
+        <result column="userName" property="userName" jdbcType="VARCHAR"/>
+        <result column="realName" property="realName" jdbcType="VARCHAR"/>
+        <result column="Password" property="password" jdbcType="VARCHAR"/>
+        <result column="PayPassword" property="payPassword" jdbcType="VARCHAR"/>
+        <result column="IdCard" property="idCard" jdbcType="VARCHAR"/>
+        <result column="Mobile" property="mobile" jdbcType="BIGINT"/>
+        <result column="Tel" property="tel" jdbcType="VARCHAR"/>
+        <result column="Qq" property="qq" jdbcType="VARCHAR"/>
+        <result column="Email" property="email" jdbcType="VARCHAR"/>
+        <result column="Address" property="address" jdbcType="VARCHAR"/>
+        <result column="AccountAttr" property="accountAttr" jdbcType="TINYINT"/>
+        <result column="AccountType" property="accountType" jdbcType="TINYINT"/>
+        <result column="BankName" property="bankName" jdbcType="VARCHAR"/>
+        <result column="BankNetName" property="bankNetName" jdbcType="VARCHAR"/>
+        <result column="AccountName" property="accountName" jdbcType="VARCHAR"/>
+        <result column="AccountNo" property="accountNo" jdbcType="VARCHAR"/>
+        <result column="Province" property="province" jdbcType="VARCHAR"/>
+        <result column="City" property="city" jdbcType="VARCHAR"/>
+        <result column="agentLevel" property="agentLevel" jdbcType="TINYINT"/>
+        <result column="FeeType" property="feeType" jdbcType="TINYINT"/>
+        <result column="FeeRate" property="feeRate" jdbcType="DECIMAL"/>
+        <result column="FeeLevel" property="feeLevel" jdbcType="VARCHAR"/>
+        <result column="RiskDay" property="riskDay" jdbcType="INTEGER"/>
+        <result column="SettConfigMode" property="settConfigMode" jdbcType="TINYINT"/>
+        <result column="DrawFlag" property="drawFlag" jdbcType="TINYINT"/>
+        <result column="AllowDrawWeekDay" property="allowDrawWeekDay" jdbcType="VARCHAR"/>
+        <result column="DrawDayStartTime" property="drawDayStartTime" jdbcType="VARCHAR"/>
+        <result column="DrawDayEndTime" property="drawDayEndTime" jdbcType="VARCHAR"/>
+        <result column="DrawMaxDayAmount" property="drawMaxDayAmount" jdbcType="BIGINT"/>
+        <result column="MaxDrawAmount" property="maxDrawAmount" jdbcType="BIGINT"/>
+        <result column="MinDrawAmount" property="minDrawAmount" jdbcType="BIGINT"/>
+        <result column="DayDrawTimes" property="dayDrawTimes" jdbcType="INTEGER"/>
+        <result column="SettType" property="settType" jdbcType="TINYINT"/>
+        <result column="SettMode" property="settMode" jdbcType="TINYINT"/>
+        <result column="Status" property="status" jdbcType="TINYINT"/>
+        <result column="LoginSecurityType" property="loginSecurityType" jdbcType="TINYINT"/>
+        <result column="PaySecurityType" property="paySecurityType" jdbcType="TINYINT"/>
+        <result column="GoogleAuthStatus" property="googleAuthStatus" jdbcType="TINYINT"/>
+        <result column="GoogleAuthSecretKey" property="googleAuthSecretKey" jdbcType="VARCHAR"/>
+        <result column="Remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="DrawFeeLimit" property="drawFeeLimit" jdbcType="BIGINT"/>
+        <result column="LastLoginIp" property="lastLoginIp" jdbcType="VARCHAR"/>
+        <result column="LastLoginTime" property="lastLoginTime" jdbcType="TIMESTAMP"/>
+        <result column="LastPasswordResetTime" property="lastPasswordResetTime" jdbcType="TIMESTAMP"/>
+        <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="offRechargeRate" property="offRechargeRate" jdbcType="DECIMAL"/>
+        <result column="PrivateKey" property="privateKey" jdbcType="VARCHAR"/>
+        <result column="AgentType" property="agentType" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    AgentId, parentAgentId, AgentName, userName, realName, Password, PayPassword, IdCard,
+    Mobile, Tel, Qq, Email, Address, AccountAttr, AccountType, BankName, BankNetName,
+    AccountName, AccountNo, Province, City, agentLevel, FeeType, FeeRate, FeeLevel, RiskDay,
+    SettConfigMode, DrawFlag, AllowDrawWeekDay, DrawDayStartTime, DrawDayEndTime, DrawMaxDayAmount,
+    MaxDrawAmount, MinDrawAmount, DayDrawTimes, SettType, SettMode, Status, LoginSecurityType,
+    PaySecurityType, GoogleAuthStatus, GoogleAuthSecretKey, Remark, DrawFeeLimit, LastLoginIp,
+    LastLoginTime, LastPasswordResetTime, CreateTime, UpdateTime, offRechargeRate, PrivateKey,AgentType
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.AgentInfoExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from t_agent_info
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from t_agent_info
+        where AgentId = #{agentId,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_agent_info
+    where AgentId = #{agentId,jdbcType=BIGINT}
+  </delete>
+    <delete id="deleteByExample" parameterType="org.xxpay.core.entity.AgentInfoExample">
+        delete from t_agent_info
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="org.xxpay.core.entity.AgentInfo">
+    insert into t_agent_info (AgentId, parentAgentId, AgentName,
+      userName, realName, Password,
+      PayPassword, IdCard, Mobile,
+      Tel, Qq, Email, Address,
+      AccountAttr, AccountType, BankName,
+      BankNetName, AccountName, AccountNo,
+      Province, City, agentLevel,
+      FeeType, FeeRate, FeeLevel,
+      RiskDay, SettConfigMode, DrawFlag,
+      AllowDrawWeekDay, DrawDayStartTime, DrawDayEndTime,
+      DrawMaxDayAmount, MaxDrawAmount, MinDrawAmount,
+      DayDrawTimes, SettType, SettMode,
+      Status, LoginSecurityType, PaySecurityType,
+      GoogleAuthStatus, GoogleAuthSecretKey,
+      Remark, DrawFeeLimit, LastLoginIp,
+      LastLoginTime, LastPasswordResetTime,
+      CreateTime, UpdateTime, offRechargeRate,
+      PrivateKey,AgentType)
+    values (#{agentId,jdbcType=BIGINT}, #{parentAgentId,jdbcType=BIGINT}, #{agentName,jdbcType=VARCHAR},
+      #{userName,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+      #{payPassword,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{mobile,jdbcType=BIGINT},
+      #{tel,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+      #{accountAttr,jdbcType=TINYINT}, #{accountType,jdbcType=TINYINT}, #{bankName,jdbcType=VARCHAR},
+      #{bankNetName,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, #{accountNo,jdbcType=VARCHAR},
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{agentLevel,jdbcType=TINYINT},
+      #{feeType,jdbcType=TINYINT}, #{feeRate,jdbcType=DECIMAL}, #{feeLevel,jdbcType=VARCHAR},
+      #{riskDay,jdbcType=INTEGER}, #{settConfigMode,jdbcType=TINYINT}, #{drawFlag,jdbcType=TINYINT},
+      #{allowDrawWeekDay,jdbcType=VARCHAR}, #{drawDayStartTime,jdbcType=VARCHAR}, #{drawDayEndTime,jdbcType=VARCHAR},
+      #{drawMaxDayAmount,jdbcType=BIGINT}, #{maxDrawAmount,jdbcType=BIGINT}, #{minDrawAmount,jdbcType=BIGINT},
+      #{dayDrawTimes,jdbcType=INTEGER}, #{settType,jdbcType=TINYINT}, #{settMode,jdbcType=TINYINT},
+      #{status,jdbcType=TINYINT}, #{loginSecurityType,jdbcType=TINYINT}, #{paySecurityType,jdbcType=TINYINT},
+      #{googleAuthStatus,jdbcType=TINYINT}, #{googleAuthSecretKey,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR}, #{drawFeeLimit,jdbcType=BIGINT}, #{lastLoginIp,jdbcType=VARCHAR},
+      #{lastLoginTime,jdbcType=TIMESTAMP}, #{lastPasswordResetTime,jdbcType=TIMESTAMP},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{offRechargeRate,jdbcType=DECIMAL},
+      #{privateKey,jdbcType=VARCHAR}),#{agentType,jdbcType=INTEGER}
+  </insert>
+    <insert id="insertSelective" parameterType="org.xxpay.core.entity.AgentInfo">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="agentId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_agent_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="agentId != null">
+                AgentId,
+            </if>
+            <if test="parentAgentId != null">
+                parentAgentId,
+            </if>
+            <if test="agentName != null">
+                AgentName,
+            </if>
+            <if test="userName != null">
+                userName,
+            </if>
+            <if test="realName != null">
+                realName,
+            </if>
+            <if test="password != null">
+                Password,
+            </if>
+            <if test="payPassword != null">
+                PayPassword,
+            </if>
+            <if test="idCard != null">
+                IdCard,
+            </if>
+            <if test="mobile != null">
+                Mobile,
+            </if>
+            <if test="tel != null">
+                Tel,
+            </if>
+            <if test="qq != null">
+                Qq,
+            </if>
+            <if test="email != null">
+                Email,
+            </if>
+            <if test="address != null">
+                Address,
+            </if>
+            <if test="accountAttr != null">
+                AccountAttr,
+            </if>
+            <if test="accountType != null">
+                AccountType,
+            </if>
+            <if test="bankName != null">
+                BankName,
+            </if>
+            <if test="bankNetName != null">
+                BankNetName,
+            </if>
+            <if test="accountName != null">
+                AccountName,
+            </if>
+            <if test="accountNo != null">
+                AccountNo,
+            </if>
+            <if test="province != null">
+                Province,
+            </if>
+            <if test="city != null">
+                City,
+            </if>
+            <if test="agentLevel != null">
+                agentLevel,
+            </if>
+            <if test="feeType != null">
+                FeeType,
+            </if>
+            <if test="feeRate != null">
+                FeeRate,
+            </if>
+            <if test="feeLevel != null">
+                FeeLevel,
+            </if>
+            <if test="riskDay != null">
+                RiskDay,
+            </if>
+            <if test="settConfigMode != null">
+                SettConfigMode,
+            </if>
+            <if test="drawFlag != null">
+                DrawFlag,
+            </if>
+            <if test="allowDrawWeekDay != null">
+                AllowDrawWeekDay,
+            </if>
+            <if test="drawDayStartTime != null">
+                DrawDayStartTime,
+            </if>
+            <if test="drawDayEndTime != null">
+                DrawDayEndTime,
+            </if>
+            <if test="drawMaxDayAmount != null">
+                DrawMaxDayAmount,
+            </if>
+            <if test="maxDrawAmount != null">
+                MaxDrawAmount,
+            </if>
+            <if test="minDrawAmount != null">
+                MinDrawAmount,
+            </if>
+            <if test="dayDrawTimes != null">
+                DayDrawTimes,
+            </if>
+            <if test="settType != null">
+                SettType,
+            </if>
+            <if test="settMode != null">
+                SettMode,
+            </if>
+            <if test="status != null">
+                Status,
+            </if>
+            <if test="loginSecurityType != null">
+                LoginSecurityType,
+            </if>
+            <if test="paySecurityType != null">
+                PaySecurityType,
+            </if>
+            <if test="googleAuthStatus != null">
+                GoogleAuthStatus,
+            </if>
+            <if test="googleAuthSecretKey != null">
+                GoogleAuthSecretKey,
+            </if>
+            <if test="remark != null">
+                Remark,
+            </if>
+            <if test="drawFeeLimit != null">
+                DrawFeeLimit,
+            </if>
+            <if test="lastLoginIp != null">
+                LastLoginIp,
+            </if>
+            <if test="lastLoginTime != null">
+                LastLoginTime,
+            </if>
+            <if test="lastPasswordResetTime != null">
+                LastPasswordResetTime,
+            </if>
+            <if test="createTime != null">
+                CreateTime,
+            </if>
+            <if test="updateTime != null">
+                UpdateTime,
+            </if>
+            <if test="offRechargeRate != null">
+                offRechargeRate,
+            </if>
+            <if test="privateKey != null">
+                PrivateKey,
+            </if>
+
+            <if test="agentType != null">
+                AgentType,
+            </if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="agentId != null">
+                #{agentId,jdbcType=BIGINT},
+            </if>
+            <if test="parentAgentId != null">
+                #{parentAgentId,jdbcType=BIGINT},
+            </if>
+            <if test="agentName != null">
+                #{agentName,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="payPassword != null">
+                #{payPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=BIGINT},
+            </if>
+            <if test="tel != null">
+                #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null">
+                #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="accountAttr != null">
+                #{accountAttr,jdbcType=TINYINT},
+            </if>
+            <if test="accountType != null">
+                #{accountType,jdbcType=TINYINT},
+            </if>
+            <if test="bankName != null">
+                #{bankName,jdbcType=VARCHAR},
+            </if>
+            <if test="bankNetName != null">
+                #{bankNetName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountName != null">
+                #{accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountNo != null">
+                #{accountNo,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="agentLevel != null">
+                #{agentLevel,jdbcType=TINYINT},
+            </if>
+            <if test="feeType != null">
+                #{feeType,jdbcType=TINYINT},
+            </if>
+            <if test="feeRate != null">
+                #{feeRate,jdbcType=DECIMAL},
+            </if>
+            <if test="feeLevel != null">
+                #{feeLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="riskDay != null">
+                #{riskDay,jdbcType=INTEGER},
+            </if>
+            <if test="settConfigMode != null">
+                #{settConfigMode,jdbcType=TINYINT},
+            </if>
+            <if test="drawFlag != null">
+                #{drawFlag,jdbcType=TINYINT},
+            </if>
+            <if test="allowDrawWeekDay != null">
+                #{allowDrawWeekDay,jdbcType=VARCHAR},
+            </if>
+            <if test="drawDayStartTime != null">
+                #{drawDayStartTime,jdbcType=VARCHAR},
+            </if>
+            <if test="drawDayEndTime != null">
+                #{drawDayEndTime,jdbcType=VARCHAR},
+            </if>
+            <if test="drawMaxDayAmount != null">
+                #{drawMaxDayAmount,jdbcType=BIGINT},
+            </if>
+            <if test="maxDrawAmount != null">
+                #{maxDrawAmount,jdbcType=BIGINT},
+            </if>
+            <if test="minDrawAmount != null">
+                #{minDrawAmount,jdbcType=BIGINT},
+            </if>
+            <if test="dayDrawTimes != null">
+                #{dayDrawTimes,jdbcType=INTEGER},
+            </if>
+            <if test="settType != null">
+                #{settType,jdbcType=TINYINT},
+            </if>
+            <if test="settMode != null">
+                #{settMode,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="loginSecurityType != null">
+                #{loginSecurityType,jdbcType=TINYINT},
+            </if>
+            <if test="paySecurityType != null">
+                #{paySecurityType,jdbcType=TINYINT},
+            </if>
+            <if test="googleAuthStatus != null">
+                #{googleAuthStatus,jdbcType=TINYINT},
+            </if>
+            <if test="googleAuthSecretKey != null">
+                #{googleAuthSecretKey,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="drawFeeLimit != null">
+                #{drawFeeLimit,jdbcType=BIGINT},
+            </if>
+            <if test="lastLoginIp != null">
+                #{lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginTime != null">
+                #{lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastPasswordResetTime != null">
+                #{lastPasswordResetTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="offRechargeRate != null">
+                #{offRechargeRate,jdbcType=DECIMAL},
+            </if>
+            <if test="privateKey != null">
+                #{privateKey,jdbcType=VARCHAR},
+            </if>
+
+            <if test="agentType != null">
+                #{agentType,jdbcType=INTEGER},
+            </if>
+
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="org.xxpay.core.entity.AgentInfoExample" resultType="java.lang.Integer">
+        select count(*) from t_agent_info
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_agent_info
+        <set>
+            <if test="record.agentId != null">
+                AgentId = #{record.agentId,jdbcType=BIGINT},
+            </if>
+            <if test="record.parentAgentId != null">
+                parentAgentId = #{record.parentAgentId,jdbcType=BIGINT},
+            </if>
+            <if test="record.agentName != null">
+                AgentName = #{record.agentName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.userName != null">
+                userName = #{record.userName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.realName != null">
+                realName = #{record.realName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.password != null">
+                Password = #{record.password,jdbcType=VARCHAR},
+            </if>
+            <if test="record.payPassword != null">
+                PayPassword = #{record.payPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="record.idCard != null">
+                IdCard = #{record.idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="record.mobile != null">
+                Mobile = #{record.mobile,jdbcType=BIGINT},
+            </if>
+            <if test="record.tel != null">
+                Tel = #{record.tel,jdbcType=VARCHAR},
+            </if>
+            <if test="record.qq != null">
+                Qq = #{record.qq,jdbcType=VARCHAR},
+            </if>
+            <if test="record.email != null">
+                Email = #{record.email,jdbcType=VARCHAR},
+            </if>
+            <if test="record.address != null">
+                Address = #{record.address,jdbcType=VARCHAR},
+            </if>
+            <if test="record.accountAttr != null">
+                AccountAttr = #{record.accountAttr,jdbcType=TINYINT},
+            </if>
+            <if test="record.accountType != null">
+                AccountType = #{record.accountType,jdbcType=TINYINT},
+            </if>
+            <if test="record.bankName != null">
+                BankName = #{record.bankName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.bankNetName != null">
+                BankNetName = #{record.bankNetName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.accountName != null">
+                AccountName = #{record.accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.accountNo != null">
+                AccountNo = #{record.accountNo,jdbcType=VARCHAR},
+            </if>
+            <if test="record.province != null">
+                Province = #{record.province,jdbcType=VARCHAR},
+            </if>
+            <if test="record.city != null">
+                City = #{record.city,jdbcType=VARCHAR},
+            </if>
+            <if test="record.agentLevel != null">
+                agentLevel = #{record.agentLevel,jdbcType=TINYINT},
+            </if>
+            <if test="record.feeType != null">
+                FeeType = #{record.feeType,jdbcType=TINYINT},
+            </if>
+            <if test="record.feeRate != null">
+                FeeRate = #{record.feeRate,jdbcType=DECIMAL},
+            </if>
+            <if test="record.feeLevel != null">
+                FeeLevel = #{record.feeLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="record.riskDay != null">
+                RiskDay = #{record.riskDay,jdbcType=INTEGER},
+            </if>
+            <if test="record.settConfigMode != null">
+                SettConfigMode = #{record.settConfigMode,jdbcType=TINYINT},
+            </if>
+            <if test="record.drawFlag != null">
+                DrawFlag = #{record.drawFlag,jdbcType=TINYINT},
+            </if>
+            <if test="record.allowDrawWeekDay != null">
+                AllowDrawWeekDay = #{record.allowDrawWeekDay,jdbcType=VARCHAR},
+            </if>
+            <if test="record.drawDayStartTime != null">
+                DrawDayStartTime = #{record.drawDayStartTime,jdbcType=VARCHAR},
+            </if>
+            <if test="record.drawDayEndTime != null">
+                DrawDayEndTime = #{record.drawDayEndTime,jdbcType=VARCHAR},
+            </if>
+            <if test="record.drawMaxDayAmount != null">
+                DrawMaxDayAmount = #{record.drawMaxDayAmount,jdbcType=BIGINT},
+            </if>
+            <if test="record.maxDrawAmount != null">
+                MaxDrawAmount = #{record.maxDrawAmount,jdbcType=BIGINT},
+            </if>
+            <if test="record.minDrawAmount != null">
+                MinDrawAmount = #{record.minDrawAmount,jdbcType=BIGINT},
+            </if>
+            <if test="record.dayDrawTimes != null">
+                DayDrawTimes = #{record.dayDrawTimes,jdbcType=INTEGER},
+            </if>
+            <if test="record.settType != null">
+                SettType = #{record.settType,jdbcType=TINYINT},
+            </if>
+            <if test="record.settMode != null">
+                SettMode = #{record.settMode,jdbcType=TINYINT},
+            </if>
+            <if test="record.status != null">
+                Status = #{record.status,jdbcType=TINYINT},
+            </if>
+            <if test="record.loginSecurityType != null">
+                LoginSecurityType = #{record.loginSecurityType,jdbcType=TINYINT},
+            </if>
+            <if test="record.paySecurityType != null">
+                PaySecurityType = #{record.paySecurityType,jdbcType=TINYINT},
+            </if>
+            <if test="record.googleAuthStatus != null">
+                GoogleAuthStatus = #{record.googleAuthStatus,jdbcType=TINYINT},
+            </if>
+            <if test="record.googleAuthSecretKey != null">
+                GoogleAuthSecretKey = #{record.googleAuthSecretKey,jdbcType=VARCHAR},
+            </if>
+            <if test="record.remark != null">
+                Remark = #{record.remark,jdbcType=VARCHAR},
+            </if>
+            <if test="record.drawFeeLimit != null">
+                DrawFeeLimit = #{record.drawFeeLimit,jdbcType=BIGINT},
+            </if>
+            <if test="record.lastLoginIp != null">
+                LastLoginIp = #{record.lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="record.lastLoginTime != null">
+                LastLoginTime = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.lastPasswordResetTime != null">
+                LastPasswordResetTime = #{record.lastPasswordResetTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.createTime != null">
+                CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.offRechargeRate != null">
+                offRechargeRate = #{record.offRechargeRate,jdbcType=DECIMAL},
+            </if>
+            <if test="record.privateKey != null">
+                PrivateKey = #{record.privateKey,jdbcType=VARCHAR},
+            </if>
+            <if test="record.agentType != null">
+                AgentType = #{record.agentType,jdbcType=INTEGER},
+            </if>
+
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_agent_info
+        set AgentId = #{record.agentId,jdbcType=BIGINT},
+        parentAgentId = #{record.parentAgentId,jdbcType=BIGINT},
+        AgentName = #{record.agentName,jdbcType=VARCHAR},
+        userName = #{record.userName,jdbcType=VARCHAR},
+        realName = #{record.realName,jdbcType=VARCHAR},
+        Password = #{record.password,jdbcType=VARCHAR},
+        PayPassword = #{record.payPassword,jdbcType=VARCHAR},
+        IdCard = #{record.idCard,jdbcType=VARCHAR},
+        Mobile = #{record.mobile,jdbcType=BIGINT},
+        Tel = #{record.tel,jdbcType=VARCHAR},
+        Qq = #{record.qq,jdbcType=VARCHAR},
+        Email = #{record.email,jdbcType=VARCHAR},
+        Address = #{record.address,jdbcType=VARCHAR},
+        AccountAttr = #{record.accountAttr,jdbcType=TINYINT},
+        AccountType = #{record.accountType,jdbcType=TINYINT},
+        BankName = #{record.bankName,jdbcType=VARCHAR},
+        BankNetName = #{record.bankNetName,jdbcType=VARCHAR},
+        AccountName = #{record.accountName,jdbcType=VARCHAR},
+        AccountNo = #{record.accountNo,jdbcType=VARCHAR},
+        Province = #{record.province,jdbcType=VARCHAR},
+        City = #{record.city,jdbcType=VARCHAR},
+        agentLevel = #{record.agentLevel,jdbcType=TINYINT},
+        FeeType = #{record.feeType,jdbcType=TINYINT},
+        FeeRate = #{record.feeRate,jdbcType=DECIMAL},
+        FeeLevel = #{record.feeLevel,jdbcType=VARCHAR},
+        RiskDay = #{record.riskDay,jdbcType=INTEGER},
+        SettConfigMode = #{record.settConfigMode,jdbcType=TINYINT},
+        DrawFlag = #{record.drawFlag,jdbcType=TINYINT},
+        AllowDrawWeekDay = #{record.allowDrawWeekDay,jdbcType=VARCHAR},
+        DrawDayStartTime = #{record.drawDayStartTime,jdbcType=VARCHAR},
+        DrawDayEndTime = #{record.drawDayEndTime,jdbcType=VARCHAR},
+        DrawMaxDayAmount = #{record.drawMaxDayAmount,jdbcType=BIGINT},
+        MaxDrawAmount = #{record.maxDrawAmount,jdbcType=BIGINT},
+        MinDrawAmount = #{record.minDrawAmount,jdbcType=BIGINT},
+        DayDrawTimes = #{record.dayDrawTimes,jdbcType=INTEGER},
+        SettType = #{record.settType,jdbcType=TINYINT},
+        SettMode = #{record.settMode,jdbcType=TINYINT},
+        Status = #{record.status,jdbcType=TINYINT},
+        LoginSecurityType = #{record.loginSecurityType,jdbcType=TINYINT},
+        PaySecurityType = #{record.paySecurityType,jdbcType=TINYINT},
+        GoogleAuthStatus = #{record.googleAuthStatus,jdbcType=TINYINT},
+        GoogleAuthSecretKey = #{record.googleAuthSecretKey,jdbcType=VARCHAR},
+        Remark = #{record.remark,jdbcType=VARCHAR},
+        DrawFeeLimit = #{record.drawFeeLimit,jdbcType=BIGINT},
+        LastLoginIp = #{record.lastLoginIp,jdbcType=VARCHAR},
+        LastLoginTime = #{record.lastLoginTime,jdbcType=TIMESTAMP},
+        LastPasswordResetTime = #{record.lastPasswordResetTime,jdbcType=TIMESTAMP},
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+        offRechargeRate = #{record.offRechargeRate,jdbcType=DECIMAL},
+        PrivateKey = #{record.privateKey,jdbcType=VARCHAR},
+        AagentType = #{record.agentType,jdbcType=INTEGER}
+
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.AgentInfo">
+        update t_agent_info
+        <set>
+            <if test="parentAgentId != null">
+                parentAgentId = #{parentAgentId,jdbcType=BIGINT},
+            </if>
+            <if test="agentName != null">
+                AgentName = #{agentName,jdbcType=VARCHAR},
+            </if>
+            <if test="userName != null">
+                userName = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                realName = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                Password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="payPassword != null">
+                PayPassword = #{payPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                IdCard = #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                Mobile = #{mobile,jdbcType=BIGINT},
+            </if>
+            <if test="tel != null">
+                Tel = #{tel,jdbcType=VARCHAR},
+            </if>
+            <if test="qq != null">
+                Qq = #{qq,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                Email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                Address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="accountAttr != null">
+                AccountAttr = #{accountAttr,jdbcType=TINYINT},
+            </if>
+            <if test="accountType != null">
+                AccountType = #{accountType,jdbcType=TINYINT},
+            </if>
+            <if test="bankName != null">
+                BankName = #{bankName,jdbcType=VARCHAR},
+            </if>
+            <if test="bankNetName != null">
+                BankNetName = #{bankNetName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountName != null">
+                AccountName = #{accountName,jdbcType=VARCHAR},
+            </if>
+            <if test="accountNo != null">
+                AccountNo = #{accountNo,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null">
+                Province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="city != null">
+                City = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="agentLevel != null">
+                agentLevel = #{agentLevel,jdbcType=TINYINT},
+            </if>
+            <if test="feeType != null">
+                FeeType = #{feeType,jdbcType=TINYINT},
+            </if>
+            <if test="feeRate != null">
+                FeeRate = #{feeRate,jdbcType=DECIMAL},
+            </if>
+            <if test="feeLevel != null">
+                FeeLevel = #{feeLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="riskDay != null">
+                RiskDay = #{riskDay,jdbcType=INTEGER},
+            </if>
+            <if test="settConfigMode != null">
+                SettConfigMode = #{settConfigMode,jdbcType=TINYINT},
+            </if>
+            <if test="drawFlag != null">
+                DrawFlag = #{drawFlag,jdbcType=TINYINT},
+            </if>
+            <if test="allowDrawWeekDay != null">
+                AllowDrawWeekDay = #{allowDrawWeekDay,jdbcType=VARCHAR},
+            </if>
+            <if test="drawDayStartTime != null">
+                DrawDayStartTime = #{drawDayStartTime,jdbcType=VARCHAR},
+            </if>
+            <if test="drawDayEndTime != null">
+                DrawDayEndTime = #{drawDayEndTime,jdbcType=VARCHAR},
+            </if>
+            <if test="drawMaxDayAmount != null">
+                DrawMaxDayAmount = #{drawMaxDayAmount,jdbcType=BIGINT},
+            </if>
+            <if test="maxDrawAmount != null">
+                MaxDrawAmount = #{maxDrawAmount,jdbcType=BIGINT},
+            </if>
+            <if test="minDrawAmount != null">
+                MinDrawAmount = #{minDrawAmount,jdbcType=BIGINT},
+            </if>
+            <if test="dayDrawTimes != null">
+                DayDrawTimes = #{dayDrawTimes,jdbcType=INTEGER},
+            </if>
+            <if test="settType != null">
+                SettType = #{settType,jdbcType=TINYINT},
+            </if>
+            <if test="settMode != null">
+                SettMode = #{settMode,jdbcType=TINYINT},
+            </if>
+            <if test="status != null">
+                Status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="loginSecurityType != null">
+                LoginSecurityType = #{loginSecurityType,jdbcType=TINYINT},
+            </if>
+            <if test="paySecurityType != null">
+                PaySecurityType = #{paySecurityType,jdbcType=TINYINT},
+            </if>
+            <if test="googleAuthStatus != null">
+                GoogleAuthStatus = #{googleAuthStatus,jdbcType=TINYINT},
+            </if>
+            <if test="googleAuthSecretKey != null">
+                GoogleAuthSecretKey = #{googleAuthSecretKey,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                Remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="drawFeeLimit != null">
+                DrawFeeLimit = #{drawFeeLimit,jdbcType=BIGINT},
+            </if>
+            <if test="lastLoginIp != null">
+                LastLoginIp = #{lastLoginIp,jdbcType=VARCHAR},
+            </if>
+            <if test="lastLoginTime != null">
+                LastLoginTime = #{lastLoginTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastPasswordResetTime != null">
+                LastPasswordResetTime = #{lastPasswordResetTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                CreateTime = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="offRechargeRate != null">
+                offRechargeRate = #{offRechargeRate,jdbcType=DECIMAL},
+            </if>
+            <if test="privateKey != null">
+                PrivateKey = #{privateKey,jdbcType=VARCHAR},
+            </if>
+          <if test="agentType != null">
+            AgentType = #{agentType,jdbcType=INTEGER},
+          </if>
+
+        </set>
+        where AgentId = #{agentId,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.AgentInfo">
+    update t_agent_info
+    set parentAgentId = #{parentAgentId,jdbcType=BIGINT},
+      AgentName = #{agentName,jdbcType=VARCHAR},
+      userName = #{userName,jdbcType=VARCHAR},
+      realName = #{realName,jdbcType=VARCHAR},
+      Password = #{password,jdbcType=VARCHAR},
+      PayPassword = #{payPassword,jdbcType=VARCHAR},
+      IdCard = #{idCard,jdbcType=VARCHAR},
+      Mobile = #{mobile,jdbcType=BIGINT},
+      Tel = #{tel,jdbcType=VARCHAR},
+      Qq = #{qq,jdbcType=VARCHAR},
+      Email = #{email,jdbcType=VARCHAR},
+      Address = #{address,jdbcType=VARCHAR},
+      AccountAttr = #{accountAttr,jdbcType=TINYINT},
+      AccountType = #{accountType,jdbcType=TINYINT},
+      BankName = #{bankName,jdbcType=VARCHAR},
+      BankNetName = #{bankNetName,jdbcType=VARCHAR},
+      AccountName = #{accountName,jdbcType=VARCHAR},
+      AccountNo = #{accountNo,jdbcType=VARCHAR},
+      Province = #{province,jdbcType=VARCHAR},
+      City = #{city,jdbcType=VARCHAR},
+      agentLevel = #{agentLevel,jdbcType=TINYINT},
+      FeeType = #{feeType,jdbcType=TINYINT},
+      FeeRate = #{feeRate,jdbcType=DECIMAL},
+      FeeLevel = #{feeLevel,jdbcType=VARCHAR},
+      RiskDay = #{riskDay,jdbcType=INTEGER},
+      SettConfigMode = #{settConfigMode,jdbcType=TINYINT},
+      DrawFlag = #{drawFlag,jdbcType=TINYINT},
+      AllowDrawWeekDay = #{allowDrawWeekDay,jdbcType=VARCHAR},
+      DrawDayStartTime = #{drawDayStartTime,jdbcType=VARCHAR},
+      DrawDayEndTime = #{drawDayEndTime,jdbcType=VARCHAR},
+      DrawMaxDayAmount = #{drawMaxDayAmount,jdbcType=BIGINT},
+      MaxDrawAmount = #{maxDrawAmount,jdbcType=BIGINT},
+      MinDrawAmount = #{minDrawAmount,jdbcType=BIGINT},
+      DayDrawTimes = #{dayDrawTimes,jdbcType=INTEGER},
+      SettType = #{settType,jdbcType=TINYINT},
+      SettMode = #{settMode,jdbcType=TINYINT},
+      Status = #{status,jdbcType=TINYINT},
+      LoginSecurityType = #{loginSecurityType,jdbcType=TINYINT},
+      PaySecurityType = #{paySecurityType,jdbcType=TINYINT},
+      GoogleAuthStatus = #{googleAuthStatus,jdbcType=TINYINT},
+      GoogleAuthSecretKey = #{googleAuthSecretKey,jdbcType=VARCHAR},
+      Remark = #{remark,jdbcType=VARCHAR},
+      DrawFeeLimit = #{drawFeeLimit,jdbcType=BIGINT},
+      LastLoginIp = #{lastLoginIp,jdbcType=VARCHAR},
+      LastLoginTime = #{lastLoginTime,jdbcType=TIMESTAMP},
+      LastPasswordResetTime = #{lastPasswordResetTime,jdbcType=TIMESTAMP},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      offRechargeRate = #{offRechargeRate,jdbcType=DECIMAL},
+      PrivateKey = #{privateKey,jdbcType=VARCHAR},
+    where AgentId = #{agentId,jdbcType=BIGINT}
+  </update>
+
+    <!-- 统计代理商信息 -->
+    <select id="count4Agent" resultType="java.util.Map" parameterType="java.util.Map">
+    SELECT COUNT(1) AS totalCount,
+    ifnull(SUM(taa.Balance),0) AS totalBalance,
+    ifnull(SUM(taa.UnBalance),0) AS totalUnBalance,
+    ifnull(SUM(taa.SettAmount),0) AS totalSettAmount
+    FROM t_agent_info tai
+    JOIN t_agent_account taa ON tai.AgentId = taa.AgentId
+    WHERE taa.Status = 1;
+  </select>
+
+    <select id="selectInfoAndAccount" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT tai.agentId, tai.agentId, tai.agentName, tai.status, tai.createTime, tai.userName, tai.realName, tai.qq,
+        tai.tel, tai.email, tai.address, taa.balance FROM t_agent_info tai
+        INNER JOIN t_agent_account taa
+        ON tai.agentId = taa.agentId
+        WHERE 1=1
+        <if test="parentAgentId != null">AND tai.parentAgentId = #{parentAgentId}</if>
+        <if test="limit != null">
+            <if test="offset != null">
+                limit ${offset}, ${limit}
+            </if>
+            <if test="offset == null">
+                limit ${limit}
+            </if>
+        </if>
+    </select>
+
+</mapper>

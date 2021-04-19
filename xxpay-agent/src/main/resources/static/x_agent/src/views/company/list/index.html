@@ -1,0 +1,434 @@
+<div class="layui-card-header layui-card">
+    <span class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">首页</a>
+        <a><cite>企业号管理</cite></a>
+    </span>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">企业号列表</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-row" style="margin-bottom:1%;">
+                    <div class="layui-form" style="float:left;">
+                        <div class="layui-form-item" style="margin:0;">
+
+                            <div class="layui-input-inline">
+                                <input type="text" name="createTimeStart" id="createTimeStart" autocomplete="off"
+                                       placeholder="开始时间" class="layui-input" value="">
+                            </div>
+
+                            <div class="layui-input-inline">
+                                <input type="text" name="createTimeEnd" id="createTimeEnd" autocomplete="off"
+                                       placeholder="结束时间" class="layui-input">
+                            </div>
+
+                            <div class="layui-input-inline">
+                                <input type="text" name="companyName" id="companyName" placeholder="企业名称"
+                                       autocomplete="off" class="layui-input">
+                            </div>
+
+                            <div class="layui-input-inline">
+                                <input type="text" name="PID" id="PID" placeholder="合作伙伴PID" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+
+                            <div class="layui-input-inline">
+                                <input type="text" name="APPID" id="APPID" placeholder="APPID" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" id="email" placeholder="邮箱账号" autocomplete="off"
+                                       class="layui-input">
+                            </div>
+
+                            <div class="layui-input-inline">
+                                <select name="status" id="status" class="layui-input">
+                                    <option value="-99">---状态---</option>
+                                    <option value="0">待审核</option>
+                                    <option value="1">正常</option>
+                                    <option value="2">禁用</option>
+                                </select>
+                            </div>
+
+                            <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                            &nbsp&nbsp
+                            <button id="add" class="layui-btn" lay-href="company/company_add" data-type="reload">新增企业号
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <table class="layui-hide" id="dataTable" lay-filter="dataTable"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    //标题内容模板
+    var tplTitle = function (d) {
+        return '<a class="layui-btn layui-btn-xs layui-btn-primary" lay-href="company/company_view/id=' + d.id + '">查看</a> '
+    };
+
+    layui.use(['table', 'util', 'form', 'laydate'], function () {
+        var table = layui.table
+            , $ = layui.$
+            , form = layui.form
+            , laydate = layui.laydate
+            , element = layui.element;
+
+        element.render('breadcrumb', 'breadcrumb');//渲染导航信息
+
+        var tplAmount = function (d) {
+            if (d.fundDirection == 1) {
+                return "<span style='color: darkgreen'>+ " + d.amount / 100 + "</span>";
+            } else if (d.fundDirection == 2) {
+                return "<span style='color: orangered'>- " + d.amount / 100 + "</span>";
+            }
+        };
+
+        var tplStatus = function (d) {
+            if (d.status == 0) {
+                return "<span style='color: darkorange'>待审核</span>";
+            } else if (d.status == 1) {
+                return "<span style='color:green'>正常</span>";
+            } else if (d.status == 2) {
+                return "<span style='color:red'>禁用</span>";
+            }
+        };
+
+        table.render({
+            elem: '#dataTable'
+            , url: layui.setter.baseUrl + '/company/list'
+            , where: {
+                access_token: layui.data(layui.setter.tableName).access_token
+            }
+            , id: 'tableReload'
+            , cols: [[
+                {field: 'agentId', title: '代理ID', sort: true, width: 128}
+                , {field: 'companyName', title: '企业名称', edit: 'text'}
+                , {field: 'pID', title: '合作伙伴PID', edit: 'number'}
+                , {field: 'aPPID', title: '应用ID', edit: 'number'}
+                , {field: 'email', title: '邮箱账号', edit: 'text'}
+                , {field: 'rSAPrivateKey', title: '私钥', edit: 'text'}
+
+                , {field: 'remark', title: '备注', edit: 'text'}
+                , {
+                    field: 'status',
+                    title: '状态',
+                    templet: tplStatus,
+                    width: 88
+                }
+                , {
+                    field: 'yesterdayDateTotalAmount',
+                    title: '昨日交易金额',
+                    templet: "<span>{{ d.yesterdayDateTotalAmount/100 }}</span>"
+                }
+                , {
+                    field: 'todayTotalAmount',
+                    title: '今日交易金额',
+                    templet: "<span>{{ d.todayTotalAmount/100 }}</span>"
+                }
+                , {
+                    field: 'successTotalAmount',
+                    title: '总交易金额',
+                    templet: "<span>{{ d.successTotalAmount/100 }}</span>"
+                }
+                , {field: 'successRate', title: '成功率', width: 100}
+                , {
+                    field: 'createTime',
+                    title: '添加时间',
+                    templet: '<div>{{ layui.util.toDateString(d.createTime) }}</div>'
+                }
+                , {field: 'edite', title: '操作', templet: tplTitle}
+            ]]
+            , page: true
+            , skin: 'line'
+        });
+        var tip_index = 0;
+        $(document).on('mouseenter', 'td[data-field="companyName"]', function () {
+            console.log(this);
+            tip_index = layer.tips('点击企业名称可以修改', this, {time: 2000});
+        }).on('mouseleave', this, function () {
+            layer.close(tip_index);
+        });
+        $(document).on('mouseenter', 'td[data-field="pid"]', function () {
+            console.log(this);
+            tip_index = layer.tips('点击合作伙伴PID可以修改', this, {time: 2000});
+        }).on('mouseleave', this, function () {
+            layer.close(tip_index);
+        });
+        $(document).on('mouseenter', 'td[data-field="appid"]', function () {
+            console.log(this);
+            tip_index = layer.tips('点击应用ID可以修改', this, {time: 2000});
+        }).on('mouseleave', this, function () {
+            layer.close(tip_index);
+        });
+        $(document).on('mouseenter', 'td[data-field="email"]', function () {
+            console.log(this);
+            tip_index = layer.tips('点击邮箱账号可以修改', this, {time: 2000});
+        }).on('mouseleave', this, function () {
+            layer.close(tip_index);
+        });
+        $(document).on('mouseenter', 'td[data-field="remark"]', function () {
+            console.log(this);
+            tip_index = layer.tips('点击备注可以修改', this, {time: 2000});
+        }).on('mouseleave', this, function () {
+            layer.close(tip_index);
+        });
+
+        // companyName,PID,APPID,email,status
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function () {
+                var createTimeStart = $('#createTimeStart').val();
+                var createTimeEnd = $('#createTimeEnd').val();
+                if(createTimeStart==''){
+                    layer.msg("开始时间不能为空");
+                    return ;
+                }
+                if(createTimeEnd==''){
+                    layer.msg("结束时间不能为空");
+                    return ;
+                }
+                var companyName = $('#companyName').val();
+                var PID = $('#PID').val();
+                var APPID = $('#APPID').val();
+                var email = $('#email').val();
+                var status = $('#status').val();
+
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        createTimeStart: createTimeStart,
+                        createTimeEnd: createTimeEnd,
+                        companyName: companyName,
+                        PID: PID,
+                        APPID: APPID,
+                        email: email,
+                        status: status
+                    }
+                });
+            }
+        };
+        $('#search').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        var day2 = new Date();
+        day2.setTime(day2.getTime());
+        laydate.render({
+            elem: '#createTimeStart'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+            , value: day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate()+' 00:00:00'
+
+        });
+
+        laydate.render({
+            elem: '#createTimeEnd'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+            , value: day2.getFullYear()+"-" + (day2.getMonth()+1) + "-" + day2.getDate()+' 23:59:59'
+        });
+
+        //监听单元格编辑
+        table.on('edit(dataTable)', function (obj) {
+            var value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            if (field == 'companyName') {
+                var id = data.id;
+                var companyName = value;
+                var flag = true;
+                if (!companyName) {
+                    layer.msg("企业名称不能为空");
+                    flag = false;
+                    return;
+                }
+                if (flag) {
+                    $.ajax({
+                        type: "POST",
+                        url: layui.setter.baseUrl + '/company/update',
+                        data: {
+                            id: id
+                            , companyName: companyName
+                            , access_token: layui.data(layui.setter.tableName).access_token
+
+                        },
+                        success: function (res) {
+                            layer.msg(res.msg);
+                            if (res.code == 0) {
+                                self.location.reload();
+                            }
+                        }
+                    });
+                }
+            }
+            if (field == 'pID') {
+                var id = data.id;
+                var pid = value;
+                var flag = true;
+                if (!pid) {
+                    layer.msg("合作伙伴PID不能为空");
+                    flag = false;
+                    return;
+                }
+                if (flag) {
+                    $.ajax({
+                        type: "POST",
+                        url: layui.setter.baseUrl + '/company/update',
+                        data: {
+                            id: id
+                            , PID: pid
+                            , access_token: layui.data(layui.setter.tableName).access_token
+
+                        },
+                        success: function (res) {
+                            layer.msg(res.msg);
+                            if (res.code == 0) {
+                                self.location.reload();
+                            } else {
+                                layer.alert(res.msg)
+                            }
+                        }
+                    });
+                }
+            }
+
+            if (field == 'aPPID') {
+                var id = data.id;
+                var appid = value;
+                var flag = true;
+                if (!appid) {
+                    layer.msg("应用ID不能为空");
+                    flag = false;
+                    return;
+                }
+                if (flag) {
+                    $.ajax({
+                        type: "POST",
+                        url: layui.setter.baseUrl + '/company/update',
+                        data: {
+                            id: id
+                            , APPID: appid
+                            , access_token: layui.data(layui.setter.tableName).access_token
+
+                        },
+                        success: function (res) {
+                            layer.msg(res.msg);
+                            if (res.code == 0) {
+                                self.location.reload();
+                            } else {
+                                layer.alert(res.msg)
+                            }
+                        }
+                    });
+                }
+            }
+
+
+            if (field == 'email') {
+                var id = data.id;
+                var email = value;
+                var flag = true;
+                if (!email) {
+                    layer.msg("邮箱账号不能为空");
+                    flag = false;
+                    return;
+                }
+                if (flag) {
+                    $.ajax({
+                        type: "POST",
+                        url: layui.setter.baseUrl + '/company/update',
+                        data: {
+                            id: id
+                            , email: email
+                            , access_token: layui.data(layui.setter.tableName).access_token
+
+                        },
+                        success: function (res) {
+                            layer.msg(res.msg);
+                            if (res.code == 0) {
+                                self.location.reload();
+                            } else {
+                                layer.alert(res.msg)
+                            }
+                        }
+                    });
+                }
+            }
+            if (field == 'rSAPrivateKey') {
+                var id = data.id;
+                var RSAPrivateKey = value;
+                var flag = true;
+                if (!RSAPrivateKey) {
+                    layer.msg("私钥不能为空");
+                    flag = false;
+                    return;
+                }
+                if (flag) {
+                    $.ajax({
+                        type: "POST",
+                        url: layui.setter.baseUrl + '/company/update',
+                        data: {
+                            id: id
+                            , RSAPrivateKey: RSAPrivateKey
+                            , access_token: layui.data(layui.setter.tableName).access_token
+
+                        },
+                        success: function (res) {
+                            layer.msg(res.msg);
+                            if (res.code == 0) {
+                                self.location.reload();
+                            } else {
+                                layer.alert(res.msg)
+                            }
+                        }
+                    });
+                }
+            }
+            if (field == 'remark') {
+                var id = data.id;
+                var remark = value;
+                var flag = true;
+                if (!remark) {
+                    layer.msg("备注不能为空");
+                    flag = false;
+                    return;
+                }
+                if (flag) {
+                    $.ajax({
+                        type: "POST",
+                        url: layui.setter.baseUrl + '/company/update',
+                        data: {
+                            id: id
+                            , remark: remark
+                            , access_token: layui.data(layui.setter.tableName).access_token
+
+                        },
+                        success: function (res) {
+                            layer.msg(res.msg);
+                            if (res.code == 0) {
+                                self.location.reload();
+                            } else {
+                                layer.alert(res.msg)
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+
+        // 渲染表单
+        form.render();
+
+
+    })
+</script>

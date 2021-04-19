@@ -1,0 +1,36 @@
+server:
+  port: 8190
+
+# 服务节点,要求分布式下每个节点不同
+## node: 01
+
+spring:
+  dubbo:
+    application:
+      name: xxpay-service
+    consumer:
+      timeout: 1200000
+    registry:
+      address: zookeeper://127.0.0.1:2181
+    protocol:
+      name: dubbo
+      port: 20880
+    scan: org.xxpay.service.impl
+  profiles:
+     active: prod
+
+  redis:
+    host: 127.0.0.1
+    password: root
+    port: 6379
+    database: 0
+    timeout: 1000
+    pool:
+      max-idle: 100
+      min-idle: 1
+      max-active: 1000
+      max-wait: -1
+logging:
+  file: /home/xxpay_0514/log/xxpay-service.log
+  level:
+    org.xxpay.service.dao.mapper: debug

@@ -1,0 +1,106 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>企业号管理</cite></a>
+        <a><cite>新建企业号</cite></a>
+    </div>
+</div>
+<style>
+    .layui-form-label {
+        width:15% !important;
+        margin-left:1%;
+    }
+    .layui-input-inline {
+        width: 33% !important;
+    }
+</style>
+<div class="layui-fluid">
+  <div class="layui-card">
+      <form class="layui-form layui-form-pane">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">基本信息</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">PID</label>
+                    <div class="layui-input-inline">
+                      <input type="text" id="PID" name="PID" lay-verify="required" placeholder="PID" autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">APPID</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="APPID" name="APPID" placeholder="输入APPID" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">支付宝企业号名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="CompanyName" name="CompanyName" lay-verify="required" placeholder="输入支付宝企业号名称" autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">企业邮箱</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" id="Email" name="Email" lay-verify="required" placeholder="输入企业邮箱" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">私钥</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="RSAPrivateKey" name="RSAPrivateKey" lay-verify="required" placeholder="输入私钥" autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">代理id</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="agentId" name="agentId" lay-verify="required" placeholder="输入代理id" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="Remark" name="Remark" lay-verify="required" placeholder="输入备注" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="padding-bottom: 20px;">
+                    <button type="button" class="layui-btn" lay-submit="" lay-filter="companyAdd">保存</button>
+                    <a class="layui-btn" lay-href="agent/company/">返回</a>
+                </div>
+            </div>
+
+        </div>
+      </form>
+  </div>
+</div>
+
+<script>
+    layui.use(['admin', 'form'],function(){
+        var form = layui.form
+        ,$ = layui.$
+        ,admin = layui.admin
+        ,element = layui.element
+        ,layer = layui.layer ;
+
+        element.render('breadcrumb', 'breadcrumb');
+        
+        form.on('submit(companyAdd)', function(data) {
+            //这里可以写ajax方法提交表单
+            admin.req({
+                type: "POST",
+                url: layui.setter.baseUrl + '/company/add',
+                data: data.field,
+                success: function(res){
+                    if(res.code == 0) {
+                        layer.alert(res.msg, {title: "保存成功"}, function(index){
+                          layer.close(index);
+                          location.href = layui.setter.baseLocal + 'agent/company/';
+                        });
+                    }else{
+                        layer.alert(res.msg)
+                    }
+                }
+            });
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+        form.render();
+    })
+</script>

@@ -1,0 +1,733 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.MchAccountHistoryMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.MchAccountHistory" >
+    <id column="Id" property="id" jdbcType="BIGINT" />
+    <result column="MchId" property="mchId" jdbcType="BIGINT" />
+    <result column="Amount" property="amount" jdbcType="BIGINT" />
+    <result column="Balance" property="balance" jdbcType="BIGINT" />
+    <result column="AfterBalance" property="afterBalance" jdbcType="BIGINT" />
+    <result column="AgentId" property="agentId" jdbcType="BIGINT" />
+    <result column="parentAgentId" property="parentAgentId" jdbcType="BIGINT" />
+    <result column="OrderAmount" property="orderAmount" jdbcType="BIGINT" />
+    <result column="Fee" property="fee" jdbcType="BIGINT" />
+    <result column="AgentProfit" property="agentProfit" jdbcType="BIGINT" />
+    <result column="parentAgentProfit" property="parentAgentProfit" jdbcType="BIGINT" />
+    <result column="PlatProfit" property="platProfit" jdbcType="BIGINT" />
+    <result column="ChannelCost" property="channelCost" jdbcType="BIGINT" />
+    <result column="FundDirection" property="fundDirection" jdbcType="TINYINT" />
+    <result column="IsAllowSett" property="isAllowSett" jdbcType="TINYINT" />
+    <result column="MchSettStatus" property="mchSettStatus" jdbcType="TINYINT" />
+    <result column="AgentSettStatus" property="agentSettStatus" jdbcType="TINYINT" />
+    <result column="parentAgentSettStatus" property="parentAgentSettStatus" jdbcType="TINYINT" />
+    <result column="OrderId" property="orderId" jdbcType="VARCHAR" />
+    <result column="ChannelOrderNo" property="channelOrderNo" jdbcType="VARCHAR" />
+    <result column="BizType" property="bizType" jdbcType="TINYINT" />
+    <result column="RiskDay" property="riskDay" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="BizItem" property="bizItem" jdbcType="VARCHAR" />
+    <result column="AgentRiskDay" property="agentRiskDay" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, MchId, Amount, Balance, AfterBalance, AgentId, parentAgentId, OrderAmount, Fee,
+    AgentProfit, parentAgentProfit, PlatProfit, ChannelCost, FundDirection, IsAllowSett,
+    MchSettStatus, AgentSettStatus, parentAgentSettStatus, OrderId, ChannelOrderNo, BizType,
+    RiskDay, Remark, CreateTime, UpdateTime, BizItem, AgentRiskDay
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.MchAccountHistoryExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mch_account_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mch_account_history
+    where Id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_mch_account_history
+    where Id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.MchAccountHistoryExample" >
+    delete from t_mch_account_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.MchAccountHistory" >
+    insert into t_mch_account_history (Id, MchId, Amount,
+      Balance, AfterBalance, AgentId,
+      parentAgentId, OrderAmount, Fee,
+      AgentProfit, parentAgentProfit, PlatProfit,
+      ChannelCost, FundDirection, IsAllowSett,
+      MchSettStatus, AgentSettStatus, parentAgentSettStatus,
+      OrderId, ChannelOrderNo, BizType,
+      RiskDay, Remark, CreateTime,
+      UpdateTime, BizItem, AgentRiskDay
+      )
+    values (#{id,jdbcType=BIGINT}, #{mchId,jdbcType=BIGINT}, #{amount,jdbcType=BIGINT},
+      #{balance,jdbcType=BIGINT}, #{afterBalance,jdbcType=BIGINT}, #{agentId,jdbcType=BIGINT},
+      #{parentAgentId,jdbcType=BIGINT}, #{orderAmount,jdbcType=BIGINT}, #{fee,jdbcType=BIGINT},
+      #{agentProfit,jdbcType=BIGINT}, #{parentAgentProfit,jdbcType=BIGINT}, #{platProfit,jdbcType=BIGINT},
+      #{channelCost,jdbcType=BIGINT}, #{fundDirection,jdbcType=TINYINT}, #{isAllowSett,jdbcType=TINYINT},
+      #{mchSettStatus,jdbcType=TINYINT}, #{agentSettStatus,jdbcType=TINYINT}, #{parentAgentSettStatus,jdbcType=TINYINT},
+      #{orderId,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, #{bizType,jdbcType=TINYINT},
+      #{riskDay,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{updateTime,jdbcType=TIMESTAMP}, #{bizItem,jdbcType=VARCHAR}, #{agentRiskDay,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.MchAccountHistory" >
+    insert into t_mch_account_history
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="mchId != null" >
+        MchId,
+      </if>
+      <if test="amount != null" >
+        Amount,
+      </if>
+      <if test="balance != null" >
+        Balance,
+      </if>
+      <if test="afterBalance != null" >
+        AfterBalance,
+      </if>
+      <if test="agentId != null" >
+        AgentId,
+      </if>
+      <if test="parentAgentId != null" >
+        parentAgentId,
+      </if>
+      <if test="orderAmount != null" >
+        OrderAmount,
+      </if>
+      <if test="fee != null" >
+        Fee,
+      </if>
+      <if test="agentProfit != null" >
+        AgentProfit,
+      </if>
+      <if test="parentAgentProfit != null" >
+        parentAgentProfit,
+      </if>
+      <if test="platProfit != null" >
+        PlatProfit,
+      </if>
+      <if test="channelCost != null" >
+        ChannelCost,
+      </if>
+      <if test="fundDirection != null" >
+        FundDirection,
+      </if>
+      <if test="isAllowSett != null" >
+        IsAllowSett,
+      </if>
+      <if test="mchSettStatus != null" >
+        MchSettStatus,
+      </if>
+      <if test="agentSettStatus != null" >
+        AgentSettStatus,
+      </if>
+      <if test="parentAgentSettStatus != null" >
+        parentAgentSettStatus,
+      </if>
+      <if test="orderId != null" >
+        OrderId,
+      </if>
+      <if test="channelOrderNo != null" >
+        ChannelOrderNo,
+      </if>
+      <if test="bizType != null" >
+        BizType,
+      </if>
+      <if test="riskDay != null" >
+        RiskDay,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime,
+      </if>
+      <if test="bizItem != null" >
+        BizItem,
+      </if>
+      <if test="agentRiskDay != null" >
+        AgentRiskDay,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="mchId != null" >
+        #{mchId,jdbcType=BIGINT},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=BIGINT},
+      </if>
+      <if test="balance != null" >
+        #{balance,jdbcType=BIGINT},
+      </if>
+      <if test="afterBalance != null" >
+        #{afterBalance,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="parentAgentId != null" >
+        #{parentAgentId,jdbcType=BIGINT},
+      </if>
+      <if test="orderAmount != null" >
+        #{orderAmount,jdbcType=BIGINT},
+      </if>
+      <if test="fee != null" >
+        #{fee,jdbcType=BIGINT},
+      </if>
+      <if test="agentProfit != null" >
+        #{agentProfit,jdbcType=BIGINT},
+      </if>
+      <if test="parentAgentProfit != null" >
+        #{parentAgentProfit,jdbcType=BIGINT},
+      </if>
+      <if test="platProfit != null" >
+        #{platProfit,jdbcType=BIGINT},
+      </if>
+      <if test="channelCost != null" >
+        #{channelCost,jdbcType=BIGINT},
+      </if>
+      <if test="fundDirection != null" >
+        #{fundDirection,jdbcType=TINYINT},
+      </if>
+      <if test="isAllowSett != null" >
+        #{isAllowSett,jdbcType=TINYINT},
+      </if>
+      <if test="mchSettStatus != null" >
+        #{mchSettStatus,jdbcType=TINYINT},
+      </if>
+      <if test="agentSettStatus != null" >
+        #{agentSettStatus,jdbcType=TINYINT},
+      </if>
+      <if test="parentAgentSettStatus != null" >
+        #{parentAgentSettStatus,jdbcType=TINYINT},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderNo != null" >
+        #{channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bizType != null" >
+        #{bizType,jdbcType=TINYINT},
+      </if>
+      <if test="riskDay != null" >
+        #{riskDay,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bizItem != null" >
+        #{bizItem,jdbcType=VARCHAR},
+      </if>
+      <if test="agentRiskDay != null" >
+        #{agentRiskDay,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.MchAccountHistoryExample" resultType="java.lang.Integer" >
+    select count(*) from t_mch_account_history
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_mch_account_history
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.mchId != null" >
+        MchId = #{record.mchId,jdbcType=BIGINT},
+      </if>
+      <if test="record.amount != null" >
+        Amount = #{record.amount,jdbcType=BIGINT},
+      </if>
+      <if test="record.balance != null" >
+        Balance = #{record.balance,jdbcType=BIGINT},
+      </if>
+      <if test="record.afterBalance != null" >
+        AfterBalance = #{record.afterBalance,jdbcType=BIGINT},
+      </if>
+      <if test="record.agentId != null" >
+        AgentId = #{record.agentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.parentAgentId != null" >
+        parentAgentId = #{record.parentAgentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.orderAmount != null" >
+        OrderAmount = #{record.orderAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.fee != null" >
+        Fee = #{record.fee,jdbcType=BIGINT},
+      </if>
+      <if test="record.agentProfit != null" >
+        AgentProfit = #{record.agentProfit,jdbcType=BIGINT},
+      </if>
+      <if test="record.parentAgentProfit != null" >
+        parentAgentProfit = #{record.parentAgentProfit,jdbcType=BIGINT},
+      </if>
+      <if test="record.platProfit != null" >
+        PlatProfit = #{record.platProfit,jdbcType=BIGINT},
+      </if>
+      <if test="record.channelCost != null" >
+        ChannelCost = #{record.channelCost,jdbcType=BIGINT},
+      </if>
+      <if test="record.fundDirection != null" >
+        FundDirection = #{record.fundDirection,jdbcType=TINYINT},
+      </if>
+      <if test="record.isAllowSett != null" >
+        IsAllowSett = #{record.isAllowSett,jdbcType=TINYINT},
+      </if>
+      <if test="record.mchSettStatus != null" >
+        MchSettStatus = #{record.mchSettStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.agentSettStatus != null" >
+        AgentSettStatus = #{record.agentSettStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.parentAgentSettStatus != null" >
+        parentAgentSettStatus = #{record.parentAgentSettStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.orderId != null" >
+        OrderId = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelOrderNo != null" >
+        ChannelOrderNo = #{record.channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bizType != null" >
+        BizType = #{record.bizType,jdbcType=TINYINT},
+      </if>
+      <if test="record.riskDay != null" >
+        RiskDay = #{record.riskDay,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        Remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.bizItem != null" >
+        BizItem = #{record.bizItem,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agentRiskDay != null" >
+        AgentRiskDay = #{record.agentRiskDay,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_mch_account_history
+    set Id = #{record.id,jdbcType=BIGINT},
+      MchId = #{record.mchId,jdbcType=BIGINT},
+      Amount = #{record.amount,jdbcType=BIGINT},
+      Balance = #{record.balance,jdbcType=BIGINT},
+      AfterBalance = #{record.afterBalance,jdbcType=BIGINT},
+      AgentId = #{record.agentId,jdbcType=BIGINT},
+      parentAgentId = #{record.parentAgentId,jdbcType=BIGINT},
+      OrderAmount = #{record.orderAmount,jdbcType=BIGINT},
+      Fee = #{record.fee,jdbcType=BIGINT},
+      AgentProfit = #{record.agentProfit,jdbcType=BIGINT},
+      parentAgentProfit = #{record.parentAgentProfit,jdbcType=BIGINT},
+      PlatProfit = #{record.platProfit,jdbcType=BIGINT},
+      ChannelCost = #{record.channelCost,jdbcType=BIGINT},
+      FundDirection = #{record.fundDirection,jdbcType=TINYINT},
+      IsAllowSett = #{record.isAllowSett,jdbcType=TINYINT},
+      MchSettStatus = #{record.mchSettStatus,jdbcType=TINYINT},
+      AgentSettStatus = #{record.agentSettStatus,jdbcType=TINYINT},
+      parentAgentSettStatus = #{record.parentAgentSettStatus,jdbcType=TINYINT},
+      OrderId = #{record.orderId,jdbcType=VARCHAR},
+      ChannelOrderNo = #{record.channelOrderNo,jdbcType=VARCHAR},
+      BizType = #{record.bizType,jdbcType=TINYINT},
+      RiskDay = #{record.riskDay,jdbcType=INTEGER},
+      Remark = #{record.remark,jdbcType=VARCHAR},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      BizItem = #{record.bizItem,jdbcType=VARCHAR},
+      AgentRiskDay = #{record.agentRiskDay,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.MchAccountHistory" >
+    update t_mch_account_history
+    <set >
+      <if test="mchId != null" >
+        MchId = #{mchId,jdbcType=BIGINT},
+      </if>
+      <if test="amount != null" >
+        Amount = #{amount,jdbcType=BIGINT},
+      </if>
+      <if test="balance != null" >
+        Balance = #{balance,jdbcType=BIGINT},
+      </if>
+      <if test="afterBalance != null" >
+        AfterBalance = #{afterBalance,jdbcType=BIGINT},
+      </if>
+      <if test="agentId != null" >
+        AgentId = #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="parentAgentId != null" >
+        parentAgentId = #{parentAgentId,jdbcType=BIGINT},
+      </if>
+      <if test="orderAmount != null" >
+        OrderAmount = #{orderAmount,jdbcType=BIGINT},
+      </if>
+      <if test="fee != null" >
+        Fee = #{fee,jdbcType=BIGINT},
+      </if>
+      <if test="agentProfit != null" >
+        AgentProfit = #{agentProfit,jdbcType=BIGINT},
+      </if>
+      <if test="parentAgentProfit != null" >
+        parentAgentProfit = #{parentAgentProfit,jdbcType=BIGINT},
+      </if>
+      <if test="platProfit != null" >
+        PlatProfit = #{platProfit,jdbcType=BIGINT},
+      </if>
+      <if test="channelCost != null" >
+        ChannelCost = #{channelCost,jdbcType=BIGINT},
+      </if>
+      <if test="fundDirection != null" >
+        FundDirection = #{fundDirection,jdbcType=TINYINT},
+      </if>
+      <if test="isAllowSett != null" >
+        IsAllowSett = #{isAllowSett,jdbcType=TINYINT},
+      </if>
+      <if test="mchSettStatus != null" >
+        MchSettStatus = #{mchSettStatus,jdbcType=TINYINT},
+      </if>
+      <if test="agentSettStatus != null" >
+        AgentSettStatus = #{agentSettStatus,jdbcType=TINYINT},
+      </if>
+      <if test="parentAgentSettStatus != null" >
+        parentAgentSettStatus = #{parentAgentSettStatus,jdbcType=TINYINT},
+      </if>
+      <if test="orderId != null" >
+        OrderId = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderNo != null" >
+        ChannelOrderNo = #{channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bizType != null" >
+        BizType = #{bizType,jdbcType=TINYINT},
+      </if>
+      <if test="riskDay != null" >
+        RiskDay = #{riskDay,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bizItem != null" >
+        BizItem = #{bizItem,jdbcType=VARCHAR},
+      </if>
+      <if test="agentRiskDay != null" >
+        AgentRiskDay = #{agentRiskDay,jdbcType=INTEGER},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.MchAccountHistory" >
+    update t_mch_account_history
+    set MchId = #{mchId,jdbcType=BIGINT},
+      Amount = #{amount,jdbcType=BIGINT},
+      Balance = #{balance,jdbcType=BIGINT},
+      AfterBalance = #{afterBalance,jdbcType=BIGINT},
+      AgentId = #{agentId,jdbcType=BIGINT},
+      parentAgentId = #{parentAgentId,jdbcType=BIGINT},
+      OrderAmount = #{orderAmount,jdbcType=BIGINT},
+      Fee = #{fee,jdbcType=BIGINT},
+      AgentProfit = #{agentProfit,jdbcType=BIGINT},
+      parentAgentProfit = #{parentAgentProfit,jdbcType=BIGINT},
+      PlatProfit = #{platProfit,jdbcType=BIGINT},
+      ChannelCost = #{channelCost,jdbcType=BIGINT},
+      FundDirection = #{fundDirection,jdbcType=TINYINT},
+      IsAllowSett = #{isAllowSett,jdbcType=TINYINT},
+      MchSettStatus = #{mchSettStatus,jdbcType=TINYINT},
+      AgentSettStatus = #{agentSettStatus,jdbcType=TINYINT},
+      parentAgentSettStatus = #{parentAgentSettStatus,jdbcType=TINYINT},
+      OrderId = #{orderId,jdbcType=VARCHAR},
+      ChannelOrderNo = #{channelOrderNo,jdbcType=VARCHAR},
+      BizType = #{bizType,jdbcType=TINYINT},
+      RiskDay = #{riskDay,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      BizItem = #{bizItem,jdbcType=VARCHAR},
+      AgentRiskDay = #{agentRiskDay,jdbcType=INTEGER}
+    where Id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!-- 查询商户单日结算汇总数据 -->
+  <select id="selectSettDailyCollect4Mch" resultType="java.util.Map" parameterType="java.util.Map" >
+    select
+    MchId,
+    sum(case when FundDirection = 1 then Amount else -Amount end) as "totalMchIncome",
+    sum(case when FundDirection = 1 then OrderAmount else -OrderAmount end) as "totalOrderAmount",
+    sum(case when FundDirection = 1 then PlatProfit else -PlatProfit end) as "totalPlatProfit",
+    sum(case when FundDirection = 1 then ChannelCost else -ChannelCost end) as "totalChannelCost",
+    sum(case when FundDirection = 1 then AgentProfit else -AgentProfit end) as "totalAgentProfit",
+    count(1) as "totalCount",
+    CONCAT(#{collDate},'') as "collectDate"
+    from t_mch_account_history
+    where
+    MchId = #{mchId}
+    and MchSettStatus = 0
+    and IsAllowSett = 1
+    <if test="fundDirection != null"> and FundDirection = #{fundDirection} </if>
+    and <![CDATA[date(CreateTime) <= DATE_ADD(#{collDate}, INTERVAL -#{riskDay} DAY)]]>
+    group by MchId;
+  </select>
+
+  <!-- 更新账户风险预存期外的商户账户历史记录记为结算完成 -->
+  <update id="updateCompleteSett4Mch" parameterType="java.util.Map">
+    update t_mch_account_history
+    set MchSettStatus = 1
+    where
+    MchId = #{mchId}
+    and MchSettStatus = 0
+    and IsAllowSett = 1
+    and <![CDATA[date(CreateTime) <= DATE_ADD(#{collDate}, INTERVAL -#{riskDay} DAY)]]>
+  </update>
+
+  <!-- 查询代理商单日结算汇总数据 -->
+  <select id="selectSettDailyCollect4Agent" resultType="java.util.Map" parameterType="java.util.Map" >
+    select
+    AgentId,
+    sum(Amount) as "totalMchIncome",
+    sum(OrderAmount) as "totalOrderAmount",
+    sum(PlatProfit) as "totalPlatProfit",
+    sum(ChannelCost) as "totalChannelCost",
+    sum(AgentProfit) as "totalAgentProfit",
+    count(1) as "totalCount",
+    CONCAT(#{collDate},'') as "collectDate"
+    from t_mch_account_history
+    where
+    AgentId = #{agentId}
+    and AgentSettStatus = 0
+    and IsAllowSett = 1
+    <if test="bizType != null"> and BizType = #{bizType} </if>
+    <if test="bizItem != null"> and BizItem = #{bizItem} </if>
+    <if test="fundDirection != null"> and FundDirection = #{fundDirection} </if>
+    and <![CDATA[date(CreateTime) <= DATE_ADD(#{collDate}, INTERVAL -#{riskDay} DAY)]]>
+    group by AgentId;
+  </select>
+
+  <!-- 更新账户风险预存期外的代理商账户历史记录记为结算完成 -->
+  <update id="updateCompleteSett4Agent" parameterType="java.util.Map">
+    update t_mch_account_history
+    set AgentSettStatus = 1
+    where
+    AgentId = #{agentId}
+    and AgentSettStatus = 0
+    and IsAllowSett = 1
+    <if test="bizType != null"> and BizType = #{bizType} </if>
+    <if test="bizItem != null"> and BizItem = #{bizItem} </if>
+    and <![CDATA[date(CreateTime) <= DATE_ADD(#{collDate}, INTERVAL -#{riskDay} DAY)]]>
+  </update>
+
+    <!-- 查询一级代理未结算数据 -->
+    <select id="selectNotSettCollect4Agent1" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    Id, MchId, Amount,
+    Balance, AfterBalance, AgentId, ParentAgentId,
+    OrderAmount, Fee, AgentProfit, ParentAgentProfit,
+    PlatProfit, ChannelCost, FundDirection,
+    IsAllowSett, MchSettStatus, AgentSettStatus, ParentAgentSettStatus,
+    OrderId, ChannelOrderNo, BizType,
+    RiskDay, Remark, CreateTime,
+    UpdateTime, BizItem, AgentRiskDay
+    from t_mch_account_history
+    where
+    ParentAgentId = #{parentAgentId}
+    and ParentAgentSettStatus = 0
+    and IsAllowSett = 1
+    and <![CDATA[date(CreateTime) <= DATE_ADD(#{collDate}, INTERVAL -AgentRiskDay DAY)]]>
+    limit 5000;
+  </select>
+
+  <!-- 查询代理未结算数据 -->
+  <select id="selectNotSettCollect4Agent2" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select
+    Id, MchId, Amount,
+    Balance, AfterBalance, AgentId, ParentAgentId,
+    OrderAmount, Fee, AgentProfit, ParentAgentProfit,
+    PlatProfit, ChannelCost, FundDirection,
+    IsAllowSett, MchSettStatus, AgentSettStatus, ParentAgentSettStatus,
+    OrderId, ChannelOrderNo, BizType,
+    RiskDay, Remark, CreateTime,
+    UpdateTime, BizItem, AgentRiskDay
+    from t_mch_account_history
+    where
+    AgentId = #{agentId}
+    and AgentSettStatus = 0
+    and IsAllowSett = 1
+    and <![CDATA[date(CreateTime) <= DATE_ADD(#{collDate}, INTERVAL -AgentRiskDay DAY)]]>
+    limit 5000;
+  </select>
+
+  <!-- 统计数据 -->
+  <select id="count4Data" resultType="java.util.Map" parameterType="java.util.Map" >
+    SELECT
+      ifnull(sum(1),0) AS totalCount,
+      ifnull(sum(OrderAmount),0) AS totalAmount,
+      ifnull(sum(Fee),0) AS totalFee,
+      ifnull(sum(AgentProfit),0) totalAgentProfit,
+      ifnull(sum(PlatProfit),0) totalPlatProfit
+    FROM t_mch_account_history
+    WHERE 1=1
+    <if test="bizType != null"> and BizType = #{bizType} </if>
+    ;
+  </select>
+
+  <!-- 统计数据 -->
+  <select id="count4Data2" resultType="java.util.Map" parameterType="java.util.Map" >
+    SELECT
+    ifnull(sum(1),0) AS totalCount,
+    ifnull(sum(OrderAmount),0) AS totalAmount,
+    ifnull(sum(Fee),0) AS totalFee,
+    ifnull(sum(AgentProfit),0) totalAgentProfit,
+    ifnull(sum(PlatProfit),0) totalPlatProfit
+    FROM t_mch_account_history
+    WHERE 1=1
+    <if test="mchId != null"> and MchId = #{mchId} </if>
+    <if test="agentId != null"> and AgentId = #{agentId} </if>
+    <if test="orderId != null"> and OrderId = #{orderId} </if>
+    <if test="bizType != null"> and BizType = #{bizType} </if>
+    <if test="createTimeStart != null"> AND CreateTime &gt;= #{createTimeStart} </if>
+    <if test="createTimeEnd != null"> AND CreateTime &lt;= #{createTimeEnd} </if>
+    ;
+  </select>
+
+  <!-- 代理商分润排行 -->
+  <select id="count4AgentProfitTop" resultType="java.util.Map" parameterType="java.util.Map" >
+    SELECT tai.AgentId AS agentId, tai.AgentName AS agentName, tpo.totalAmount,
+    tpo.totalAgentProfit, tpo.totalPlatProfit,
+    tpo.totalChannelCost, tpo.totalCount FROM t_agent_info tai LEFT JOIN (
+    SELECT AgentId,
+    SUM(Amount) AS totalAmount,
+    SUM(AgentProfit) AS totalAgentProfit,
+    SUM(PlatProfit) AS totalPlatProfit,
+    SUM(ChannelCost) AS totalChannelCost,
+    COUNT(1) AS totalCount
+    FROM t_mch_account_history
+    WHERE 1=1
+    <if test="agentId != null"> AND agentId = #{agentId} </if>
+    <if test="bizType != null"> AND bizType = #{bizType} </if>
+    <if test="createTimeStart != null"> AND CreateTime &gt;= #{createTimeStart} </if>
+    <if test="createTimeEnd != null"> AND CreateTime &lt;= #{createTimeEnd} </if>
+    GROUP BY AgentId ORDER BY totalAgentProfit DESC, AgentId ASC
+    ) tpo ON tai.AgentId = tpo.AgentId
+     WHERE 1=1
+    <if test="agentId != null"> AND tai.agentId = #{agentId} </if>;
+  </select>
+
+</mapper>

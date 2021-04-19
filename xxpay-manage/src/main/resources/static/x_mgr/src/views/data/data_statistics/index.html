@@ -1,0 +1,336 @@
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>数据分析</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">数据统计</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row" style="margin-bottom: 10px;">
+                        <blockquote class="layui-elem-quote" id="amountTip" style="float:left">
+                            充值总金额:<span id="totalAmounts" style="color: green; margin-left: 10px;"></span>
+                            &nbsp &nbsp
+                            <span style="color: red;font-size: 18px">充值金额=处理完成</span>
+                        </blockquote>
+                        <div class="layui-form" style="float:right;">
+                            <div class="layui-form-item" style="margin:0;">
+                                <div class="layui-input-inline">
+                                    <input type="text" name="createTimeStart" id="createTimeStart" autocomplete="off"
+                                           placeholder="起始时间" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="createTimeEnd" id="createTimeEnd" autocomplete="off"
+                                           placeholder="结束时间" class="layui-input">
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="mchId" id="mchId" lay-search="">
+                                        <option value="-99">商户名称</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="passageId" id="passageId" lay-search="">
+                                        <option value="-99">支付通道</option>
+                                    </select>
+                                </div>
+                                <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                                <button id="exportDataStatics" class="layui-btn">导出EXCEL</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table id="XxPay_Bcd_User_dataAll" lay-filter="XxPay_Bcd_User_dataAll"></table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.config({
+        base: 'layui/layui_exts/',
+    }).extend({
+        excel: 'excel'
+    });
+
+    layui.use(['admin', 'table', 'util', 'laydate', 'excel', 'util'], function () {
+        var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            // , util = layui.util
+            , element = layui.element
+            , laydate = layui.laydate
+            , excel = layui.excel
+            , form = layui.form;
+
+        element.render('breadcrumb', 'breadcrumb');
+
+        var tplStatus = function (d) {
+            var d = d.successRate;
+            if (parseFloat(d * 100) >= 50.00) {
+                return "<span  style='color: green'>" + d == null ? 0 : (d * 100).toFixed(2) + "%</span>";
+            } else if (parseFloat(d * 100) < 50.00) {
+                return "<span style='color: red'>" + d == null ? 0 : (d * 100).toFixed(2) + "%</span>";
+            }
+        };
+
+        var tplOutAmount2 = function (d) {
+            return d.outAmount - d.feeAmount;
+        };
+
+        //数据统计计列表
+        table.render({
+            elem: '#XxPay_Bcd_User_dataAll'
+            , cellMinWidth: 90
+            , url: layui.setter.baseUrl + '/data/count5DataStatistics'  //数据统计接口
+            , where: {
+                access_token: layui.data(layui.setter.tableName).access_token
+            }
+            ,initSort: {
+                field: 'totalAmount' //排序字段，对应 cols 设定的各字段名
+                , type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            }
+            , id: 'tableReload'
+            , page: true
+            , cols: [
+                [
+                    {field: 'mchId', title: '商户ID'}
+                    , {field: 'mchName', title: '商户名称'}
+                    , {
+                    field: 'passageId',
+                    title: '渠道编号',
+                    sort: true,
+                    templet: '<div>{{ d.passageId==null?0:d.passageId }}</div>'
+                }
+                    , {
+                    field: 'passageName',
+                    title: '支付渠道',
+                    sort: true,
+                    templet: '<div>{{ d.passageName==null?0:d.passageName }}</div>'
+                }
+                    , {
+                    field: 'totalAmount',
+                    title: '成功金额',
+                    sort: true,
+                    templet: '<div>{{ d.totalAmount==null?0:(d.totalAmount)/100}}</div>'
+                }
+                    , {
+                    field: 'handlingfee',
+                    title: '手续费',
+                    templet: '<div>{{ d.handlingfee == null?0:d.handlingfee/100 }}</div>'
+                }
+                    , {field: 'Amount', title: '结算金额', templet: '<div>{{ d.Amount == null?0:d.Amount/100 }}</div>'}
+                    , {
+                    field: 'successRate',
+                    title: '订单成功率',
+                    templet: '<div>{{ d.successRate==null?0:d.successRate }}% </div>',
+                    templet: tplStatus
+                }]
+            ],
+            skin: 'line'
+        });
+
+        // 加载商户名称
+        admin.req({
+            type: 'post',
+            url: layui.setter.baseUrl + '/config/common/mch_name_all',
+            error: function (err) {
+                layer.alert(err);
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    var mchInfoList = res.data;
+                    //遍历赋值
+                    for (var i in mchInfoList) {
+                        $("#mchId").append('<option value= ' + mchInfoList[i].mchId + '>' + mchInfoList[i].name + '</option>');
+                    }
+                    form.render('select');
+                }
+            }
+        });
+
+        // 加载支付通道
+        admin.req({
+            type: 'post',
+            url: layui.setter.baseUrl + '/config/common/pay_passage_all',
+            error: function (err) {
+                layer.alert(err);
+            },
+            success: function (res) {
+                if (res.code == 0) {
+                    var payPassageList = res.data;
+                    //遍历赋值
+                    for (var i in payPassageList) {
+                        $("#passageId").append('<option value= ' + payPassageList[i].id + '>' + payPassageList[i].passageName + '</option>');
+                    }
+                    form.render('select');
+                }
+            }
+        });
+
+        $.collInit = function () {
+            var createTimeStart = $('#createTimeStart').val();
+            var createTimeEnd = $('#createTimeEnd').val();
+            var passageId = $('#passageId').val();
+            var mchId = $('#mchId').val();
+            admin.req({
+                type: 'post',
+                url: layui.setter.baseUrl + '/data/countDataStatisAmount',
+                data: {
+                    createTimeStart: createTimeStart,
+                    createTimeEnd: createTimeEnd,
+                    passageId:passageId,
+                    mchId: mchId
+                },
+                error: function (err) {
+                    layer.alert(err);
+                },
+                success: function (res) {
+                    if (res.code == 0) {
+                        var spName = document.getElementById("totalAmounts");
+                        spName.innerText = res.data.totalAmount/100;
+                    }
+                }
+            });
+        };
+
+        $.collInit(); //初始化
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function () {
+                var createTimeStart = $('#createTimeStart').val();
+                var createTimeEnd = $('#createTimeEnd').val();
+                var passageId = $('#passageId').val();
+                var mchId = $('#mchId').val();
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , page: true
+                    , where: {
+                        createTimeStart: createTimeStart,
+                        createTimeEnd: createTimeEnd,
+                        passageId:passageId,
+                        mchId: mchId
+                    }
+                });
+                admin.req({
+                    type: 'post',
+                    url: layui.setter.baseUrl + '/data/countDataStatisAmount',
+                    data: {
+                        createTimeStart: createTimeStart,
+                        createTimeEnd: createTimeEnd,
+                        passageId:passageId,
+                        mchId: mchId
+                    },
+                    error: function (err) {
+                        layer.alert(err);
+                    },
+                    success: function (res) {
+                        if (res.code == 0) {
+                            debugger;
+                            var spName = document.getElementById("totalAmounts");
+                            spName.innerText = res.data.totalAmount/100;
+                        }
+                    }
+                });
+            }
+        };
+
+        // 导出
+        $('#exportDataStatics').on('click', function () {
+            var createTimeStart = $('#createTimeStart').val();
+            var createTimeEnd = $('#createTimeEnd').val();
+            var passageId = $('#passageId').val();
+            var mchId = $('#mchId').val();
+            function daysBetween(sDate1, sDate2) {
+                //Date.parse() 解析一个日期时间字符串，并返回1970/1/1 午夜距离该日期时间的毫秒数
+                var time1 = Date.parse(sDate1);
+                var time2 = Date.parse(new Date(sDate2));
+                var nDays = parseFloat((time2 - time1) / 1000 / 3600 / 24);
+                return nDays;
+            };
+
+            var accessToken = layui.data(layui.setter.tableName).access_token;
+            var reqUrl = layui.setter.baseUrl + '/data/exportDataStatistics' + '?' +
+                'access_token=' + accessToken +
+                '&createTimeStart=' + createTimeStart +
+                '&createTimeEnd=' + createTimeEnd +
+                '&passageId=' + passageId +
+                '&mchId=' + mchId;
+            // layer.alert("开始导出订单");
+
+            var index = layer.load(1, exportFile(reqUrl));
+
+
+            //关闭
+            layer.close(index);
+
+        })
+
+        //表格导出
+        function exportFile(reqUrl) {
+            var headerArr = ['mchId', 'mchName','passageId','passageName','totalAmount','handlingfee','amount','successRate'];
+            var titles = {mchId:"商户ID ",
+                mchName:"商户名称",
+                passageId:"渠道编码",
+                passageName:"支付渠道",
+                totalAmount:"成功金额",
+                handlingfee:"手续费",
+                amount:"结算金额",
+                successRate:"成功率"
+            };
+            $.ajax({
+                url: reqUrl,
+                dataType: 'json',
+                success:function(res) {
+                    var data = res.data;
+                    data = excel.filterExportData(data,headerArr)
+                    //将标题行置顶添加到数组
+                    data.unshift(titles);
+                    //导出excel
+                    var year = new Date().getFullYear();
+                    var month = new Date().getMonth()+1;
+                    var date = new Date().getDate();
+                    excel.exportExcel({
+                        支付订单: data
+                    }, 'HistoryList_' +year+'-'+ month+'-'+date+ '.xlsx', 'xlsx');
+                },
+                error:function(){
+                    layer.alert('获取数据失败');
+                }
+
+            });
+        }
+
+        $('#search').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        laydate.render({
+            elem: '#createTimeStart'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+            , value: layui.util.toDateString(new Date(), "yyyy-MM-dd 00:00:00")
+        });
+
+        laydate.render({
+            elem: '#createTimeEnd'
+            , type: 'datetime'
+            , format: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        // 渲染表单
+        form.render();
+    });
+</script>

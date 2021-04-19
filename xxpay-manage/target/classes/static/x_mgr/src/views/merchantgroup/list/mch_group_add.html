@@ -1,0 +1,88 @@
+<div class=" layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">首页</a>
+        <a>商户组管理</a>
+        <a><cite>新增商户组</cite></a>
+    </div>
+</div>
+
+
+<style>
+    .layui-form-label {
+        width: 120px !important;
+        margin-left: 1%;
+    }
+
+    .layui-input-inline {
+        width: 80% !important;
+    }
+</style>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">新增商户组</li>
+            </ul>
+            <div class="layui-tab-content">
+                <form class="layui-form center">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商户组名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="groupName" id="groupName" style="width: 200px" required
+                                   lay-verify="required" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">商户组费率(%)</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="rate" id="rate" style="width: 200px" required lay-verify="required"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <button type="button" class="layui-btn" lay-submit="" lay-filter="add">保存</button>
+                            <a lay-href = "merchantgroup/list/"  class="layui-btn ">返回</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form', 'table', 'util', 'admin',], function () {
+        var form = layui.form
+            , $ = layui.$
+            , admin = layui.admin
+            , layer = layui.layer
+            , element = layui.element
+            , table = layui.table;
+
+        element.render('breadcrumb', 'breadcrumb');//渲染导航信息
+        form.render();
+
+        // 新增商户组费率
+        form.on('submit(add)', function (data) {
+            admin.req({
+                type: 'post',
+                url: layui.setter.baseUrl + '/mch_group/addMchGroup', //模拟接口
+                data: data.field,
+                error: function (err) {
+                    layer.alert(err.msg, {title: "操作失败"})
+                },
+                success: function (res) {
+                    if (res.code == 0) {
+                        layer.alert(res.msg, {title: '保存成功'}, function (index) {
+                            layer.close(index);
+                            location.hash = '/merchantGroup/list/';
+                        });
+                    }
+                }
+            })
+        })
+    })
+
+</script>

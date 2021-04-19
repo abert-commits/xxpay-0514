@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.PinduoduoAddressMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.PinduoduoAddress" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="address_province" property="address_province" jdbcType="SMALLINT" />
+    <result column="address_city" property="address_city" jdbcType="SMALLINT" />
+    <result column="address_district" property="address_district" jdbcType="SMALLINT" />
+    <result column="address_concret" property="address_concret" jdbcType="VARCHAR" />
+    <result column="date" property="date" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, address_province, address_city, address_district, address_concret, date
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.PinduoduoAddressExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from pinduoduo_address
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from pinduoduo_address
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from pinduoduo_address
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.PinduoduoAddressExample" >
+    delete from pinduoduo_address
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.PinduoduoAddress" >
+    insert into pinduoduo_address (id, address_province, address_city, 
+      address_district, address_concret, date
+      )
+    values (#{id,jdbcType=INTEGER}, #{address_province,jdbcType=SMALLINT}, #{address_city,jdbcType=SMALLINT}, 
+      #{address_district,jdbcType=SMALLINT}, #{address_concret,jdbcType=VARCHAR}, #{date,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.PinduoduoAddress" >
+    insert into pinduoduo_address
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="address_province != null" >
+        address_province,
+      </if>
+      <if test="address_city != null" >
+        address_city,
+      </if>
+      <if test="address_district != null" >
+        address_district,
+      </if>
+      <if test="address_concret != null" >
+        address_concret,
+      </if>
+      <if test="date != null" >
+        date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="address_province != null" >
+        #{address_province,jdbcType=SMALLINT},
+      </if>
+      <if test="address_city != null" >
+        #{address_city,jdbcType=SMALLINT},
+      </if>
+      <if test="address_district != null" >
+        #{address_district,jdbcType=SMALLINT},
+      </if>
+      <if test="address_concret != null" >
+        #{address_concret,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.PinduoduoAddressExample" resultType="java.lang.Integer" >
+    select count(*) from pinduoduo_address
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update pinduoduo_address
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.address_province != null" >
+        address_province = #{record.address_province,jdbcType=SMALLINT},
+      </if>
+      <if test="record.address_city != null" >
+        address_city = #{record.address_city,jdbcType=SMALLINT},
+      </if>
+      <if test="record.address_district != null" >
+        address_district = #{record.address_district,jdbcType=SMALLINT},
+      </if>
+      <if test="record.address_concret != null" >
+        address_concret = #{record.address_concret,jdbcType=VARCHAR},
+      </if>
+      <if test="record.date != null" >
+        date = #{record.date,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update pinduoduo_address
+    set id = #{record.id,jdbcType=INTEGER},
+      address_province = #{record.address_province,jdbcType=SMALLINT},
+      address_city = #{record.address_city,jdbcType=SMALLINT},
+      address_district = #{record.address_district,jdbcType=SMALLINT},
+      address_concret = #{record.address_concret,jdbcType=VARCHAR},
+      date = #{record.date,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.PinduoduoAddress" >
+    update pinduoduo_address
+    <set >
+      <if test="address_province != null" >
+        address_province = #{address_province,jdbcType=SMALLINT},
+      </if>
+      <if test="address_city != null" >
+        address_city = #{address_city,jdbcType=SMALLINT},
+      </if>
+      <if test="address_district != null" >
+        address_district = #{address_district,jdbcType=SMALLINT},
+      </if>
+      <if test="address_concret != null" >
+        address_concret = #{address_concret,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        date = #{date,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.PinduoduoAddress" >
+    update pinduoduo_address
+    set address_province = #{address_province,jdbcType=SMALLINT},
+      address_city = #{address_city,jdbcType=SMALLINT},
+      address_district = #{address_district,jdbcType=SMALLINT},
+      address_concret = #{address_concret,jdbcType=VARCHAR},
+      date = #{date,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

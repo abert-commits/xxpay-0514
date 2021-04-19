@@ -1,0 +1,114 @@
+<div class="layui-card-header layui-card">
+    <span class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">首页</a>
+        <a><cite>资金归集配置</cite></a>
+    </span>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">支付产品</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-row">
+                    <div class="layuiAdmin-btns" style="margin-bottom: 10px;">
+                        <a lay-href="config/pay_cash_coll/create" class="layui-btn" data-type="all"
+                           data-events="create">新增收款账号</a>
+                    </div>
+
+                    <select name="status" id="status" lay-search="" style="width: 180px; float: left;margin-right: 10px"
+                            class="layui-input">
+                        <option value="-99">账户状态</option>
+                        <option value="1">开启</option>
+                        <option value="0">关闭</option>
+                    </select>
+
+                    <div class="layuiAdmin-btns" style="float: left">
+                        <input type="text" id="remark" name="remark" class="layui-input" placeholder="备注信息">
+                    </div>
+
+                    <div class="layuiAdmin-btns">
+                        <button id="search" class="layui-btn" data-type="reload">搜索</button>
+                    </div>
+                </div>
+                <table class="layui-hide center" id="cList"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['table', 'util', 'form'], function () {
+        var table = layui.table
+            , $ = layui.$
+            , form = layui.form
+            , element = layui.element;
+
+        element.render('breadcrumb', 'breadcrumb');//渲染导航信息
+
+        //标题内容模板
+        var tplTitle = function (d) {
+            return '<a class="layui-btn layui-btn-sm" lay-href="config/pay_cash_coll/update/id=' + d.id + '">编辑</a>'
+        };
+
+        var tplStatus = function (d) {
+            if (d.status == 0) {
+                return "关闭";
+            } else if (d.status == 1) {
+                return "<span style='color: red'>开启</span>";
+            }
+        };
+
+        table.render({
+            elem: '#cList'
+            , url: layui.setter.baseUrl + '/config/pay_cash_coll/list'
+            , where: {access_token: layui.data(layui.setter.tableName).access_token, belongPayAccountId: 0}
+            , id: 'tableReload'
+            , initSort: {
+                field: 'remark' //排序字段，对应 cols 设定的各字段名
+                , type: 'asc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            }
+            , cols: [[
+                {field: 'transInUserName', title: '分账收入方姓名',width:150}
+                , {field: 'remark', title: '备注', width: 150}
+                , {field: 'transInUserAccount', title: '分账收入方账号',width:228}
+                , {field: 'transInUserId', title: '分账收入方用户ID', width: 250}
+                , {title: '分账百分比', templet: "<span>{{ d.transInPercentage }}% </span>"}
+                , {field: 'belongPayAccountId', title: '所属支付子账户ID'}
+                , {title: '状态', templet: tplStatus}
+                , {field: 'edite', width: 200, title: '操作', templet: tplTitle}
+            ]]
+            , page: true
+            , skin: 'line'
+        });
+
+        // 渲染表单
+        form.render();
+
+        $('#search').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+        // 搜索
+        var $ = layui.$, active = {
+            reload: function () {
+                var remark = $('#remark').val();
+                var status = $('#status').val();
+                //执行重载
+                table.reload('tableReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        remark: remark,
+                        status: status
+                    }
+                });
+            }
+        };
+
+    });
+
+</script>

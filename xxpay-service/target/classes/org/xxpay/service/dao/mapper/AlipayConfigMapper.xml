@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.AlipayConfigMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.AlipayConfig" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="PID" property="PID" jdbcType="VARCHAR" />
+    <result column="APPID" property="APPID" jdbcType="VARCHAR" />
+    <result column="AgentId" property="agentId" jdbcType="BIGINT" />
+    <result column="AppCertPublickeyFileName" property="appCertPublickeyFileName" jdbcType="VARCHAR" />
+    <result column="AliPayCertPublickeyFileName" property="aliPayCertPublickeyFileName" jdbcType="VARCHAR" />
+    <result column="RSAPrivateKey" property="RSAPrivateKey" jdbcType="VARCHAR" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CompanyName" property="companyName" jdbcType="VARCHAR" />
+    <result column="Email" property="email" jdbcType="VARCHAR" />
+    <result column="Status" property="status" jdbcType="INTEGER" />
+    <result column="Remark" property="remark" jdbcType="VARCHAR" />
+    <result column="ParentAgentId" property="parentAgentId" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="org.xxpay.core.entity.AlipayConfig" extends="BaseResultMap" >
+    <result column="AppCertPublickey" property="appCertPublickey" jdbcType="LONGVARBINARY" />
+    <result column="AliPayCertPublickey" property="aliPayCertPublickey" jdbcType="LONGVARBINARY" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    Id, PID, APPID, AgentId, AppCertPublickeyFileName, AliPayCertPublickeyFileName, RSAPrivateKey, 
+    UpdateTime, CreateTime, CompanyName, Email, Status, Remark, ParentAgentId
+  </sql>
+  <sql id="Blob_Column_List" >
+    AppCertPublickey, AliPayCertPublickey
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="org.xxpay.core.entity.AlipayConfigExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from alipay_config
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.AlipayConfigExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from alipay_config
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from alipay_config
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from alipay_config
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.AlipayConfigExample" >
+    delete from alipay_config
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.AlipayConfig" >
+    insert into alipay_config (Id, PID, APPID, 
+      AgentId, AppCertPublickeyFileName, AliPayCertPublickeyFileName, 
+      RSAPrivateKey, UpdateTime, CreateTime, 
+      CompanyName, Email, Status, 
+      Remark, ParentAgentId, AppCertPublickey, 
+      AliPayCertPublickey)
+    values (#{id,jdbcType=INTEGER}, #{PID,jdbcType=VARCHAR}, #{APPID,jdbcType=VARCHAR}, 
+      #{agentId,jdbcType=BIGINT}, #{appCertPublickeyFileName,jdbcType=VARCHAR}, #{aliPayCertPublickeyFileName,jdbcType=VARCHAR}, 
+      #{RSAPrivateKey,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{companyName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{parentAgentId,jdbcType=VARCHAR}, #{appCertPublickey,jdbcType=LONGVARBINARY}, 
+      #{aliPayCertPublickey,jdbcType=LONGVARBINARY})
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.AlipayConfig" >
+    insert into alipay_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="PID != null" >
+        PID,
+      </if>
+      <if test="APPID != null" >
+        APPID,
+      </if>
+      <if test="agentId != null" >
+        AgentId,
+      </if>
+      <if test="appCertPublickeyFileName != null" >
+        AppCertPublickeyFileName,
+      </if>
+      <if test="aliPayCertPublickeyFileName != null" >
+        AliPayCertPublickeyFileName,
+      </if>
+      <if test="RSAPrivateKey != null" >
+        RSAPrivateKey,
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="companyName != null" >
+        CompanyName,
+      </if>
+      <if test="email != null" >
+        Email,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="remark != null" >
+        Remark,
+      </if>
+      <if test="parentAgentId != null" >
+        ParentAgentId,
+      </if>
+      <if test="appCertPublickey != null" >
+        AppCertPublickey,
+      </if>
+      <if test="aliPayCertPublickey != null" >
+        AliPayCertPublickey,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="PID != null" >
+        #{PID,jdbcType=VARCHAR},
+      </if>
+      <if test="APPID != null" >
+        #{APPID,jdbcType=VARCHAR},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="appCertPublickeyFileName != null" >
+        #{appCertPublickeyFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="aliPayCertPublickeyFileName != null" >
+        #{aliPayCertPublickeyFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="RSAPrivateKey != null" >
+        #{RSAPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyName != null" >
+        #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAgentId != null" >
+        #{parentAgentId,jdbcType=VARCHAR},
+      </if>
+      <if test="appCertPublickey != null" >
+        #{appCertPublickey,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="aliPayCertPublickey != null" >
+        #{aliPayCertPublickey,jdbcType=LONGVARBINARY},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.AlipayConfigExample" resultType="java.lang.Integer" >
+    select count(*) from alipay_config
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update alipay_config
+    <set >
+      <if test="record.id != null" >
+        Id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.PID != null" >
+        PID = #{record.PID,jdbcType=VARCHAR},
+      </if>
+      <if test="record.APPID != null" >
+        APPID = #{record.APPID,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agentId != null" >
+        AgentId = #{record.agentId,jdbcType=BIGINT},
+      </if>
+      <if test="record.appCertPublickeyFileName != null" >
+        AppCertPublickeyFileName = #{record.appCertPublickeyFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aliPayCertPublickeyFileName != null" >
+        AliPayCertPublickeyFileName = #{record.aliPayCertPublickeyFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.RSAPrivateKey != null" >
+        RSAPrivateKey = #{record.RSAPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.companyName != null" >
+        CompanyName = #{record.companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        Email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null" >
+        Remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentAgentId != null" >
+        ParentAgentId = #{record.parentAgentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.appCertPublickey != null" >
+        AppCertPublickey = #{record.appCertPublickey,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="record.aliPayCertPublickey != null" >
+        AliPayCertPublickey = #{record.aliPayCertPublickey,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update alipay_config
+    set Id = #{record.id,jdbcType=INTEGER},
+      PID = #{record.PID,jdbcType=VARCHAR},
+      APPID = #{record.APPID,jdbcType=VARCHAR},
+      AgentId = #{record.agentId,jdbcType=BIGINT},
+      AppCertPublickeyFileName = #{record.appCertPublickeyFileName,jdbcType=VARCHAR},
+      AliPayCertPublickeyFileName = #{record.aliPayCertPublickeyFileName,jdbcType=VARCHAR},
+      RSAPrivateKey = #{record.RSAPrivateKey,jdbcType=VARCHAR},
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      CompanyName = #{record.companyName,jdbcType=VARCHAR},
+      Email = #{record.email,jdbcType=VARCHAR},
+      Status = #{record.status,jdbcType=INTEGER},
+      Remark = #{record.remark,jdbcType=VARCHAR},
+      ParentAgentId = #{record.parentAgentId,jdbcType=VARCHAR},
+      AppCertPublickey = #{record.appCertPublickey,jdbcType=LONGVARBINARY},
+      AliPayCertPublickey = #{record.aliPayCertPublickey,jdbcType=LONGVARBINARY}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update alipay_config
+    set Id = #{record.id,jdbcType=INTEGER},
+      PID = #{record.PID,jdbcType=VARCHAR},
+      APPID = #{record.APPID,jdbcType=VARCHAR},
+      AgentId = #{record.agentId,jdbcType=BIGINT},
+      AppCertPublickeyFileName = #{record.appCertPublickeyFileName,jdbcType=VARCHAR},
+      AliPayCertPublickeyFileName = #{record.aliPayCertPublickeyFileName,jdbcType=VARCHAR},
+      RSAPrivateKey = #{record.RSAPrivateKey,jdbcType=VARCHAR},
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      CompanyName = #{record.companyName,jdbcType=VARCHAR},
+      Email = #{record.email,jdbcType=VARCHAR},
+      Status = #{record.status,jdbcType=INTEGER},
+      Remark = #{record.remark,jdbcType=VARCHAR},
+      ParentAgentId = #{record.parentAgentId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.AlipayConfig" >
+    update alipay_config
+    <set >
+      <if test="PID != null" >
+        PID = #{PID,jdbcType=VARCHAR},
+      </if>
+      <if test="APPID != null" >
+        APPID = #{APPID,jdbcType=VARCHAR},
+      </if>
+      <if test="agentId != null" >
+        AgentId = #{agentId,jdbcType=BIGINT},
+      </if>
+      <if test="appCertPublickeyFileName != null" >
+        AppCertPublickeyFileName = #{appCertPublickeyFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="aliPayCertPublickeyFileName != null" >
+        AliPayCertPublickeyFileName = #{aliPayCertPublickeyFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="RSAPrivateKey != null" >
+        RSAPrivateKey = #{RSAPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="companyName != null" >
+        CompanyName = #{companyName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        Email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAgentId != null" >
+        ParentAgentId = #{parentAgentId,jdbcType=VARCHAR},
+      </if>
+      <if test="appCertPublickey != null" >
+        AppCertPublickey = #{appCertPublickey,jdbcType=LONGVARBINARY},
+      </if>
+      <if test="aliPayCertPublickey != null" >
+        AliPayCertPublickey = #{aliPayCertPublickey,jdbcType=LONGVARBINARY},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="org.xxpay.core.entity.AlipayConfig" >
+    update alipay_config
+    set PID = #{PID,jdbcType=VARCHAR},
+      APPID = #{APPID,jdbcType=VARCHAR},
+      AgentId = #{agentId,jdbcType=BIGINT},
+      AppCertPublickeyFileName = #{appCertPublickeyFileName,jdbcType=VARCHAR},
+      AliPayCertPublickeyFileName = #{aliPayCertPublickeyFileName,jdbcType=VARCHAR},
+      RSAPrivateKey = #{RSAPrivateKey,jdbcType=VARCHAR},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      CompanyName = #{companyName,jdbcType=VARCHAR},
+      Email = #{email,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR},
+      ParentAgentId = #{parentAgentId,jdbcType=VARCHAR},
+      AppCertPublickey = #{appCertPublickey,jdbcType=LONGVARBINARY},
+      AliPayCertPublickey = #{aliPayCertPublickey,jdbcType=LONGVARBINARY}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.AlipayConfig" >
+    update alipay_config
+    set PID = #{PID,jdbcType=VARCHAR},
+      APPID = #{APPID,jdbcType=VARCHAR},
+      AgentId = #{agentId,jdbcType=BIGINT},
+      AppCertPublickeyFileName = #{appCertPublickeyFileName,jdbcType=VARCHAR},
+      AliPayCertPublickeyFileName = #{aliPayCertPublickeyFileName,jdbcType=VARCHAR},
+      RSAPrivateKey = #{RSAPrivateKey,jdbcType=VARCHAR},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      CompanyName = #{companyName,jdbcType=VARCHAR},
+      Email = #{email,jdbcType=VARCHAR},
+      Status = #{status,jdbcType=INTEGER},
+      Remark = #{remark,jdbcType=VARCHAR},
+      ParentAgentId = #{parentAgentId,jdbcType=VARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

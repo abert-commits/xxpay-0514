@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.xxpay.service.dao.mapper.MchAgentpayPassageMapper" >
+  <resultMap id="BaseResultMap" type="org.xxpay.core.entity.MchAgentpayPassage" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="MchId" property="mchId" jdbcType="BIGINT" />
+    <result column="AgentpayPassageId" property="agentpayPassageId" jdbcType="INTEGER" />
+    <result column="AgentpayPassageAccountId" property="agentpayPassageAccountId" jdbcType="INTEGER" />
+    <result column="MchFeeType" property="mchFeeType" jdbcType="TINYINT" />
+    <result column="MchFeeRate" property="mchFeeRate" jdbcType="DECIMAL" />
+    <result column="MchFeeEvery" property="mchFeeEvery" jdbcType="BIGINT" />
+    <result column="Status" property="status" jdbcType="TINYINT" />
+    <result column="IsDefault" property="isDefault" jdbcType="TINYINT" />
+    <result column="CreateTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="MaxEveryAmount" property="maxEveryAmount" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, MchId, AgentpayPassageId, AgentpayPassageAccountId, MchFeeType, MchFeeRate, MchFeeEvery,
+    Status, IsDefault, CreateTime, UpdateTime, MaxEveryAmount
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="org.xxpay.core.entity.MchAgentpayPassageExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mch_agentpay_passage
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null" >
+      <if test="offset != null" >
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null" >
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mch_agentpay_passage
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_mch_agentpay_passage
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="org.xxpay.core.entity.MchAgentpayPassageExample" >
+    delete from t_mch_agentpay_passage
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="org.xxpay.core.entity.MchAgentpayPassage" >
+    insert into t_mch_agentpay_passage (id, MchId, AgentpayPassageId, 
+      AgentpayPassageAccountId, MchFeeType, MchFeeRate,
+      MchFeeEvery, Status, IsDefault,
+      CreateTime, UpdateTime, MaxEveryAmount
+      )
+    values (#{id,jdbcType=INTEGER}, #{mchId,jdbcType=BIGINT}, #{agentpayPassageId,jdbcType=INTEGER}, 
+      #{agentpayPassageAccountId,jdbcType=INTEGER}, #{mchFeeType,jdbcType=TINYINT}, #{mchFeeRate,jdbcType=DECIMAL},
+      #{mchFeeEvery,jdbcType=BIGINT}, #{status,jdbcType=TINYINT}, #{isDefault,jdbcType=TINYINT},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{maxEveryAmount,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.xxpay.core.entity.MchAgentpayPassage" >
+    insert into t_mch_agentpay_passage
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="mchId != null" >
+        MchId,
+      </if>
+      <if test="agentpayPassageId != null" >
+        AgentpayPassageId,
+      </if>
+      <if test="agentpayPassageAccountId != null" >
+        AgentpayPassageAccountId,
+      </if>
+      <if test="mchFeeType != null" >
+        MchFeeType,
+      </if>
+      <if test="mchFeeRate != null" >
+        MchFeeRate,
+      </if>
+      <if test="mchFeeEvery != null" >
+        MchFeeEvery,
+      </if>
+      <if test="status != null" >
+        Status,
+      </if>
+      <if test="isDefault != null" >
+        IsDefault,
+      </if>
+      <if test="createTime != null" >
+        CreateTime,
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime,
+      </if>
+      <if test="maxEveryAmount != null" >
+        MaxEveryAmount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="mchId != null" >
+        #{mchId,jdbcType=BIGINT},
+      </if>
+      <if test="agentpayPassageId != null" >
+        #{agentpayPassageId,jdbcType=INTEGER},
+      </if>
+      <if test="agentpayPassageAccountId != null" >
+        #{agentpayPassageAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="mchFeeType != null" >
+        #{mchFeeType,jdbcType=TINYINT},
+      </if>
+      <if test="mchFeeRate != null" >
+        #{mchFeeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="mchFeeEvery != null" >
+        #{mchFeeEvery,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="isDefault != null" >
+        #{isDefault,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maxEveryAmount != null" >
+        #{maxEveryAmount,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="org.xxpay.core.entity.MchAgentpayPassageExample" resultType="java.lang.Integer" >
+    select count(*) from t_mch_agentpay_passage
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_mch_agentpay_passage
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.mchId != null" >
+        MchId = #{record.mchId,jdbcType=BIGINT},
+      </if>
+      <if test="record.agentpayPassageId != null" >
+        AgentpayPassageId = #{record.agentpayPassageId,jdbcType=INTEGER},
+      </if>
+      <if test="record.agentpayPassageAccountId != null" >
+        AgentpayPassageAccountId = #{record.agentpayPassageAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="record.mchFeeType != null" >
+        MchFeeType = #{record.mchFeeType,jdbcType=TINYINT},
+      </if>
+      <if test="record.mchFeeRate != null" >
+        MchFeeRate = #{record.mchFeeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.mchFeeEvery != null" >
+        MchFeeEvery = #{record.mchFeeEvery,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null" >
+        Status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.isDefault != null" >
+        IsDefault = #{record.isDefault,jdbcType=TINYINT},
+      </if>
+      <if test="record.createTime != null" >
+        CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.maxEveryAmount != null" >
+        MaxEveryAmount = #{record.maxEveryAmount,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_mch_agentpay_passage
+    set id = #{record.id,jdbcType=INTEGER},
+      MchId = #{record.mchId,jdbcType=BIGINT},
+      AgentpayPassageId = #{record.agentpayPassageId,jdbcType=INTEGER},
+      AgentpayPassageAccountId = #{record.agentpayPassageAccountId,jdbcType=INTEGER},
+      MchFeeType = #{record.mchFeeType,jdbcType=TINYINT},
+      MchFeeRate = #{record.mchFeeRate,jdbcType=DECIMAL},
+      MchFeeEvery = #{record.mchFeeEvery,jdbcType=BIGINT},
+      Status = #{record.status,jdbcType=TINYINT},
+      IsDefault = #{record.isDefault,jdbcType=TINYINT},
+      CreateTime = #{record.createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      MaxEveryAmount = #{record.maxEveryAmount,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="org.xxpay.core.entity.MchAgentpayPassage" >
+    update t_mch_agentpay_passage
+    <set >
+      <if test="mchId != null" >
+        MchId = #{mchId,jdbcType=BIGINT},
+      </if>
+      <if test="agentpayPassageId != null" >
+        AgentpayPassageId = #{agentpayPassageId,jdbcType=INTEGER},
+      </if>
+      <if test="agentpayPassageAccountId != null" >
+        AgentpayPassageAccountId = #{agentpayPassageAccountId,jdbcType=INTEGER},
+      </if>
+      <if test="mchFeeType != null" >
+        MchFeeType = #{mchFeeType,jdbcType=TINYINT},
+      </if>
+      <if test="mchFeeRate != null" >
+        MchFeeRate = #{mchFeeRate,jdbcType=DECIMAL},
+      </if>
+      <if test="mchFeeEvery != null" >
+        MchFeeEvery = #{mchFeeEvery,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        Status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="isDefault != null" >
+        IsDefault = #{isDefault,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maxEveryAmount != null" >
+        MaxEveryAmount = #{maxEveryAmount,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.xxpay.core.entity.MchAgentpayPassage" >
+    update t_mch_agentpay_passage
+    set MchId = #{mchId,jdbcType=BIGINT},
+      AgentpayPassageId = #{agentpayPassageId,jdbcType=INTEGER},
+      AgentpayPassageAccountId = #{agentpayPassageAccountId,jdbcType=INTEGER},
+      MchFeeType = #{mchFeeType,jdbcType=TINYINT},
+      MchFeeRate = #{mchFeeRate,jdbcType=DECIMAL},
+      MchFeeEvery = #{mchFeeEvery,jdbcType=BIGINT},
+      Status = #{status,jdbcType=TINYINT},
+      IsDefault = #{isDefault,jdbcType=TINYINT},
+      CreateTime = #{createTime,jdbcType=TIMESTAMP},
+      UpdateTime = #{updateTime,jdbcType=TIMESTAMP},
+      MaxEveryAmount = #{maxEveryAmount,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
