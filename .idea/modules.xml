@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/xxpay.iml" filepath="$PROJECT_DIR$/xxpay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xxpay-agent/xxpay-agent.iml" filepath="$PROJECT_DIR$/xxpay-agent/xxpay-agent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xxpay-core/xxpay-core.iml" filepath="$PROJECT_DIR$/xxpay-core/xxpay-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xxpay-generator/xxpay-generator.iml" filepath="$PROJECT_DIR$/xxpay-generator/xxpay-generator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xxpay-manage/xxpay-manage.iml" filepath="$PROJECT_DIR$/xxpay-manage/xxpay-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xxpay-merchant/xxpay-merchant.iml" filepath="$PROJECT_DIR$/xxpay-merchant/xxpay-merchant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xxpay-pay/xxpay-pay.iml" filepath="$PROJECT_DIR$/xxpay-pay/xxpay-pay.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xxpay-service/xxpay-service.iml" filepath="$PROJECT_DIR$/xxpay-service/xxpay-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xxpay-task/xxpay-task.iml" filepath="$PROJECT_DIR$/xxpay-task/xxpay-task.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xxpay-transit/xxpay-transit.iml" filepath="$PROJECT_DIR$/xxpay-transit/xxpay-transit.iml" />
+    </modules>
+  </component>
+</project>

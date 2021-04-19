@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="xxpay-core" />
+        <module name="xxpay-generator" />
+        <module name="xxpay-manage" />
+        <module name="xxpay-task" />
+        <module name="xxpay-pay" />
+        <module name="xxpay-service" />
+        <module name="xxpay-agent" />
+        <module name="xxpay-transit" />
+        <module name="xxpay-merchant" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="xxpay" target="1.8" />
+      <module name="xxpay-agent" target="1.8" />
+      <module name="xxpay-core" target="1.8" />
+      <module name="xxpay-generator" target="1.6" />
+      <module name="xxpay-manage" target="1.8" />
+      <module name="xxpay-merchant" target="1.8" />
+      <module name="xxpay-pay" target="1.8" />
+      <module name="xxpay-service" target="1.8" />
+      <module name="xxpay-task" target="1.8" />
+      <module name="xxpay-transit" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

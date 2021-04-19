@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e2e646c2-741e-482f-846f-5b1f9524af50" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/xxpay-service/src/main/java/org/xxpay/service/XxPayServiceAppliaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-service/src/main/java/org/xxpay/service/XxPayServiceAppliaction.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1rNTTY00MjhjHrBnS3sKVa6lLs0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="RunManager" selected="Spring Boot.XxPayServiceAppliaction">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayAgentApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-agent" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.XxPayAgentApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayManageApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-manage" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.XxPayManageApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayMerchantApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-merchant" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.XxPayMerchantApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayPayAppliaction" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-pay" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.pay.XxPayPayAppliaction" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayServiceAppliaction" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.service.XxPayServiceAppliaction" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxPayTaskApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-task" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.task.XxPayTaskApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XxpayTransitApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="xxpay-transit" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.xxpay.transit.XxpayTransitApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e2e646c2-741e-482f-846f-5b1f9524af50" name="Default Changelist" comment="" />
+      <created>1618815556921</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1618815556921</updated>
+      <workItem from="1618815559483" duration="36000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
