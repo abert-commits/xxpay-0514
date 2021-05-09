@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e2e646c2-741e-482f-846f-5b1f9524af50" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/xxpay-pay/src/main/java/org/xxpay/pay/service/AgentpayService.java" beforeDir="false" afterPath="$PROJECT_DIR$/xxpay-pay/src/main/java/org/xxpay/pay/service/AgentpayService.java" afterDir="false" />
-    </list>
+    <list default="true" id="e2e646c2-741e-482f-846f-5b1f9524af50" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -165,7 +163,7 @@
       <workItem from="1619001162714" duration="44055000" />
       <workItem from="1619672765461" duration="16345000" />
       <workItem from="1620034740377" duration="7271000" />
-      <workItem from="1620123443719" duration="13335000" />
+      <workItem from="1620123443719" duration="13638000" />
     </task>
     <servers />
   </component>
