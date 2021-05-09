@@ -245,4 +245,8 @@ public class AgentpayService {
         }
         return null;
     }
+
+    public static void main(String[] args) {
+        System.out.println("Sepro 印度支付");
+    }
 }
